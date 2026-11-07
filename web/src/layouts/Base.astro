@@ -41,19 +41,17 @@ const url = new URL(path, Astro.site).toString();
 <body data-has-buybar={buybar ? '1' : undefined}>
   <a class="sr" href="#main">Skip to content</a>
   <header class="top">
-    <div class="wrap">
-      <a class="brand" href="/" aria-label={site.nameEn}><img src="/logo.png" width="79" height="42" alt={site.nameEn} /></a>
-      <nav class="nav" aria-label="Main">
-        <a href="/" aria-current={cur('home')}><Bi k="home" /></a>
-        <a href="/shop" aria-current={cur('shop')}><Bi k="shop" /></a>
-        <a href="/showroom"><Bi k="showroom" /></a>
-        <a href="/track"><Bi k="track" /></a>
-        <a href="/about" aria-current={cur('info')}><Bi k="info" /></a>
-        <a href="/contact"><Bi k="contact" /></a>
-      </nav>
+    <div class="wrap hdr">
+      <a class="brand" href="/" aria-label={site.nameEn}><img src="/logo.png" width="96" height="51" alt={site.nameEn} /></a>
+      <form class="hsearch" action="/shop" method="get" role="search">
+        <input type="search" name="q" autocomplete="off" aria-label="Search" data-ph-bn="পণ্য খুঁজুন (বাংলা বা English)" data-ph-en="Search products (Bangla or English)" placeholder="পণ্য খুঁজুন" />
+        <button type="submit" aria-label="Search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      </form>
       <div class="tools">
+        <a class="tool msearch" href="/shop?focus=1" aria-label="Search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></a>
         <button class="tool" id="lang" type="button" aria-label="Language / ভাষা"><span class="bn">EN</span><span class="en">বাং</span></button>
         <button class="tool" id="theme" type="button" aria-label="Theme"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button>
+        <a class="tool" href="/track" aria-label="Track order"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></a>
         <a class="tool cartlink" href="/cart" aria-label="Cart"><Icons name="cart" /><span class="badge" data-cartcount hidden>0</span></a>
       </div>
     </div>
@@ -63,6 +61,8 @@ const url = new URL(path, Astro.site).toString();
   <main id="main"><slot /></main>
 
   <footer class="ft">
+    <svg class="wave flip" viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 0h1440v10c-120 12-240 18-360 12S840 4 720 6 480 24 360 24 120 14 0 10Z" /></svg>
+    <div class="fbody">
     <div class="wrap cols">
       <div>
         <strong style="color:#fff;font-size:1.1rem"><Bi bn={site.nameBn} en={site.nameEn} /></strong>
@@ -82,6 +82,7 @@ const url = new URL(path, Astro.site).toString();
       </ul>
     </div>
     <div class="wrap" style="margin-top:1.2rem;font-size:.85rem">© {new Date().getFullYear()} {site.nameEn}</div>
+    </div>
   </footer>
 
   <nav class={`tabs${buybar ? ' hide' : ''}`} aria-label="Tabs">

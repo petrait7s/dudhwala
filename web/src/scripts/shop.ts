@@ -9,7 +9,10 @@ const cards = Array.from(grid.querySelectorAll<HTMLElement>('.pc'));
 const q = document.getElementById('q') as HTMLInputElement | null;
 const sort = document.getElementById('sort') as HTMLSelectElement | null;
 const none = document.getElementById('none');
-let cat = new URLSearchParams(location.search).get('c') || '';
+const params = new URLSearchParams(location.search);
+let cat = params.get('c') || '';
+if (q && params.get('q')) q.value = params.get('q')!.slice(0, 80);
+if (q && params.get('focus')) setTimeout(() => q.focus(), 50);
 
 function expand(text: string): string[] {
   const t = text.toLowerCase().trim();
@@ -37,6 +40,15 @@ function apply() {
     if (on) shown++;
   }
   if (none) none.hidden = shown > 0;
+  const cnt = document.getElementById('count');
+  if (cnt) cnt.innerHTML = `<span class="bn">${toBn(String(shown))}টি পণ্য</span><span class="en">${shown} products</span>`;
+  // category pill counts follow the search and the zone (not the selected category)
+  const per = new Map<string, number>(); let all = 0;
+  for (const c of cards) {
+    const okQ2 = !terms.length || terms.some((t) => c.dataset.name!.includes(t) || c.dataset.cat!.includes(t));
+    if (okQ2 && zoneEligible(c.dataset.cat!, (c.dataset.outer || null) as OuterStatus, zone)) { all++; per.set(c.dataset.cat!, (per.get(c.dataset.cat!) ?? 0) + 1); }
+  }
+  document.querySelectorAll<HTMLElement>('[data-n]').forEach((b) => { const k = b.dataset.n!; b.textContent = toBn(String(k === '' ? all : per.get(k) ?? 0)); });
   const zn = document.getElementById('zonenote');
   if (zn) {
     zn.hidden = zone !== 'OUTER_CITY';

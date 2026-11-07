@@ -1,29 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import Bi from '../components/Bi.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { products, categories } from '../lib/catalogue';
+import CatalogBrowser from '../components/CatalogBrowser.astro';
 ---
 <Base titleBn="শপ" titleEn="Shop" nav="shop">
-  <div class="wrap">
-    <h1 style="margin-top:1.2rem"><Bi k="shop" /></h1>
-    <div class="bar">
-      <div class="grow"><input id="q" type="search" data-ph-bn="পণ্য খুঁজুন (বাংলা বা English)" data-ph-en="Search products (Bangla or English)" placeholder="পণ্য খুঁজুন" aria-label="Search" /></div>
-      <select id="sort" aria-label="Sort">
-        <option value="name">নাম / Name</option>
-        <option value="low">দাম কম → বেশি / Price low → high</option>
-        <option value="high">দাম বেশি → কম / Price high → low</option>
-      </select>
-    </div>
-    <div class="chips" role="group" aria-label="Category">
-      <button class="chip" type="button" data-chip="" aria-pressed="true"><Bi k="allProducts" /></button>
-      {categories.map((c) => <button class="chip" type="button" data-chip={c.slug} aria-pressed="false"><Bi bn={c.nameBn} en={c.nameEn} /></button>)}
-    </div>
-    <p id="zonenote" class="notice" hidden style="margin-top:1rem"></p>
-    <div class="grid" id="grid" style="margin-top:1rem">
-      {products.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} outer={p.outerCity ? p.outerCity.toUpperCase() : null} />)}
-    </div>
-    <p id="none" class="notice" hidden><Bi k="noResults" /></p>
-  </div>
-  <script>import '../scripts/shop';</script>
+  <div class="wrap" style="padding-top:1rem"><CatalogBrowser /></div>
 </Base>

@@ -1,11 +1,10 @@
 ---
 import Bi from './Bi.astro';
 import hero from '../data/hero.json';
-import site from '../data/site.json';
 interface Slide { src: string; fx?: number; fy?: number; altBn?: string; altEn?: string }
 const slides = hero as Slide[];
 ---
-<section class={`hero${slides.length ? '' : ' plain'}`} data-hero>
+<section class={`heroband${slides.length ? ' hasphotos' : ''}`} data-hero style={slides.length ? 'min-height:min(78vh,620px);display:flex;align-items:flex-end' : ''}>
   {slides.length > 0 && (
     <div class="slides" data-slides>
       {slides.map((s, i) => (
@@ -17,15 +16,20 @@ const slides = hero as Slide[];
     </div>
   )}
   {slides.length > 0 && <div class="shade"></div>}
-  <div class="wrap">
-    <div class="copy" data-copy>
-      <h1><span class="wavy"><Bi bn={site.nameBn} en="Dudhwala" /></span><br /><Bi bn={`${site.taglineBn}`} en={site.taglineEn} /></h1>
-      <p><Bi bn="সিলেটের দুগ্ধজাত মিষ্টি, দই ও বেকারি। ঘরে বসে অর্ডার করুন, অথবা আপনার পছন্দের শাখা থেকে সংগ্রহ করুন।" en="Dairy sweets, doi and bakery from Sylhet. Order from home, or collect from the branch you choose." /></p>
-      <div class="ctas">
-        <a class="btn accent" href="/shop"><Bi bn="পণ্য দেখুন" en="Browse products" /></a>
-        <a class="btn" href="/showroom"><Bi k="showroom" /></a>
+  <div class="wrap" style="width:100%">
+    <div class="in" data-copy>
+      <div>
+        <p class="eyebrow">Serving Purity</p>
+        <h1><Bi bn="সিলেটের নিজস্ব দুগ্ধজাত পণ্য," en="Sylhet's own dairy products," /><br /><em><Bi bn="আপনার দোরগোড়ায়" en="at your doorstep" /></em></h1>
+        <p class="lead"><Bi bn="গরুর খাঁটি কাঁচা দুধ, দই, মিষ্টি, ঘি এবং বেকারি পণ্য — অনলাইনে অর্ডার করুন, পছন্দের সময়ে ডেলিভারি নিন।" en="Pure cow's milk, doi, sweets, ghee and bakery products. Order online and get delivery at your chosen time." /></p>
+        <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.4rem">
+          <a class="btn light" href="#products"><Bi bn="পণ্য দেখুন" en="Browse products" /></a>
+          <a class="btn ghostw" href="/showroom"><Bi k="showroom" /></a>
+        </div>
       </div>
+      <div class="logocard" aria-hidden="true"><img src="/logo.png" alt="" width="450" height="240" /></div>
     </div>
   </div>
 </section>
+<svg class="wave" viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true" style="color:var(--dw-bar-2);transform:scaleY(-1);margin-top:-1px;background:transparent"><path fill="currentColor" d="M0 28V12c120 10 240 16 360 10S600 0 720 2s240 20 360 20 240-10 360-14v20Z" /></svg>
 <script>import '../scripts/hero';</script>

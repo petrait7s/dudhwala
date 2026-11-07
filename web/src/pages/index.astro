@@ -2,40 +2,15 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import Bi from '../components/Bi.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { products } from '../lib/catalogue';
-const featured = products.filter((_, i) => i % 7 === 0).slice(0, 8);
+import CatalogBrowser from '../components/CatalogBrowser.astro';
 ---
 <Base titleBn="হোম" titleEn="Home" nav="home">
   <Hero />
   <div class="wrap">
-    <div class="bento">
-      <div class="card b"><strong><Bi bn="অর্ডারের সময়" en="Ordering hours" /></strong><span class="muted" data-hours>১০:০০ – ২২:০০</span></div>
-      <div class="card b"><strong><Bi bn="ডেলিভারি" en="Delivery" /></strong><span class="muted"><Bi bn="ইন সিলেট: ২৪ ঘণ্টার মধ্যে · আউটার সিলেট: ১-২ দিনের মধ্যে" en="In Sylhet: within 24h · Outer Sylhet: within 1-2 days" /></span></div>
-      <div class="card b"><strong><Bi k="showroom" /></strong><span class="muted"><Bi bn="আমাদের যেকোনো শাখা থেকে সংগ্রহ" en="Collect from any of our branches" /></span></div>
-      <div class="card b"><strong><Bi bn="পেমেন্ট" en="Payment" /></strong><span class="muted"><Bi bn="ক্যাশ অন ডেলিভারি, বিকাশ, নগদ" en="Cash on delivery, bKash, Nagad" /></span></div>
-    </div>
+    <div class="below"><CatalogBrowser /></div>
 
     <section class="s below">
-      <h2><Bi bn="আমাদের পণ্য" en="Our products" /></h2>
-      <div class="grid" id="grid">
-        {featured.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} outer={p.outerCity ? p.outerCity.toUpperCase() : null} />)}
-      </div>
-      <p style="margin-top:1.2rem"><a class="btn primary" href="/shop"><Bi k="allProducts" /></a></p>
-    </section>
-
-    <section class="s below">
-      <h2><Bi bn="কীভাবে অর্ডার করবেন" en="How to order" /></h2>
-      <ol class="steps">
-        <li class="card"><strong><Bi bn="পণ্য বাছুন" en="Pick products" /></strong><br /><span class="muted"><Bi bn="শপ থেকে পছন্দের পণ্য কার্টে যোগ করুন।" en="Add what you like from the shop to your cart." /></span></li>
-        <li class="card"><strong><Bi bn="কীভাবে পাবেন ঠিক করুন" en="Choose how to get it" /></strong><br /><span class="muted"><Bi bn="হোম ডেলিভারি, এক্সপ্রেস পিকআপ, অথবা শোরুম।" en="Home delivery, express pickup, or showroom." /></span></li>
-        <li class="card"><strong><Bi bn="পেমেন্ট" en="Pay" /></strong><br /><span class="muted"><Bi bn="ক্যাশ অন ডেলিভারি, অথবা বিকাশ/নগদে পাঠিয়ে TrxID দিন।" en="Cash on delivery, or send via bKash/Nagad and enter the TrxID." /></span></li>
-        <li class="card"><strong><Bi bn="ট্র্যাক করুন" en="Track it" /></strong><br /><span class="muted"><Bi bn="অর্ডার নম্বর ও ফোন নম্বর দিয়ে অবস্থা দেখুন।" en="Use your order number and phone to see its status." /></span></li>
-      </ol>
-    </section>
-
-    <section class="s below">
-      <div class="card" style="padding:1.2rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between">
+      <div class="card promo">
         <div style="flex:1;min-width:240px">
           <h2 style="font-size:1.2rem;margin-bottom:.3rem"><Bi k="showroom" /></h2>
           <p class="muted" style="margin:0" data-bulkpromo><Bi bn="অনুষ্ঠান বা বড় চাহিদার জন্য একসাথে অনেক পণ্য অর্ডার করুন। আপনার পছন্দের শাখা থেকে সংগ্রহ করুন।" en="Ordering a lot for an event or a big need? Collect from the branch you choose." /></p>
@@ -43,18 +18,20 @@ const featured = products.filter((_, i) => i % 7 === 0).slice(0, 8);
         <a class="btn primary" href="/showroom"><Bi bn="শোরুম থেকে অর্ডার করুন" en="Order from showroom" /></a>
       </div>
     </section>
+
+    <section class="s below" style="padding-top:0">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        <a class="card" href="/about" style="display:block;padding:1.1rem;color:inherit"><h2 style="font-size:1.05rem;margin:0"><Bi bn="দুধওয়ালা সম্পর্কে" en="About Dudhwala" /></h2><p class="muted" style="margin:0;font-size:.9rem"><Bi bn="আমাদের পরিচিতি →" en="Who we are →" /></p></a>
+        <a class="card" href="/track" style="display:block;padding:1.1rem;color:inherit"><h2 style="font-size:1.05rem;margin:0"><Bi k="track" /></h2><p class="muted" style="margin:0;font-size:.9rem"><Bi bn="অর্ডার নম্বর ও ফোন দিয়ে →" en="With order number and phone →" /></p></a>
+      </div>
+    </section>
   </div>
   <script>
-    import { fillPrices } from '../scripts/prices';
     import { getConfig } from '../lib/api';
-    import { hhmm } from '../lib/rules';
     import { toBn } from '../scripts/bn';
-    fillPrices();
     getConfig().then((c) => {
       const bp = document.querySelector('[data-bulkpromo]');
       if (bp) bp.innerHTML = `<span class="bn">অনুষ্ঠান বা বড় চাহিদার জন্য একসাথে অনেক পণ্য অর্ডার করুন। ন্যূনতম${c.bulk.approved === false ? ' (চূড়ান্ত নয়)' : ''}: ${toBn(String(c.bulk.min_total_quantity))} টি। আপনার পছন্দের শাখা থেকে সংগ্রহ করুন।</span><span class="en">Ordering a lot for an event or a big need? Minimum${c.bulk.approved === false ? ' (not final)' : ''}: ${c.bulk.min_total_quantity} items. Collect from the branch you choose.</span>`;
-      const el = document.querySelector('[data-hours]');
-      if (el) { const t = `${hhmm(c.hours.open_minute)} – ${hhmm(c.hours.close_minute)}`; el.innerHTML = `<span class="bn">${toBn(t)}</span><span class="en">${t}</span>`; }
     });
   </script>
 </Base>
