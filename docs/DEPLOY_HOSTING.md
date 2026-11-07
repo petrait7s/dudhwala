@@ -83,3 +83,7 @@ Roll back by restoring the previous zip and, if a migration ran, the pre-update 
 - **Stop new orders**: Settings → maintenance mode.
 - **Logs**: `storage/logs` (daily files).
 - **Alerts**: new orders are only logged for now; the `OrderNotifier` interface is ready for a WhatsApp notifier once the contact is supplied.
+
+## 8. Courier handoff (no payment gateway, no courier API)
+
+Orders are confirmed by staff and handed to a courier or rider by hand. In the admin, open a **home delivery** order, move it to *Preparing*, then in the **Courier / rider** box choose Steadfast, Pathao, Own rider or Other, enter the tracking/consignment code (required for Steadfast and Pathao) and an optional note (rider name and phone), and save. The customer sees the courier and tracking code under *Track order*. Showroom and pickup orders are collected at the chosen branch and have no courier. Steadfast/Pathao API booking can be added later if wanted (needs their API keys).

@@ -21,12 +21,18 @@ class OrderShow extends Component
     public string $voidReason = '';
     public ?int $voidingPayment = null;
     public bool $cancelling = false;
+    public string $courier = '';
+    public string $courierRef = '';
+    public string $courierNote = '';
     public ?string $flash = null;
     public ?string $error = null;
 
     public function mount(Order $order): void
     {
         $this->order = $order;
+        $this->courier = (string) $order->courier;
+        $this->courierRef = (string) $order->courier_ref;
+        $this->courierNote = (string) $order->courier_note;
     }
 
     private function run(callable $f): void
@@ -52,6 +58,11 @@ class OrderShow extends Component
             $svc->transition($this->order, 'CANCELLED', Auth::user(), $this->cancelReason);
             $this->cancelling = false; $this->cancelReason = '';
         });
+    }
+
+    public function saveCourier(OrderService $svc): void
+    {
+        $this->run(fn () => $svc->setCourier($this->order, Auth::user(), $this->courier, $this->courierRef, $this->courierNote));
     }
 
     public function codCollected(PaymentService $svc): void

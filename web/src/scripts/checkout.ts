@@ -101,6 +101,7 @@ function render() {
   const sub = lines.reduce((s, l) => s + l.unitPoisha * l.quantity, 0);
   const fee = deliveryFee(m, m === 'HOME_DELIVERY' ? z : null, cfg.fees);
   $('sub').innerHTML = tk(sub); $('fee').innerHTML = m === 'HOME_DELIVERY' && !z ? '—' : tk(fee); $('tot').innerHTML = tk(sub + fee);
+  if (!busy) $('go').innerHTML = both((l) => (l === 'bn' ? 'অর্ডার কনফার্ম' : 'Confirm order') + ' · ' + formatTaka(sub + fee, l));
 
   const open = orderingOpen(new Date(), cfg.hours);
   const closed = $('closed'); closed.hidden = open;
@@ -122,8 +123,9 @@ function render() {
   if (pm !== 'COD') {
     const num = pm === 'BKASH' ? cfg.payment_numbers.bkash : cfg.payment_numbers.nagad;
     $('payhow').innerHTML = both((l) => l === 'bn'
-      ? `${esc(num ?? '')} নম্বরে ${formatTaka(sub + fee, 'bn')} পাঠান, তারপর নিচে আপনার নম্বর ও TrxID দিন। আমাদের স্টাফ যাচাই করবেন।`
-      : `Send ${formatTaka(sub + fee, 'en')} to ${esc(num ?? '')}, then enter your number and the TrxID below. Our staff will verify it.`);
+      ? `এই নম্বরে টাকা পাঠান: <b>${esc(num ?? '')}</b> · <b>${formatTaka(sub + fee, 'bn')}</b>। তারপর নিচে আপনার নম্বর ও TrxID দিন। আমাদের স্টাফ যাচাই করবেন।`
+      : `Send the money to <b>${esc(num ?? '')}</b> · <b>${formatTaka(sub + fee, 'en')}</b>. Then enter your number and the TrxID below. Our staff will verify it.`)
+      + ` <button type="button" class="btn sm" data-copy="${esc(num ?? '')}">${both((l) => (l === 'bn' ? 'নম্বর কপি' : 'Copy number'))}</button>`;
   }
 }
 
@@ -195,6 +197,10 @@ $('lines').addEventListener('click', (e) => {
   if (t.matches('input[type=radio]')) render();
 }));
 onZone(() => { $<HTMLSelectElement>('zone').value = getZone(); render(); });
+$('payhow').addEventListener('click', (e) => {
+  const b = (e.target as HTMLElement).closest<HTMLElement>('[data-copy]'); if (!b) return;
+  navigator.clipboard?.writeText(b.dataset.copy!).then(() => { const t = b.innerHTML; b.textContent = '✓'; setTimeout(() => (b.innerHTML = t), 1200); }).catch(() => {});
+});
 $('toin').addEventListener('click', () => setZone('IN_CITY'));
 $('rmbad').addEventListener('click', () => {
   const z = zone(); if (!z) return;

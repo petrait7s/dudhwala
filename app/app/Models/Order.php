@@ -8,7 +8,7 @@ class Order extends Model
 {
     protected $table = 'orders';
     protected $guarded = [];
-    protected $casts = ['bulk_rule_snapshot' => 'array', 'pickup_at' => 'datetime'];
+    protected $casts = ['bulk_rule_snapshot' => 'array', 'pickup_at' => 'datetime', 'dispatched_at' => 'datetime'];
 
     public function items() { return $this->hasMany(OrderItem::class); }
     public function payments() { return $this->hasMany(Payment::class); }

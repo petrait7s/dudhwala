@@ -18,6 +18,11 @@ import Bi from '../components/Bi.astro';
           <div class="stat"><button type="button" class="btn primary sm" id="toin"><Bi bn="ইন সিলেট বেছে নিন" en="Choose In Sylhet" /></button><button type="button" class="btn sm" id="rmbad"><Bi bn="চিহ্নিত পণ্যগুলো সরান" en="Remove marked items" /></button></div>
         </div>
         <div class="card" id="lines"></div>
+        <div class="card sumcard">
+          <div class="row"><span><Bi k="subtotal" /></span><span id="sub"></span></div>
+          <div class="row"><span><Bi k="deliveryFee" /></span><span id="fee"></span></div>
+          <div class="row tot"><span><Bi k="total" /></span><span id="tot"></span></div>
+        </div>
         <p id="bulknote" class="notice" hidden style="margin-top:1rem"></p>
       </div>
       <form class="card" id="f" style="padding:1.1rem" novalidate>
@@ -55,9 +60,9 @@ import Bi from '../components/Bi.astro';
 
         <h2 style="font-size:1.2rem;margin-top:1.2rem"><Bi bn="পেমেন্ট" en="Payment" /></h2>
         <div class="opts" id="pays">
-          <label class="opt" data-p="COD"><input type="radio" name="pay" value="COD" checked /><span><strong><Bi bn="ক্যাশ অন ডেলিভারি / হাতে নগদ" en="Cash on delivery / cash in hand" /></strong></span></label>
-          <label class="opt" data-p="BKASH"><input type="radio" name="pay" value="BKASH" /><span><strong>bKash / বিকাশ</strong><br /><span class="hint" data-pn="BKASH"></span></span></label>
-          <label class="opt" data-p="NAGAD"><input type="radio" name="pay" value="NAGAD" /><span><strong>Nagad / নগদ</strong><br /><span class="hint" data-pn="NAGAD"></span></span></label>
+          <label class="opt" data-p="COD"><input type="radio" name="pay" value="COD" checked /><span><strong>COD</strong><br /><span class="hint"><Bi bn="ক্যাশ অন ডেলিভারি" en="Cash on delivery" /></span></span></label>
+          <label class="opt" data-p="BKASH"><input type="radio" name="pay" value="BKASH" /><span><strong>bKash</strong><br /><span class="hint" data-pn="BKASH"></span></span></label>
+          <label class="opt" data-p="NAGAD"><input type="radio" name="pay" value="NAGAD" /><span><strong>Nagad</strong><br /><span class="hint" data-pn="NAGAD"></span></span></label>
         </div>
         <div id="mobbox" hidden style="margin-top:.8rem">
           <p class="notice" id="payhow"></p>
@@ -67,13 +72,9 @@ import Bi from '../components/Bi.astro';
 
         <input class="hp" type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-        <div style="margin-top:1.2rem">
-          <div class="row"><span><Bi k="subtotal" /></span><span id="sub"></span></div>
-          <div class="row"><span><Bi k="deliveryFee" /></span><span id="fee"></span></div>
-          <div class="row tot"><span><Bi k="total" /></span><span id="tot"></span></div>
-        </div>
-        <div id="errs" class="notice bad" hidden></div>
+        <div id="errs" class="notice bad" hidden style="margin-top:1rem"></div>
         <button class="btn primary block" id="go" type="submit" style="margin-top:1rem"><Bi k="placeOrder" /></button>
+        <p class="hint" style="text-align:center;margin-top:.6rem"><Bi bn="অর্ডার কনফার্ম হলে আমরা আপনার ঠিকানায় কুরিয়ার বা রাইডারের মাধ্যমে পাঠিয়ে দেব।" en="Once your order is confirmed we send it to your address by courier or rider." /></p>
       </form>
     </div>
   </div>

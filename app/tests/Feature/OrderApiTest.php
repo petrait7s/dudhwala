@@ -492,6 +492,56 @@ class OrderApiTest extends TestCase
         $this->assertSame(0, $svc->cancelledCountForPhone('01999999999'));
     }
 
+    /* ───── courier handoff (manual: Steadfast / Pathao / own rider) ───── */
+
+    public function test_staff_record_the_courier_and_the_customer_sees_the_tracking_code(): void
+    {
+        $o = $this->placed(); $a = $this->admin(); $svc = app(OrderService::class);
+        $svc->transition($o, 'PREPARING', $a);
+        $o = $svc->setCourier($o->fresh(), $a, 'STEADFAST', ' SF123456 ', 'call before delivery');
+        $this->assertSame(['STEADFAST', 'SF123456', 'call before delivery'], [$o->courier, $o->courier_ref, $o->courier_note]);
+        $this->assertNotNull($o->dispatched_at);
+        $this->assertDatabaseHas('audit_logs', ['action' => 'order.courier_set', 'entity_id' => (string) $o->id]);
+        $first = $o->dispatched_at;
+        $o = $svc->setCourier($o, $a, 'PATHAO', 'PT-99', null); // correcting keeps the first dispatch time
+        $this->assertSame([$first->timestamp, 'PATHAO'], [$o->dispatched_at->timestamp, $o->courier]);
+
+        $r = $this->postJson('/api/orders/track', ['order_number' => $o->order_number, 'phone' => $o->contact_phone])->assertOk();
+        $this->assertSame(['PATHAO', 'PT-99'], [$r['courier'], $r['courier_ref']]);
+        $this->assertStringNotContainsString('call before', $r->getContent());
+    }
+
+    public function test_courier_rules(): void
+    {
+        $o = $this->placed(); $a = $this->admin(); $svc = app(OrderService::class);
+        $code = function (callable $f) { try { $f(); return 'ok'; } catch (\App\Exceptions\ShopException $e) { return $e->errorCode; } };
+        $this->assertSame('VALIDATION_FAILED', $code(fn () => $svc->setCourier($o, $a, 'STEADFAST', '', null)), 'tracking code needed for Steadfast');
+        $this->assertSame('VALIDATION_FAILED', $code(fn () => $svc->setCourier($o, $a, 'PATHAO', null, null)));
+        $this->assertSame('VALIDATION_FAILED', $code(fn () => $svc->setCourier($o, $a, 'DHL', 'x', null)));
+        $this->assertSame('ok', $code(fn () => $svc->setCourier($o, $a, 'OWN_RIDER', null, 'Rahim 017...')));
+        $this->assertSame('FORBIDDEN', $code(fn () => $svc->setCourier($o, $this->admin('MANAGER'), 'OTHER', null, null)));
+
+        $showroom = $this->placed('BULK_ORDER');
+        $this->assertSame('CONFLICT', $code(fn () => $svc->setCourier($showroom, $a, 'OWN_RIDER', null, null)), 'only home delivery goes to a courier');
+
+        $cancelled = $this->placed(); $svc->transition($cancelled, 'CANCELLED', $a, 'x');
+        $this->assertSame('CONFLICT', $code(fn () => $svc->setCourier($cancelled->fresh(), $a, 'OWN_RIDER', null, null)));
+    }
+
+    public function test_courier_screen_for_admin_and_read_only_for_manager(): void
+    {
+        $o = $this->placed();
+        $admin = $this->admin(); $admin->forceFill(['mfa_enabled' => true, 'mfa_secret' => 'JBSWY3DPEHPK3PXP'])->save();
+        $this->actingAs($admin->fresh())->withSession(['mfa_ok' => true]);
+        \Livewire\Livewire::test(\App\Livewire\Admin\OrderShow::class, ['order' => $o])->set('courier', 'STEADFAST')->set('courierRef', 'SF777')->call('saveCourier')->assertSet('flash', __('admin.saved'));
+        $this->assertSame('SF777', $o->fresh()->courier_ref);
+        $m = $this->admin('MANAGER');
+        $this->actingAs($m);
+        $this->get('/admin/orders/'.$o->id)->assertOk()->assertSee('SF777')->assertDontSee(__('admin.courier_ref'));
+        \Livewire\Livewire::test(\App\Livewire\Admin\OrderShow::class, ['order' => $o->fresh()])->set('courier', 'PATHAO')->set('courierRef', 'HACK')->call('saveCourier')->assertSet('error', fn ($e) => $e !== null);
+        $this->assertSame('SF777', $o->fresh()->courier_ref);
+    }
+
     /* ───── payments ───── */
 
     public function test_verify_bkash_then_due_is_zero_and_second_verify_refused(): void

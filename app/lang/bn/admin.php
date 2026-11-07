@@ -40,4 +40,5 @@ return [
     'page_note' => 'অনুচ্ছেদ আলাদা করতে একটি ফাঁকা লাইন দিন।',
     'audit_action' => 'কাজ', 'audit_entity' => 'কিসের', 'audit_actor' => 'কে', 'audit_when' => 'কখন', 'audit_before' => 'আগে', 'audit_after' => 'পরে', 'audit_filter' => 'কাজ বা বিষয় দিয়ে খুঁজুন',
     'err_fields' => 'চিহ্নিত ঘরগুলো দেখুন।',
+    'courier' => 'কুরিয়ার / রাইডার', 'courier_ref' => 'ট্র্যাকিং / কনসাইনমেন্ট কোড', 'courier_note' => 'রাইডারের নাম, ফোন বা নোট', 'cr' => ['STEADFAST' => 'স্টেডফাস্ট', 'PATHAO' => 'পাঠাও', 'OWN_RIDER' => 'নিজস্ব রাইডার', 'OTHER' => 'অন্য কুরিয়ার'],
 ];

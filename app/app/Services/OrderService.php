@@ -216,6 +216,32 @@ class OrderService
         });
     }
 
+    public const COURIERS = ['STEADFAST', 'PATHAO', 'OWN_RIDER', 'OTHER'];
+
+    /**
+     * Staff hand a home-delivery parcel to a courier or rider and record it (no courier API, no gateway: manual and simple).
+     * The tracking code is required for Steadfast and Pathao. Can be corrected until the order is delivered or cancelled.
+     */
+    public function setCourier(Order $order, User $by, string $courier, ?string $ref, ?string $note): Order
+    {
+        if (! $by->isActive() || ! $by->isAdmin()) throw new ShopException('FORBIDDEN', 'Only an admin can change orders');
+        if (! in_array($courier, self::COURIERS, true)) throw new ShopException('VALIDATION_FAILED', 'Choose a courier');
+        $ref = trim((string) $ref) ?: null;
+        $note = trim((string) $note) ?: null;
+        if (in_array($courier, ['STEADFAST', 'PATHAO'], true) && ! $ref) throw new ShopException('VALIDATION_FAILED', 'The tracking code is required for this courier');
+        if (mb_strlen((string) $ref) > 64 || mb_strlen((string) $note) > 200) throw new ShopException('VALIDATION_FAILED', 'Tracking code or note is too long');
+
+        return DB::transaction(function () use ($order, $by, $courier, $ref, $note) {
+            $o = Order::whereKey($order->id)->lockForUpdate()->first();
+            if ($o->method !== 'HOME_DELIVERY') throw new ShopException('CONFLICT', 'Only home delivery orders go to a courier');
+            if (in_array($o->status, ['CANCELLED', OrderingRules::finalStatus($o->method)], true)) throw new ShopException('CONFLICT', 'This order is finished');
+            $before = $o->only(['courier', 'courier_ref', 'courier_note']);
+            $o->update(['courier' => $courier, 'courier_ref' => $ref, 'courier_note' => $note, 'dispatched_at' => $o->dispatched_at ?? now()]);
+            $this->audit->log('order.courier_set', 'order', $o->id, $before, ['courier' => $courier, 'courier_ref' => $ref, 'courier_note' => $note], $by);
+            return $o->fresh();
+        });
+    }
+
     /** How many earlier cancelled orders this phone has (shown to staff as a warning). */
     public function cancelledCountForPhone(string $phone, ?int $excludeOrderId = null): int
     {

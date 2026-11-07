@@ -52,6 +52,7 @@ class OrderController extends Controller
         return response()->json([
             'order_number' => $o->order_number, 'method' => $o->method, 'status' => $o->status, 'payment_status' => $payments->summary($o),
             'subtotal_poisha' => $o->subtotal_poisha, 'delivery_fee_poisha' => $o->delivery_fee_poisha, 'total_poisha' => $o->total_poisha,
+            'courier' => $o->courier, 'courier_ref' => $o->courier_ref,
             'items' => $o->items->map(fn ($i) => ['name_bn' => $i->product_name_bn, 'variant_label_bn' => $i->variant_label_bn, 'quantity' => $i->quantity, 'line_total_poisha' => $i->line_total_poisha])->all(),
         ]);
     }

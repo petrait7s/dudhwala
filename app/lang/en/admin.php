@@ -40,4 +40,5 @@ return [
     'page_note' => 'Separate paragraphs with a blank line.',
     'audit_action' => 'Action', 'audit_entity' => 'Entity', 'audit_actor' => 'Who', 'audit_when' => 'When', 'audit_before' => 'Before', 'audit_after' => 'After', 'audit_filter' => 'Filter by action or entity',
     'err_fields' => 'Please check the highlighted fields.',
+    'courier' => 'Courier / rider', 'courier_ref' => 'Tracking / consignment code', 'courier_note' => 'Rider name, phone or note', 'cr' => ['STEADFAST' => 'Steadfast', 'PATHAO' => 'Pathao', 'OWN_RIDER' => 'Own rider', 'OTHER' => 'Other courier'],
 ];

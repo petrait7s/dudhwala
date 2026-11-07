@@ -53,6 +53,21 @@
     @endforeach
   </div>
 
+  @if($o->method === 'HOME_DELIVERY')
+  <div class="card">
+    <h3>{{ __('admin.courier') }}</h3>
+    @if($o->courier)<p class="muted">{{ __('admin.cr.'.$o->courier) }}@if($o->courier_ref) · <code>{{ $o->courier_ref }}</code>@endif @if($o->courier_note) · {{ $o->courier_note }}@endif @if($o->dispatched_at) · {{ $o->dispatched_at->timezone('Asia/Dhaka')->format('d M, H:i') }}@endif</p>@elseif(! $canManage)<p class="muted">—</p>@endif
+    @if($canManage && $live)
+      <form wire:submit="saveCourier" class="grid2">
+        <label>{{ __('admin.courier') }}<select wire:model="courier"><option value="">—</option>@foreach(['STEADFAST', 'PATHAO', 'OWN_RIDER', 'OTHER'] as $c)<option value="{{ $c }}">{{ __('admin.cr.'.$c) }}</option>@endforeach</select></label>
+        <label>{{ __('admin.courier_ref') }}<input wire:model="courierRef"></label>
+        <label>{{ __('admin.courier_note') }}<input wire:model="courierNote"></label>
+        <div style="align-self:end"><button class="btn" type="submit">{{ __('admin.save') }}</button></div>
+      </form>
+    @endif
+  </div>
+  @endif
+
   @if($canManage && $live)
   <div class="card">
     <div class="row">

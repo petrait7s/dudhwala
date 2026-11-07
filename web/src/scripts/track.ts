@@ -42,7 +42,9 @@ $('tf').addEventListener('submit', async (e) => {
     const lis = cancelled ? `<li class="now done">${both(...LABEL.CANCELLED!)}</li>` : flow.map((s, i) => `<li class="${i < idx ? 'done' : i === idx ? 'done now' : ''}">${both(...(LABEL[s] ?? [s, s]))}</li>`).join('');
     const items = (o.items ?? []).map((i: any) => `<div class="row"><span>${esc(i.name_bn)}${i.variant_label_bn ? ' · ' + esc(i.variant_label_bn) : ''} × ${i.quantity}</span><span>${both(formatTaka(i.line_total_poisha, 'bn'), formatTaka(i.line_total_poisha, 'en'))}</span></div>`).join('');
     const pay = o.payment_status ? `<span class="pill ${o.payment_status === 'PAID' ? 'ok' : ''}">${both(...(PAY[o.payment_status] ?? [o.payment_status, o.payment_status]))}</span>` : '';
-    $('res').innerHTML = `<div class="stat"><strong style="font-size:1.2rem">${esc(o.order_number)}</strong> ${pay}</div><ul class="tl">${lis}</ul>${items}
+    const COUR: Record<string, [string, string]> = { STEADFAST: ['স্টেডফাস্ট', 'Steadfast'], PATHAO: ['পাঠাও', 'Pathao'], OWN_RIDER: ['আমাদের রাইডার', 'Our rider'], OTHER: ['কুরিয়ার', 'Courier'] };
+    const cour = o.courier ? `<p class="notice">${both('কুরিয়ার: ' + (COUR[o.courier]?.[0] ?? o.courier) + (o.courier_ref ? ' · ট্র্যাকিং কোড: ' + esc(o.courier_ref) : ''), 'Courier: ' + (COUR[o.courier]?.[1] ?? o.courier) + (o.courier_ref ? ' · Tracking code: ' + esc(o.courier_ref) : ''))}</p>` : '';
+    $('res').innerHTML = `<div class="stat"><strong style="font-size:1.2rem">${esc(o.order_number)}</strong> ${pay}</div><ul class="tl">${lis}</ul>${cour}${items}
       <div class="row tot"><span>${both('মোট', 'Total')}</span><span>${both(formatTaka(o.total_poisha, 'bn'), formatTaka(o.total_poisha, 'en'))}</span></div>`;
     $('res').hidden = false;
   } catch (x: any) {
