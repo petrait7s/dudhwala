@@ -9,4 +9,6 @@ class Category extends Model
     protected $table = 'categories';
     protected $guarded = [];
     public $timestamps = false;
+
+    protected $casts = ['active' => 'boolean'];
 }

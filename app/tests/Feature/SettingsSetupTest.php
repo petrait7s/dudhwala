@@ -42,9 +42,11 @@ class SettingsSetupTest extends TestCase
     public function test_setup_command_is_idempotent(): void
     {
         $file = tempnam(sys_get_temp_dir(), 'dw').'.json';
-        file_put_contents($file, file_get_contents(base_path('../apps/api/data/setup.example.json')));
-        $this->artisan('dudhwala:setup', ['--file' => $file])->assertSuccessful();
-        $this->artisan('dudhwala:setup', ['--file' => $file])->assertSuccessful();
+        file_put_contents($file, str_replace('REPLACE_WITH_REAL_PHONE', '01711111111', file_get_contents(base_path('../apps/api/data/setup.example.json'))));
+        $this->artisan('dudhwala:setup', ['--file' => $file])->assertFailed(); // placeholders refused
+        $this->assertSame(0, Outlet::count());
+        $this->artisan('dudhwala:setup', ['--file' => $file, '--allow-placeholders' => true])->assertSuccessful();
+        $this->artisan('dudhwala:setup', ['--file' => $file, '--allow-placeholders' => true])->assertSuccessful();
         $this->assertSame(1, Outlet::count());
         $o = Outlet::first();
         $this->assertSame(1, $o->hours()->count());

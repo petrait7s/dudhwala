@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 /** Re-runnable. Outlets matched by code and updated; nothing deleted. */
 class SetupOwnerData extends Command
 {
-    protected $signature = 'dudhwala:setup {--file= : path to owner setup JSON}';
+    protected $signature = 'dudhwala:setup {--file= : path to owner setup JSON} {--allow-placeholders : accept REPLACE_WITH_* values (testing only)}';
     protected $description = 'Apply outlets, hours and dispatch/collection outlets from the owner JSON';
 
     public function handle(SettingsService $settings, AuditService $audit): int
@@ -27,8 +27,8 @@ class SetupOwnerData extends Command
             'outlets.*.code' => ['required', 'regex:/^[A-Z0-9-]{2,32}$/'],
             'outlets.*.nameBn' => 'required|string',
             'outlets.*.nameEn' => 'nullable|string',
-            'outlets.*.addressLine' => 'required|string',
-            'outlets.*.phone' => 'nullable|string',
+            'outlets.*.addressLine' => 'required|string|max:255',
+            'outlets.*.phone' => 'nullable|string|max:20',
             'outlets.*.status' => 'nullable|in:ACTIVE,PAUSED,CLOSED',
             'outlets.*.hours' => 'nullable|array|max:7',
             'outlets.*.hours.*.weekday' => 'required|integer|between:0,6',
@@ -38,6 +38,11 @@ class SetupOwnerData extends Command
             'collectionOutletCode' => 'nullable|string',
         ]);
         if ($v->fails()) { foreach ($v->errors()->all() as $e) $this->error($e); return self::FAILURE; }
+
+        if (! $this->option('allow-placeholders') && str_contains(json_encode($data), 'REPLACE_WITH')) {
+            $this->error('File still contains REPLACE_WITH_* placeholders. Fill in real values.');
+            return self::FAILURE;
+        }
 
         $codes = array_column($data['outlets'], 'code');
         foreach (['dispatchOutletCode', 'collectionOutletCode'] as $k) {
