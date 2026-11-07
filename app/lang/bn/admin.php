@@ -21,7 +21,7 @@ return [
     's' => ['PLACED' => 'অর্ডার নেওয়া হয়েছে', 'PICKUP_REQUESTED' => 'পিকআপের অনুরোধ', 'PREPARING' => 'প্রস্তুত হচ্ছে', 'OUT_FOR_DELIVERY' => 'ডেলিভারির পথে', 'READY_FOR_PICKUP' => 'পিকআপের জন্য প্রস্তুত', 'READY_FOR_COLLECTION' => 'সংগ্রহের জন্য প্রস্তুত', 'DELIVERED' => 'ডেলিভারি সম্পন্ন', 'PICKED_UP' => 'পিকআপ সম্পন্ন', 'COLLECTED' => 'সংগ্রহ সম্পন্ন', 'CANCELLED' => 'বাতিল'],
     'p' => ['UNPAID' => 'বাকি', 'PENDING_VERIFICATION' => 'যাচাই বাকি', 'PAID' => 'পরিশোধিত', 'VOID' => 'বাতিল'],
 
-    'nav' => ['orders' => 'অর্ডার', 'products' => 'পণ্য', 'categories' => 'ক্যাটাগরি', 'outlets' => 'আউটলেট', 'settings' => 'সেটিংস', 'pages' => 'কনটেন্ট পেজ', 'audit' => 'অডিট লগ', 'staff' => 'স্টাফ'],
+    'nav' => ['orders' => 'অর্ডার', 'products' => 'পণ্য', 'categories' => 'ক্যাটাগরি', 'outlets' => 'আউটলেট', 'settings' => 'সেটিংস', 'pages' => 'কনটেন্ট পেজ', 'audit' => 'অডিট লগ', 'staff' => 'স্টাফ', 'bulk' => 'একসাথে আপডেট'],
     'save' => 'সংরক্ষণ', 'add' => 'যোগ করুন', 'delete' => 'মুছুন', 'edit' => 'সম্পাদনা', 'new' => 'নতুন', 'active' => 'দৃশ্যমান', 'hidden' => 'লুকানো', 'publish' => 'প্রকাশ করুন', 'hide' => 'লুকান', 'actions' => 'কাজ',
     'name_bn' => 'নাম (বাংলা)', 'name_en' => 'নাম (ইংরেজি)', 'slug' => 'স্লাগ', 'category' => 'ক্যাটাগরি', 'sort' => 'ক্রম', 'code' => 'কোড', 'status_label' => 'অবস্থা',
     'outer_city' => 'আউটার সিলেট', 'outer_default' => 'ক্যাটাগরির নিয়ম', 'outer' => ['APPROVED' => 'অনুমোদিত', 'DISABLED' => 'বন্ধ', 'PENDING_VERIFICATION' => 'যাচাই বাকি', 'PENDING_CONFIRMATION' => 'নিশ্চিতকরণ বাকি'],
@@ -46,4 +46,9 @@ return [
     'role' => 'ভূমিকা', 'roles' => ['ADMIN' => 'অ্যাডমিন', 'MANAGER' => 'ম্যানেজার'], 'suspended' => 'স্থগিত', 'suspend' => 'স্থগিত করুন', 'activate' => 'চালু করুন', 'reset_password' => 'নতুন অস্থায়ী পাসওয়ার্ড', 'reset_2fa' => 'টু-ফ্যাক্টর রিসেট', 'generate' => 'তৈরি করুন', 'temp_password' => 'অস্থায়ী পাসওয়ার্ড (একবারই দেখানো হয়, নিরাপদে হস্তান্তর করুন)',
     'account' => 'আমার অ্যাকাউন্ট', 'current_password' => 'বর্তমান পাসওয়ার্ড', 'new_password' => 'নতুন পাসওয়ার্ড (কমপক্ষে ১২ অক্ষর)',
     'export_csv' => 'CSV ডাউনলোড', 'stat_today' => 'আজকের অর্ডার', 'stat_new' => 'নতুন, শুরু হয়নি', 'stat_verify' => 'যাচাই বাকি পেমেন্ট', 'stat_cod' => 'ক্যাশ অন ডেলিভারি, টাকা নেওয়া হয়নি',
+    'bulk_csv_title' => 'সব পণ্যের দাম, দৃশ্যমানতা ও স্টক (স্প্রেডশিট)', 'bulk_step1' => 'স্প্রেডশিট ডাউনলোড করুন: সব পণ্য ও সাইজ বর্তমান মানসহ থাকবে।', 'bulk_step2' => 'Excel বা Google Sheets-এ price_taka (ফাঁকা = দাম নেই), visible (yes/no), outer_sylhet এবং stock:<শাখা> কলাম পূরণ করুন। product_slug ও variant_id বদলাবেন না।', 'bulk_step3' => 'CSV হিসেবে সেভ করে আপলোড করুন। কোনো সারি ভুল হলে কিছুই সেভ হবে না, ভুল সারিগুলো দেখানো হবে।',
+    'bulk_download' => 'স্প্রেডশিট ডাউনলোড (CSV)', 'bulk_upload' => 'আপলোড ও প্রয়োগ', 'bulk_choose' => 'আগে CSV ফাইলটি বাছুন।', 'bulk_nothing_saved' => 'কিছুই সেভ হয়নি। এই সারিগুলো ঠিক করে আবার আপলোড করুন:',
+    'bulk_done' => ':rows সারি যাচাই হয়েছে। :v সাইজ বদলেছে, :s স্টক সেট হয়েছে, :p পণ্য প্রকাশিত, :h লুকানো।',
+    'bulk_photos_title' => 'একসাথে অনেক পণ্যের ছবি', 'bulk_photos_help' => 'প্রতিটি ফাইলের নাম পণ্যের কোড (স্প্রেডশিটের product_slug) দিয়ে দিন: ds-01.jpg হবে মূল ছবি, ds-01-2.jpg ও ds-01-3.jpg হবে আরও ছবি। JPEG, PNG বা WebP, প্রতিটি সর্বোচ্চ ৮ MB।',
+    'bulk_photos_upload' => 'ছবি আপলোড', 'bulk_photos_done' => ':c টি মূল ছবি ও :e টি অতিরিক্ত ছবি সেভ হয়েছে।',
 ];

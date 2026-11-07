@@ -21,7 +21,7 @@ return [
     's' => ['PLACED' => 'Placed', 'PICKUP_REQUESTED' => 'Pickup requested', 'PREPARING' => 'Preparing', 'OUT_FOR_DELIVERY' => 'Out for delivery', 'READY_FOR_PICKUP' => 'Ready for pickup', 'READY_FOR_COLLECTION' => 'Ready for collection', 'DELIVERED' => 'Delivered', 'PICKED_UP' => 'Picked up', 'COLLECTED' => 'Collected', 'CANCELLED' => 'Cancelled'],
     'p' => ['UNPAID' => 'Unpaid', 'PENDING_VERIFICATION' => 'Needs verification', 'PAID' => 'Paid', 'VOID' => 'Void'],
 
-    'nav' => ['orders' => 'Orders', 'products' => 'Products', 'categories' => 'Categories', 'outlets' => 'Outlets', 'settings' => 'Settings', 'pages' => 'Content pages', 'audit' => 'Audit log', 'staff' => 'Staff'],
+    'nav' => ['orders' => 'Orders', 'products' => 'Products', 'categories' => 'Categories', 'outlets' => 'Outlets', 'settings' => 'Settings', 'pages' => 'Content pages', 'audit' => 'Audit log', 'staff' => 'Staff', 'bulk' => 'Bulk update'],
     'save' => 'Save', 'add' => 'Add', 'delete' => 'Delete', 'edit' => 'Edit', 'new' => 'New', 'active' => 'Visible', 'hidden' => 'Hidden', 'publish' => 'Publish', 'hide' => 'Hide', 'actions' => 'Actions',
     'name_bn' => 'Name (Bangla)', 'name_en' => 'Name (English)', 'slug' => 'Slug', 'category' => 'Category', 'sort' => 'Sort order', 'code' => 'Code', 'status_label' => 'Status',
     'outer_city' => 'Outer Sylhet', 'outer_default' => 'Category default', 'outer' => ['APPROVED' => 'Approved', 'DISABLED' => 'Disabled', 'PENDING_VERIFICATION' => 'Pending verification', 'PENDING_CONFIRMATION' => 'Pending confirmation'],
@@ -46,4 +46,9 @@ return [
     'role' => 'Role', 'roles' => ['ADMIN' => 'Admin', 'MANAGER' => 'Manager'], 'suspended' => 'Suspended', 'suspend' => 'Suspend', 'activate' => 'Activate', 'reset_password' => 'New temporary password', 'reset_2fa' => 'Reset two-factor', 'generate' => 'Generate', 'temp_password' => 'Temporary password (shown once, hand it over safely)',
     'account' => 'My account', 'current_password' => 'Current password', 'new_password' => 'New password (at least 12 characters)',
     'export_csv' => 'Download CSV', 'stat_today' => 'Orders today', 'stat_new' => 'New, not started', 'stat_verify' => 'Payments to verify', 'stat_cod' => 'Cash on delivery not collected',
+    'bulk_csv_title' => 'Prices, visibility and stock for all products (spreadsheet)', 'bulk_step1' => 'Download the spreadsheet: every product and size with its current values.', 'bulk_step2' => 'Fill in price_taka (empty = no price), visible (yes/no), outer_sylhet and the stock:<branch> columns in Excel or Google Sheets. Do not change product_slug or variant_id.', 'bulk_step3' => 'Save as CSV and upload it. If any row is wrong nothing is saved and the rows are listed.',
+    'bulk_download' => 'Download spreadsheet (CSV)', 'bulk_upload' => 'Upload and apply', 'bulk_choose' => 'Choose the CSV file first.', 'bulk_nothing_saved' => 'Nothing was saved. Fix these rows and upload again:',
+    'bulk_done' => ':rows rows checked. :v sizes changed, :s stock values set, :p products published, :h hidden.',
+    'bulk_photos_title' => 'Photos for many products at once', 'bulk_photos_help' => 'Name each file after the product code (product_slug in the spreadsheet): ds-01.jpg becomes the main photo, ds-01-2.jpg and ds-01-3.jpg become extra photos. JPEG, PNG or WebP, up to 8 MB each.',
+    'bulk_photos_upload' => 'Upload photos', 'bulk_photos_done' => ':c main photos and :e extra photos saved.',
 ];

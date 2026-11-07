@@ -36,6 +36,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/pages', Admin\ContentPages::class)->name('admin.pages');
             Route::get('/audit', Admin\AuditLogView::class)->name('admin.audit');
             Route::get('/staff', Admin\Staff::class)->name('admin.staff');
+            Route::get('/bulk', Admin\Bulk::class)->name('admin.bulk');
             Route::get('/orders-export', \App\Http\Controllers\OrderExportController::class)->name('admin.export');
         });
     });

@@ -34,7 +34,7 @@ echo "Wrote $OUT ($(du -h "$OUT" | cut -f1))"
 
 # web-folder-only package: index.php patched to load the app from elsewhere and to serve uploads from its own folder
 APP_REL="${APP_REL:-/../dudhwala/app}"
-PUB_OUT="${OUT%.zip}-public_html.zip"
+PUB_OUT="$(dirname "$OUT")/dudhwala-public_html.zip"
 rm -rf "$TMP/pub" && mkdir -p "$TMP/pub" && rsync -a --exclude storage --exclude hot "$ROOT/app/public/" "$TMP/pub/"
 python3 - "$TMP/pub/index.php" "$APP_REL" <<'PY'
 import sys

@@ -50,7 +50,8 @@ No terminal? Create a temporary cron job (every minute) with the same command, w
 7. **Cron** (one line, every minute): `* * * * * cd /home/USER/dudhwala/app && /usr/local/bin/php artisan schedule:run >> /dev/null 2>&1` runs the daily 03:00 (Dhaka) database backup.
 8. Sign in at `https://admin.yourdomain.com/admin`, enrol the authenticator app (admins must), **save the recovery codes**, then in the admin:
    **Outlets** (real address, phone, hours for each branch) → **Settings** (hours, showroom limit, fees, bKash/Nagad numbers, courier link formats) → **Products** (prices, stock per branch, photos, Outer Sylhet status) → publish.
-9. **Staff**: Admin → *Staff* creates Managers (view only) or more Admins, suspends people, resets two-factor or issues a temporary password. Everyone changes their own password under their name in the top bar.
+9. **Bulk update** (Admin → *Bulk update*): download the spreadsheet of all 59 products, fill prices, visible = yes and stock per branch in Excel or Google Sheets, upload it back (all-or-nothing, errors listed by row). Upload many photos at once named by product code (`ds-01.jpg` main, `ds-01-2.jpg` extra).
+10. **Staff**: Admin → *Staff* creates Managers (view only) or more Admins, suspends people, resets two-factor or issues a temporary password. Everyone changes their own password under their name in the top bar.
 
 ## 3. Vercel: storefront
 
