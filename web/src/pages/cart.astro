@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import Bi from '../components/Bi.astro';
+---
+<Base titleBn="কার্ট ও চেকআউট" titleEn="Cart & checkout" nav="cart">
+  <div class="wrap" style="padding-top:1rem;padding-bottom:2rem">
+    <h1><Bi bn="কার্ট" en="Cart" /></h1>
+    <div id="empty" class="card" style="padding:2rem;text-align:center" hidden>
+      <p><Bi k="emptyCart" /></p><a class="btn primary" href="/shop"><Bi k="shop" /></a>
+    </div>
+    <div id="noapi" class="notice warn" hidden><Bi bn="অনলাইন অর্ডার এখনো চালু হয়নি। শীঘ্রই আসছে।" en="Online ordering is not open yet. Coming soon." /></div>
+    <div id="closed" class="notice warn" hidden></div>
+
+    <div class="lay" id="main-lay" hidden>
+      <div>
+        <div class="card" id="lines"></div>
+        <p id="bulknote" class="notice" hidden style="margin-top:1rem"></p>
+      </div>
+      <form class="card" id="f" style="padding:1.1rem" novalidate>
+        <h2 style="font-size:1.2rem"><Bi bn="কীভাবে পাবেন" en="How would you like to get it?" /></h2>
+        <div class="opts" id="methods">
+          <label class="opt" data-m="HOME_DELIVERY"><input type="radio" name="method" value="HOME_DELIVERY" /><span><strong><Bi bn="হোম ডেলিভারি" en="Home delivery" /></strong><br /><span class="hint"><Bi bn="ডেলিভারি চার্জ প্রযোজ্য হতে পারে" en="A delivery fee may apply" /></span></span></label>
+          <label class="opt" data-m="EXPRESS_PICKUP"><input type="radio" name="method" value="EXPRESS_PICKUP" /><span><strong><Bi bn="এক্সপ্রেস পিকআপ" en="Express pickup" /></strong><br /><span class="hint"><Bi bn="কমপক্ষে ১ ঘণ্টা পরে, ৩০ মিনিটের স্লট" en="At least 1 hour ahead, 30-minute slots" /></span></span></label>
+          <label class="opt" data-m="BULK_ORDER"><input type="radio" name="method" value="BULK_ORDER" /><span><strong><Bi k="showroom" /></strong><br /><span class="hint" id="bulkhint"><Bi bn="বেশি পরিমাণ অর্ডারে শোরুম থেকে সংগ্রহ" en="Large orders are collected at the showroom" /></span></span></label>
+        </div>
+
+        <div id="zonebox" class="field" style="margin-top:1rem">
+          <label for="zone"><Bi bn="এলাকা" en="Area" /></label>
+          <select id="zone" name="zone">
+            <option value="">— —</option>
+            <option value="IN_CITY">ইন সিলেট / In Sylhet</option>
+            <option value="OUTER_CITY">আউটার সিলেট / Outer Sylhet</option>
+          </select>
+          <p class="hint" id="eta"></p>
+          <p class="err" id="zonebad" hidden></p>
+        </div>
+
+        <div id="pickbox" hidden>
+          <div class="field" style="margin-top:1rem"><label for="outlet"><Bi bn="আউটলেট" en="Outlet" /></label><select id="outlet"></select></div>
+          <div class="field"><label for="slot"><Bi bn="পিকআপের সময়" en="Pickup time" /></label><select id="slot"></select></div>
+        </div>
+
+        <h2 style="font-size:1.2rem;margin-top:1.4rem"><Bi bn="যোগাযোগ" en="Contact" /></h2>
+        <div class="field"><label for="name"><Bi bn="নাম" en="Name" /></label><input id="name" autocomplete="name" maxlength="80" /></div>
+        <div class="field"><label for="phone"><Bi bn="মোবাইল নম্বর" en="Mobile number" /></label><input id="phone" inputmode="tel" autocomplete="tel" placeholder="01XXXXXXXXX" /></div>
+        <div id="addrbox">
+          <div class="field"><label for="addr"><Bi bn="ঠিকানা" en="Address" /></label><textarea id="addr" rows="2" maxlength="300"></textarea></div>
+          <div class="field"><label for="land"><Bi bn="ল্যান্ডমার্ক (ঐচ্ছিক)" en="Landmark (optional)" /></label><input id="land" maxlength="120" /></div>
+        </div>
+
+        <h2 style="font-size:1.2rem;margin-top:1.2rem"><Bi bn="পেমেন্ট" en="Payment" /></h2>
+        <div class="opts" id="pays">
+          <label class="opt" data-p="COD"><input type="radio" name="pay" value="COD" checked /><span><strong><Bi bn="ক্যাশ অন ডেলিভারি / হাতে নগদ" en="Cash on delivery / cash in hand" /></strong></span></label>
+          <label class="opt" data-p="BKASH"><input type="radio" name="pay" value="BKASH" /><span><strong>bKash / বিকাশ</strong><br /><span class="hint" data-pn="BKASH"></span></span></label>
+          <label class="opt" data-p="NAGAD"><input type="radio" name="pay" value="NAGAD" /><span><strong>Nagad / নগদ</strong><br /><span class="hint" data-pn="NAGAD"></span></span></label>
+        </div>
+        <div id="mobbox" hidden style="margin-top:.8rem">
+          <p class="notice" id="payhow"></p>
+          <div class="field"><label for="sender"><Bi bn="যে নম্বর থেকে পাঠিয়েছেন" en="Number you sent from" /></label><input id="sender" inputmode="tel" placeholder="01XXXXXXXXX" /></div>
+          <div class="field"><label for="trx">TrxID</label><input id="trx" maxlength="40" autocapitalize="characters" /></div>
+        </div>
+
+        <input class="hp" type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <div style="margin-top:1.2rem">
+          <div class="row"><span><Bi k="subtotal" /></span><span id="sub"></span></div>
+          <div class="row"><span><Bi k="deliveryFee" /></span><span id="fee"></span></div>
+          <div class="row tot"><span><Bi k="total" /></span><span id="tot"></span></div>
+        </div>
+        <div id="errs" class="notice bad" hidden></div>
+        <button class="btn primary block" id="go" type="submit" style="margin-top:1rem"><Bi k="placeOrder" /></button>
+      </form>
+    </div>
+  </div>
+  <script>import '../scripts/checkout';</script>
+</Base>

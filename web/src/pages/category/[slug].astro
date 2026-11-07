@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import Bi from '../../components/Bi.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products, categories } from '../../lib/catalogue';
+export function getStaticPaths() { return categories.map((c) => ({ params: { slug: c.slug }, props: { c } })); }
+const { c } = Astro.props;
+const list = products.filter((p) => p.category === c.slug);
+---
+<Base titleBn={c.nameBn} titleEn={c.nameEn} nav="shop">
+  <div class="wrap">
+    <p class="crumbs"><a href="/shop"><Bi k="shop" /></a> / <Bi bn={c.nameBn} en={c.nameEn} /></p>
+    <h1><Bi bn={c.nameBn} en={c.nameEn} /></h1>
+    <div class="bar"><select id="sort" aria-label="Sort">
+      <option value="name">নাম / Name</option><option value="low">দাম কম → বেশি / Price low → high</option><option value="high">দাম বেশি → কম / Price high → low</option>
+    </select></div>
+    <div class="grid" id="grid">{list.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} />)}</div>
+    <p id="none" hidden></p>
+  </div>
+  <script>import '../../scripts/shop';</script>
+</Base>

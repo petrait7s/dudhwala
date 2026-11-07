@@ -1,0 +1,8 @@
+---
+import { D, type Key } from '../lib/i18n';
+interface Props { k?: Key; bn?: string; en?: string }
+const { k, bn, en } = Astro.props;
+const b = bn ?? (k ? D[k].bn : '');
+const e = en ?? (k ? D[k].en : '');
+---
+<span class="bn" lang="bn">{b}</span><span class="en" lang="en">{e}</span>

@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import Bi from '../components/Bi.astro';
+import site from '../data/site.json';
+---
+<Base titleBn="পরিচিতি" titleEn="About" nav="info">
+  <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem;max-width:760px">
+    <h1><Bi bn={site.nameBn} en={site.nameEn} /></h1>
+    <p><Bi bn={`${site.nameBn} (${site.nameEn}) ${site.city.bn}ভিত্তিক। আমরা দুগ্ধজাত মিষ্টি, দই ও বেকারি পণ্য বিক্রি করি।`} en={`${site.nameEn} is based in ${site.city.en}. We sell dairy sweets, doi and bakery products.`} /></p>
+    <p><Bi bn={`শোরুম: ${site.showroom.nameBn}।`} en={`Showroom: ${site.showroom.nameEn}.`} /></p>
+    <p><a class="btn primary" href="/shop"><Bi k="shop" /></a> <a class="btn" href="/contact"><Bi k="contact" /></a></p>
+  </div>
+</Base>

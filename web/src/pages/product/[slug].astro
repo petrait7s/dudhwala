@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import Bi from '../../components/Bi.astro';
+import Icons from '../../components/Icons.astro';
+import { products, catName } from '../../lib/catalogue';
+export function getStaticPaths() { return products.map((p) => ({ params: { slug: p.id }, props: { p } })); }
+const { p } = Astro.props;
+const cat = catName(p.category)!;
+---
+<Base titleBn={p.nameBn} titleEn={p.nameEn} nav="shop" buybar>
+  <div class="wrap has-buybar" data-product data-slug={p.id} data-cat={p.category} data-outer={p.outerCity ?? ''} data-name-bn={p.nameBn} data-name-en={p.nameEn}>
+    <p class="crumbs"><a href="/shop"><Bi k="shop" /></a> / <a href={`/category/${cat.slug}`}><Bi bn={cat.nameBn} en={cat.nameEn} /></a></p>
+    <div class="pdp">
+      <div class="pic" data-pic><Icons name="jar" /></div>
+      <div>
+        <h1><Bi bn={p.nameBn} en={p.nameEn} /></h1>
+        <p class="muted"><Bi bn={cat.nameBn} en={cat.nameEn} /></p>
+        <div class="price" data-price><span class="soon muted" style="font-size:1rem;font-weight:600"><Bi k="priceSoon" /></span></div>
+        <div class="field" data-sizes-wrap hidden style="margin-top:1rem">
+          <label><Bi k="size" /></label>
+          <div class="chips" data-sizes></div>
+        </div>
+        <div class="field" data-qty-wrap hidden>
+          <label><Bi k="qty" /></label>
+          <div class="qty"><button type="button" data-minus aria-label="−">−</button><output data-qty>1</output><button type="button" data-plus aria-label="+">+</button></div>
+        </div>
+        <p class="notice warn" data-na hidden><Bi k="unavailable" /></p>
+        <div class="stat" style="margin-top:1rem">
+          <button class="btn primary" type="button" data-add disabled><Bi k="addToCart" /></button>
+          <button class="btn accent" type="button" data-buy disabled><Bi k="buyNow" /></button>
+        </div>
+        <p class="hint" data-outer-note></p>
+      </div>
+    </div>
+  </div>
+  <div class="buybar" data-bar>
+    <div class="tot" data-bartotal></div>
+    <button class="btn primary" type="button" data-add2 disabled><Bi k="addToCart" /></button>
+    <button class="btn accent" type="button" data-buy2 disabled><Bi k="buyNow" /></button>
+  </div>
+  <script>import '../../scripts/product';</script>
+</Base>

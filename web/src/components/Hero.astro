@@ -1,0 +1,31 @@
+---
+import Bi from './Bi.astro';
+import hero from '../data/hero.json';
+import site from '../data/site.json';
+interface Slide { src: string; fx?: number; fy?: number; altBn?: string; altEn?: string }
+const slides = hero as Slide[];
+---
+<section class={`hero${slides.length ? '' : ' plain'}`} data-hero>
+  {slides.length > 0 && (
+    <div class="slides" data-slides>
+      {slides.map((s, i) => (
+        <div class={`slide${i === 0 ? ' on' : ''}`} style={`--fx:${s.fx ?? 50}%;--fy:${s.fy ?? 50}%`}>
+          <img src={`${s.src}-800.webp`} srcset={`${s.src}-800.webp 800w, ${s.src}-1400.webp 1400w`} sizes="100vw" alt={s.altEn ?? ''}
+            width="1400" height="933" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding={i === 0 ? 'sync' : 'async'} />
+        </div>
+      ))}
+    </div>
+  )}
+  {slides.length > 0 && <div class="shade"></div>}
+  <div class="wrap">
+    <div class="copy" data-copy>
+      <h1><span class="wavy"><Bi bn={site.nameBn} en="Dudhwala" /></span><br /><Bi bn={`${site.taglineBn}`} en={site.taglineEn} /></h1>
+      <p><Bi bn="সিলেটের দুগ্ধজাত মিষ্টি, দই ও বেকারি। ঘরে বসে অর্ডার করুন, অথবা শোরুম থেকে সংগ্রহ করুন।" en="Dairy sweets, doi and bakery from Sylhet. Order from home, or collect from the showroom." /></p>
+      <div class="ctas">
+        <a class="btn accent" href="/shop"><Bi bn="পণ্য দেখুন" en="Browse products" /></a>
+        <a class="btn" href="/showroom"><Bi k="showroom" /></a>
+      </div>
+    </div>
+  </div>
+</section>
+<script>import '../scripts/hero';</script>

@@ -1,0 +1,8 @@
+---
+const { name } = Astro.props as { name: 'home' | 'shop' | 'info' | 'cart' | 'jar' };
+---
+{name === 'home' && <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>}
+{name === 'shop' && <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16l-1.5 12h-13zM9 7a3 3 0 016 0"/></svg>}
+{name === 'info' && <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.1"/></svg>}
+{name === 'cart' && <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h10.2L20 8H6.2M9 20a1 1 0 100-.1M17 20a1 1 0 100-.1"/></svg>}
+{name === 'jar' && <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v3l2 3v10a2 2 0 01-2 2H9a2 2 0 01-2-2V9l2-3zM7 12h10"/></svg>}

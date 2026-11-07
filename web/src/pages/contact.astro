@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Bi from '../components/Bi.astro';
+import site from '../data/site.json';
+const wa = site.whatsapp.replace(/\D/g, '');
+const any = site.whatsapp || site.phone || site.email || site.showroom.address;
+---
+<Base titleBn="যোগাযোগ" titleEn="Contact">
+  <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem;max-width:680px">
+    <h1><Bi k="contact" /></h1>
+    <div class="card" style="padding:1.1rem">
+      <div class="row"><span><Bi bn="শোরুম" en="Showroom" /></span><strong><Bi bn={site.showroom.nameBn} en={site.showroom.nameEn} /></strong></div>
+      {site.showroom.address && <div class="row"><span><Bi bn="ঠিকানা" en="Address" /></span><span>{site.showroom.address}</span></div>}
+      {site.phone && <div class="row"><span><Bi bn="ফোন" en="Phone" /></span><a href={`tel:${site.phone}`}>{site.phone}</a></div>}
+      {site.email && <div class="row"><span>Email</span><a href={`mailto:${site.email}`}>{site.email}</a></div>}
+      {!any && <p class="muted"><Bi bn="যোগাযোগের তথ্য শীঘ্রই যোগ হবে।" en="Contact details will be added soon." /></p>}
+    </div>
+    {wa && <p style="margin-top:1rem"><a class="btn accent" href={`https://wa.me/${wa}`} rel="noopener"><Bi bn="WhatsApp-এ মেসেজ করুন" en="Message on WhatsApp" /></a></p>}
+  </div>
+</Base>

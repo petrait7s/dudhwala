@@ -1,0 +1,13 @@
+---
+import Bi from './Bi.astro';
+import Icons from './Icons.astro';
+interface Props { slug: string; nameBn: string; nameEn: string; category: string }
+const { slug, nameBn, nameEn, category } = Astro.props;
+---
+<a class="card pc reveal" href={`/product/${slug}`} data-slug={slug} data-cat={category} data-name={`${nameBn} ${nameEn}`.toLowerCase()}>
+  <div class="ph" data-ph><Icons name="jar" /></div>
+  <div class="bd">
+    <div class="nm"><Bi bn={nameBn} en={nameEn} /></div>
+    <div class="pr soon" data-price><Bi k="priceSoon" /></div>
+  </div>
+</a>

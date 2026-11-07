@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Bi from '../components/Bi.astro';
+---
+<Base titleBn="অর্ডার ট্র্যাক" titleEn="Track order">
+  <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem;max-width:680px">
+    <h1><Bi k="track" /></h1>
+    <form class="card" id="tf" style="padding:1.1rem" novalidate>
+      <div class="field"><label for="on"><Bi bn="অর্ডার নম্বর" en="Order number" /></label><input id="on" autocapitalize="characters" /></div>
+      <div class="field"><label for="ph"><Bi bn="মোবাইল নম্বর" en="Mobile number" /></label><input id="ph" inputmode="tel" placeholder="01XXXXXXXXX" /></div>
+      <button class="btn primary block" type="submit" id="tb"><Bi bn="অবস্থা দেখুন" en="Check status" /></button>
+      <p class="notice warn" id="noapi" hidden style="margin-top:1rem"><Bi bn="অর্ডার ট্র্যাকিং এখনো চালু হয়নি।" en="Tracking is not open yet." /></p>
+      <p class="err" id="te" hidden></p>
+    </form>
+    <div id="res" class="card" style="padding:1.1rem;margin-top:1rem" hidden></div>
+  </div>
+  <script>import '../scripts/track';</script>
+</Base>

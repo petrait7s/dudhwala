@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Bi from '../components/Bi.astro';
+---
+<Base titleBn="অর্ডার সম্পন্ন" titleEn="Order placed">
+  <div class="wrap" style="padding:2rem var(--dw-s-4)">
+    <div class="card" style="padding:1.6rem;max-width:620px;margin:0 auto;text-align:center">
+      <div class="pill ok" style="margin-bottom:.8rem"><Bi bn="অর্ডার নেওয়া হয়েছে" en="Order received" /></div>
+      <h1 style="font-size:1.6rem"><Bi bn="ধন্যবাদ!" en="Thank you!" /></h1>
+      <p><Bi bn="আপনার অর্ডার নম্বর" en="Your order number" /></p>
+      <p style="font-size:1.8rem;font-weight:800;letter-spacing:.04em" id="num">—</p>
+      <p class="muted" id="pnote"></p>
+      <p class="muted"><Bi bn="নম্বরটি সংরক্ষণ করুন। ট্র্যাক করতে অর্ডার নম্বর ও ফোন নম্বর লাগবে।" en="Keep this number. You need it with your phone number to track the order." /></p>
+      <p><a class="btn primary" href="/track" id="trk"><Bi k="track" /></a> <a class="btn" href="/shop"><Bi k="shop" /></a></p>
+    </div>
+  </div>
+  <script>
+    const qs = new URLSearchParams(location.search);
+    const n = qs.get('o') || '';
+    (document.getElementById('num') as HTMLElement).textContent = n || '—';
+    (document.getElementById('trk') as HTMLAnchorElement).href = '/track?o=' + encodeURIComponent(n);
+    try {
+      const last = JSON.parse(sessionStorage.getItem('dw_last_order') || 'null');
+      if (last && last.n === n && last.p !== 'COD') {
+        (document.getElementById('pnote') as HTMLElement).innerHTML = '<span class="bn">আপনার TrxID আমাদের স্টাফ যাচাই করবেন।</span><span class="en">Our staff will verify your TrxID.</span>';
+      } else if (last && last.n === n) {
+        (document.getElementById('pnote') as HTMLElement).innerHTML = '<span class="bn">পেমেন্ট: ক্যাশ অন ডেলিভারি / হাতে নগদ।</span><span class="en">Payment: cash on delivery / cash in hand.</span>';
+      }
+    } catch {}
+  </script>
+</Base>

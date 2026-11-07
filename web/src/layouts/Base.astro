@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+import Bi from '../components/Bi.astro';
+import Icons from '../components/Icons.astro';
+import site from '../data/site.json';
+import pages from '../data/pages.json';
+interface Props { titleBn: string; titleEn: string; descBn?: string; descEn?: string; nav?: 'home' | 'shop' | 'info' | 'cart' | ''; buybar?: boolean }
+const { titleBn, titleEn, descBn = 'দুধওয়ালা: সিলেটের দুগ্ধজাত মিষ্টি, দই ও বেকারি।', descEn = 'Dudhwala: dairy sweets, doi and bakery from Sylhet.', nav = '', buybar = false } = Astro.props;
+const path = Astro.url.pathname;
+const cur = (n: string) => (nav === n ? 'page' : undefined);
+const url = new URL(path, Astro.site).toString();
+---
+<!doctype html>
+<html lang="bn" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>{titleBn} | {titleEn} · {site.nameEn}</title>
+  <meta name="description" content={descBn + ' ' + descEn} />
+  <link rel="canonical" href={url} />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <meta name="theme-color" content="#1d2672" />
+  <meta property="og:title" content={`${titleBn} | ${titleEn}`} />
+  <meta property="og:image" content="/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Tiro+Bangla&display=swap" />
+  <script is:inline>
+    (function () {
+      try {
+        var l = localStorage.getItem('dw_lang'); document.documentElement.lang = l === 'en' ? 'en' : 'bn';
+        var t = localStorage.getItem('dw_theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body data-has-buybar={buybar ? '1' : undefined}>
+  <a class="sr" href="#main">Skip to content</a>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label={site.nameEn}><img src="/logo.png" width="79" height="42" alt={site.nameEn} /></a>
+      <nav class="nav" aria-label="Main">
+        <a href="/" aria-current={cur('home')}><Bi k="home" /></a>
+        <a href="/shop" aria-current={cur('shop')}><Bi k="shop" /></a>
+        <a href="/showroom"><Bi k="showroom" /></a>
+        <a href="/track"><Bi k="track" /></a>
+        <a href="/about" aria-current={cur('info')}><Bi k="info" /></a>
+        <a href="/contact"><Bi k="contact" /></a>
+      </nav>
+      <div class="tools">
+        <button class="tool" id="lang" type="button" aria-label="Language / ভাষা"><span class="bn">EN</span><span class="en">বাং</span></button>
+        <button class="tool" id="theme" type="button" aria-label="Theme"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button>
+        <a class="tool cartlink" href="/cart" aria-label="Cart"><Icons name="cart" /><span class="badge" data-cartcount hidden>0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <footer class="ft">
+    <div class="wrap cols">
+      <div>
+        <strong style="color:#fff;font-size:1.1rem"><Bi bn={site.nameBn} en={site.nameEn} /></strong>
+        <p><Bi bn={`${site.taglineBn} · ${site.city.bn}`} en={`${site.taglineEn} · ${site.city.en}`} /></p>
+        <p><Bi bn={`শোরুম: ${site.showroom.nameBn}`} en={`Showroom: ${site.showroom.nameEn}`} />{site.showroom.address && <>, {site.showroom.address}</>}</p>
+      </div>
+      <ul>
+        <li><a href="/shop"><Bi k="shop" /></a></li>
+        <li><a href="/showroom"><Bi k="showroom" /></a></li>
+        <li><a href="/track"><Bi k="track" /></a></li>
+        <li><a href="/cart"><Bi k="cart" /></a></li>
+      </ul>
+      <ul>
+        <li><a href="/about"><Bi k="info" /></a></li>
+        <li><a href="/contact"><Bi k="contact" /></a></li>
+        {(pages as { slug: string; titleBn: string; titleEn?: string }[]).map((p) => <li><a href={`/info/${p.slug}`}><Bi bn={p.titleBn} en={p.titleEn ?? p.titleBn} /></a></li>)}
+      </ul>
+    </div>
+    <div class="wrap" style="margin-top:1.2rem;font-size:.85rem">© {new Date().getFullYear()} {site.nameEn}</div>
+  </footer>
+
+  <nav class={`tabs${buybar ? ' hide' : ''}`} aria-label="Tabs">
+    <a href="/" aria-current={cur('home')}><Icons name="home" /><Bi k="home" /></a>
+    <a href="/shop" aria-current={cur('shop')}><Icons name="shop" /><Bi k="shop" /></a>
+    <a href="/about" aria-current={cur('info')}><Icons name="info" /><Bi k="info" /></a>
+    <a href="/cart" aria-current={cur('cart')}><Icons name="cart" /><Bi k="cart" /><span class="badge" data-cartcount hidden>0</span></a>
+  </nav>
+  <script>import '../scripts/app';</script>
+</body>
+</html>

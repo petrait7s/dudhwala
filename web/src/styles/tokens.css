@@ -1,0 +1,139 @@
+/* Brand tokens copied unchanged from packages/ui/styles/dw.css (only the font stack differs). */
+:root {
+  color-scheme: light;
+
+  /* surfaces */
+  --dw-bg: #dde4ff;
+  --dw-bg-a: #e9eeff;
+  --dw-bg-b: #cfdcff;
+  --dw-surface: #ffffff;
+  --dw-surface-soft: rgba(255, 255, 255, 0.94);
+  --dw-surface-2: #f3f5fe;
+  --dw-glass: rgba(255, 255, 255, 0.74);
+  --dw-glass-strong: rgba(255, 255, 255, 0.94);
+  --dw-overlay: rgba(10, 14, 52, 0.55);
+  --dw-glow-1: rgba(0, 170, 240, 0.28);
+  --dw-glow-2: rgba(63, 70, 220, 0.26);
+
+  /* text + lines */
+  --dw-ink: #12173f;
+  --dw-muted: #484d78;
+  --dw-line: #d8dcf0;
+  --dw-line-strong: #b4bce0;
+
+  /* brand: saturated indigo, vivid cyan */
+  --dw-brand-50: #f1f3ff;
+  --dw-brand-100: #e2e6ff;
+  --dw-brand-500: #4047d8;
+  --dw-brand-600: #2f35b6;
+  --dw-brand-700: #1d2672;
+  --dw-brand-900: #0e1344;
+  --dw-brand-edge: #1a2086;
+  --dw-link: #2f35b6;
+  --dw-accent-100: #d6f3ff;
+  --dw-accent-500: #00b4f2;
+  --dw-accent-ink: #00709f;
+  --dw-sky: #79b9e5;
+  --dw-on-brand: #ffffff;
+  --dw-bar-ink: #dfe4ff; /* secondary text on the always-dark bars (hero, footer) in both themes */
+  --dw-bar: #2a2fae;
+  --dw-bar-2: #151b63;
+
+  /* status */
+  --dw-ok: #14703d;
+  --dw-ok-bg: #e2f6ea;
+  --dw-ok-line: #9fd9b6;
+  --dw-warn: #854d00;
+  --dw-warn-bg: #fff2cf;
+  --dw-warn-line: #ecc978;
+  --dw-danger: #b3261e;
+  --dw-danger-bg: #fdebe9;
+  --dw-danger-line: #efb0aa;
+  --dw-info: #0a5a85;
+  --dw-info-bg: #ddf2fc;
+  --dw-info-line: #9fd3ee;
+
+  --dw-focus: #0096d6;
+
+  /* depth */
+  --dw-shadow-1: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 1px 2px rgba(18, 23, 63, 0.08), 0 10px 24px -14px rgba(18, 23, 63, 0.3);
+  --dw-shadow-2: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 2px 4px rgba(18, 23, 63, 0.1), 0 18px 36px -14px rgba(18, 23, 63, 0.4);
+  --dw-shadow-press: inset 0 2px 4px rgba(14, 19, 68, 0.3);
+
+  /* shape + spacing */
+  --dw-r-sm: 8px;
+  --dw-r-md: 12px;
+  --dw-r-lg: 16px;
+  --dw-r-xl: 24px;
+  --dw-s-1: 0.25rem;
+  --dw-s-2: 0.5rem;
+  --dw-s-3: 0.75rem;
+  --dw-s-4: 1rem;
+  --dw-s-5: 1.5rem;
+  --dw-s-6: 2rem;
+
+  /* motion */
+  --dw-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dw-fast: 120ms;
+  --dw-base: 220ms;
+  --dw-slow: 480ms;
+
+  /* fonts: Bangla first on Bangla pages, Latin first on English pages (set per html[lang] below) */
+  --dw-font: 'Montserrat', 'Tiro Bangla', system-ui, sans-serif;
+  --dw-font-latin: 'Montserrat', system-ui, sans-serif;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --dw-bg: #0b1140;
+  --dw-bg-a: #0a0f36;
+  --dw-bg-b: #101a58;
+  --dw-surface: #141a4a;
+  --dw-surface-soft: rgba(24, 31, 82, 0.86);
+  --dw-surface-2: #1b2360;
+  --dw-glass: rgba(18, 24, 68, 0.74);
+  --dw-glass-strong: rgba(18, 24, 68, 0.95);
+  --dw-overlay: rgba(2, 4, 24, 0.7);
+  --dw-glow-1: rgba(0, 190, 255, 0.2);
+  --dw-glow-2: rgba(92, 100, 255, 0.3);
+
+  --dw-ink: #eef1ff;
+  --dw-muted: #aab2e0;
+  --dw-line: #2b3578;
+  --dw-line-strong: #43509e;
+
+  --dw-brand-50: #182058;
+  --dw-brand-100: #222c7c;
+  --dw-brand-500: #6a71ff;
+  --dw-brand-600: #4f57f5;
+  --dw-brand-700: #c2caff;
+  --dw-brand-900: #070a2c;
+  --dw-brand-edge: #2d35c4;
+  --dw-link: #97a0ff;
+  --dw-accent-100: #0d3a59;
+  --dw-accent-500: #1ec8ff;
+  --dw-accent-ink: #55d9ff;
+  --dw-sky: #79b9e5;
+  --dw-bar: #1b2275;
+  --dw-bar-2: #0b0f3a;
+
+  --dw-ok: #62e0a2;
+  --dw-ok-bg: #0f3a2a;
+  --dw-ok-line: #1f6b4b;
+  --dw-warn: #ffd166;
+  --dw-warn-bg: #3b2d0a;
+  --dw-warn-line: #7a5d14;
+  --dw-danger: #ff8f86;
+  --dw-danger-bg: #4a1823;
+  --dw-danger-line: #8c2f3d;
+  --dw-info: #6ccfff;
+  --dw-info-bg: #0d3550;
+  --dw-info-line: #1d6a96;
+
+  --dw-focus: #46d1ff;
+
+  --dw-shadow-1: inset 0 1px 0 rgba(160, 172, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 26px -14px rgba(0, 0, 0, 0.7);
+  --dw-shadow-2: inset 0 1px 0 rgba(160, 172, 255, 0.14), 0 2px 4px rgba(0, 0, 0, 0.5), 0 20px 40px -14px rgba(0, 0, 0, 0.8);
+  --dw-shadow-press: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}

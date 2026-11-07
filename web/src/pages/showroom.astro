@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Bi from '../components/Bi.astro';
+import site from '../data/site.json';
+---
+<Base titleBn="শোরুম থেকে অর্ডার" titleEn="Order From Showroom">
+  <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem;max-width:760px">
+    <h1><Bi k="showroom" /></h1>
+    <p><Bi bn={`বেশি পরিমাণে দরকার হলে ${site.showroom.nameBn} থেকে সংগ্রহ করুন। কার্টে পণ্যের পরিমাণ বা মোট দাম নির্ধারিত সীমায় পৌঁছালে চেকআউটে শুধু শোরুম অপশন পাবেন।`} en={`For larger quantities, collect from ${site.showroom.nameEn}. When the quantity or total in your cart reaches the set limit, checkout offers the showroom option only.`} /></p>
+    <div class="card" style="padding:1.1rem;margin:1rem 0">
+      <div class="row"><span><Bi bn="সংগ্রহের স্থান" en="Collection point" /></span><strong><Bi bn={site.showroom.nameBn} en={site.showroom.nameEn} /></strong></div>
+      {site.showroom.address && <div class="row"><span><Bi bn="ঠিকানা" en="Address" /></span><span>{site.showroom.address}</span></div>}
+      <div class="row"><span><Bi bn="বর্তমান সীমা" en="Current limit" /></span><span id="lim" class="muted">—</span></div>
+    </div>
+    <a class="btn primary" href="/shop"><Bi bn="পণ্য বাছুন" en="Choose products" /></a>
+    <a class="btn" href="/cart"><Bi k="cart" /></a>
+  </div>
+  <script>
+    import { getConfig } from '../lib/api';
+    import { formatTaka } from '../lib/money';
+    getConfig().then((c) => {
+      const q = c.bulk.min_total_quantity, a = c.bulk.min_total_poisha;
+      const pend = c.bulk.approved === false;
+      (document.getElementById('lim') as HTMLElement).innerHTML = `<span class="bn">${q} পিস বা ${formatTaka(a, 'bn')}${pend ? ' (চূড়ান্ত নয়)' : ''}</span><span class="en">${q} items or ${formatTaka(a, 'en')}${pend ? ' (not final)' : ''}</span>`;
+    });
+  </script>
+</Base>
