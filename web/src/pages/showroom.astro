@@ -8,8 +8,10 @@ import site from '../data/site.json';
   <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem">
     <h1><Bi k="showroom" /></h1>
     <p class="notice" role="note"><Bi
-      bn={`পণ্য বেছে সংখ্যা দিন। সংগ্রহ শুধু ${site.showroom.nameBn} থেকে; হোম ডেলিভারি নেই। আগে পেমেন্ট লাগে।`}
-      en={`Pick products and quantities. Collection only at ${site.showroom.nameEn}; no home delivery. Payment is required in advance.`} /></p>
+      bn="পণ্য বেছে সংখ্যা দিন। আমাদের যেকোনো শাখা থেকে সংগ্রহ করা যাবে (চেকআউটে শাখা বেছে নেবেন); হোম ডেলিভারি নেই। আগে পেমেন্ট লাগে।"
+      en="Pick products and quantities. Collect from any of our branches (you choose at checkout); no home delivery. Payment is required in advance." /></p>
+    <div id="branches"></div>
+    <script>import '../scripts/branches';</script>
     <p class="muted" id="limit"></p>
     <p class="notice warn" id="noapi" hidden><Bi bn="অনলাইন অর্ডার এখনো চালু হয়নি। শীঘ্রই আসছে।" en="Online ordering is not open yet. Coming soon." /></p>
 

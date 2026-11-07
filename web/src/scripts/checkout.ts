@@ -81,13 +81,15 @@ function render() {
   const note = $('bulknote');
   note.hidden = !b.isBulk;
   if (b.isBulk) note.innerHTML = both((l) => l === 'bn'
-    ? `শোরুম থেকে অর্ডার (${toBn(String(b.qty))} পিস${b.total !== null ? ', ' + formatTaka(b.total, 'bn') : ''}): হোম ডেলিভারি ও এক্সপ্রেস পিকআপ নেই; শুধু মদিনা মার্কেট শাখা থেকে সংগ্রহ।${cfg.bulk_prepaid ? ' আগে পেমেন্ট করতে হবে।' : ''}`
-    : `Showroom order (${b.qty} items${b.total !== null ? ', ' + formatTaka(b.total, 'en') : ''}): no home delivery or express pickup; collect at Modina Market Branch only.${cfg.bulk_prepaid ? ' Payment is required in advance.' : ''}`);
+    ? `শোরুম থেকে অর্ডার (${toBn(String(b.qty))} পিস${b.total !== null ? ', ' + formatTaka(b.total, 'bn') : ''}): হোম ডেলিভারি ও এক্সপ্রেস পিকআপ নেই; আপনার বেছে নেওয়া শাখা থেকে সংগ্রহ।${cfg.bulk_prepaid ? ' আগে পেমেন্ট করতে হবে।' : ''}`
+    : `Showroom order (${b.qty} items${b.total !== null ? ', ' + formatTaka(b.total, 'en') : ''}): no home delivery or express pickup; collect at the branch you choose.${cfg.bulk_prepaid ? ' Payment is required in advance.' : ''}`);
   if (cfg.bulk.approved === false && b.isBulk) note.innerHTML += ' ' + both((l) => (l === 'bn' ? '(সীমা এখনো চূড়ান্ত নয়)' : '(threshold not final yet)'));
 
   $('zonebox').hidden = m !== 'HOME_DELIVERY';
   $('addrbox').hidden = m !== 'HOME_DELIVERY';
+  $('outletbox').hidden = m === 'HOME_DELIVERY';
   $('pickbox').hidden = m !== 'EXPRESS_PICKUP';
+  showBranch();
   const z = zone();
   $('eta').innerHTML = m === 'HOME_DELIVERY' && z ? both((l) => DELIVERY_ESTIMATE[z][l]) : '';
 
@@ -128,14 +130,28 @@ function render() {
 function fillPickup() {
   const sel = $<HTMLSelectElement>('slot');
   const cur = sel.value;
-  sel.innerHTML = pickupSlots(new Date(), 12, cfg.hours).map((d) => {
+  const branch = cfg.outlets.find((x) => String(x.id) === val('outlet'))?.hours;
+  sel.innerHTML = pickupSlots(new Date(), 12, cfg.hours, branch).map((d) => {
     const m = dhakaMinutes(d); const day = new Date(d.getTime() + 6 * 3600_000).toISOString().slice(5, 10);
     return `<option value="${d.toISOString()}">${day} ${hhmm(m)}</option>`;
   }).join('');
   if (cur) sel.value = cur;
+}
+
+/** Branch choices (pickup and showroom): every active branch; the default collection branch is preselected. */
+function fillOutlets() {
   const o = $<HTMLSelectElement>('outlet');
-  const outs = cfg.outlets.filter((x) => x);
+  const keep = o.value;
+  const outs = cfg.outlets;
   o.innerHTML = outs.length ? outs.map((x) => `<option value="${x.id}">${esc(x.name_bn)}${x.name_en ? ' / ' + esc(x.name_en) : ''}</option>`).join('') : '<option value="">—</option>';
+  const def = outs.find((x) => x.is_collection) ?? outs[0];
+  o.value = keep && outs.some((x) => String(x.id) === keep) ? keep : String(def?.id ?? '');
+  fillPickup();
+}
+
+function showBranch() {
+  const x = cfg.outlets.find((b) => String(b.id) === val('outlet'));
+  $('branchinfo').textContent = x ? [x.address_line, x.phone].filter(Boolean).join(' · ') : '';
 }
 
 function showErrors(codes: string[]) {
@@ -158,7 +174,8 @@ function localIssues(): string[] {
   }
   if (!val('name')) out.push('address_name_required');
   if (!normalizePhone(val('phone'))) out.push('address_phone_invalid');
-  if (m === 'EXPRESS_PICKUP') { if (!val('outlet')) out.push('outlet_required'); if (!val('slot')) out.push('pickup_invalid'); }
+  if ((m === 'EXPRESS_PICKUP' || m === 'BULK_ORDER') && !val('outlet')) out.push('outlet_required');
+  if (m === 'EXPRESS_PICKUP' && !val('slot')) out.push('pickup_invalid');
   const p = pay();
   if (p !== 'COD') { if (!val('trx')) out.push('payment_trx_required'); if (!normalizePhone(val('sender'))) out.push('payment_sender_invalid'); }
   if (m === 'BULK_ORDER' && cfg.bulk_prepaid && p === 'COD') out.push('bulk_prepayment_required');
@@ -173,6 +190,7 @@ $('lines').addEventListener('click', (e) => {
 });
 ['change', 'input'].forEach((ev) => $('f').addEventListener(ev, (e) => {
   const t = e.target as HTMLElement;
+  if (t.matches('select#outlet')) { fillPickup(); showBranch(); return; }
   if (t.matches('select#zone')) { setZone(val('zone') as Zone); return; } // the zone bar and this form share one zone
   if (t.matches('input[type=radio]')) render();
 }));
@@ -200,7 +218,7 @@ $('f').addEventListener('submit', async (e) => {
       idempotency_key: key, method: m, zone: m === 'HOME_DELIVERY' ? zone() : null,
       items: lines.map((l) => ({ variant_id: l.variantId, quantity: l.quantity })),
       contact: { name: val('name'), phone: normalizePhone(val('phone'))!, ...(m === 'HOME_DELIVERY' ? { address_line1: val('addr'), landmark: val('land') } : {}) },
-      outlet_id: m === 'EXPRESS_PICKUP' ? Number(val('outlet')) || null : null,
+      outlet_id: m === 'EXPRESS_PICKUP' || m === 'BULK_ORDER' ? Number(val('outlet')) || null : null,
       pickup_at: m === 'EXPRESS_PICKUP' ? val('slot') : null,
       payment: p === 'COD' ? { method: 'COD' } : { method: p, trx_id: val('trx'), sender_number: normalizePhone(val('sender'))! },
       website: val('website'),
@@ -217,6 +235,6 @@ $('f').addEventListener('submit', async (e) => {
 });
 
 const qs = new URLSearchParams(location.search);
-getConfig().then((c) => { cfg = c; fillPickup(); const want = qs.get('method'); if (want === 'BULK_ORDER' && bulk().isBulk) document.querySelector<HTMLInputElement>('input[value=BULK_ORDER]')!.checked = true; render(); });
+getConfig().then((c) => { cfg = c; fillOutlets(); const want = qs.get('method'); if (want === 'BULK_ORDER' && bulk().isBulk) document.querySelector<HTMLInputElement>('input[value=BULK_ORDER]')!.checked = true; render(); });
 $<HTMLSelectElement>('zone').value = getZone();
-fillPickup(); render();
+fillOutlets(); render();

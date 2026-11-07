@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bulkStatus, deliveryFee, orderingOpen, pickupSlots, zoneEligible, dhakaMinutes } from './rules';
+import { bulkStatus, deliveryFee, inBranchHours, orderingOpen, pickupSlots, zoneEligible, dhakaMinutes } from './rules';
 import { formatTaka, normalizePhone } from './money';
 
 const at = (s: string) => new Date(s);
@@ -48,5 +48,20 @@ describe('pickup + fees + money', () => {
     expect(normalizePhone('+8801712345678')).toBe('01712345678');
     expect(normalizePhone('০১৭১২৩৪৫৬৭৮')).toBe('01712345678');
     expect(normalizePhone('01212345678')).toBeNull();
+  });
+});
+
+describe('branch hours', () => {
+  const tue = [{ weekday: 2, opens: '14:00', closes: '18:00' }];
+  it('weekday + time in Dhaka, closing minute inclusive, no rows = no limit', () => {
+    expect(inBranchHours(new Date('2026-03-10T09:00:00Z'), tue)).toBe(true); // Tue 15:00 Dhaka
+    expect(inBranchHours(new Date('2026-03-10T12:00:00Z'), tue)).toBe(true); // Tue 18:00
+    expect(inBranchHours(new Date('2026-03-10T12:01:00Z'), tue)).toBe(false);
+    expect(inBranchHours(new Date('2026-03-11T09:00:00Z'), tue)).toBe(false); // Wednesday
+    expect(inBranchHours(new Date('2026-03-11T09:00:00Z'), [])).toBe(true);
+  });
+  it('pickup slots only inside the chosen branch hours', () => {
+    const slots = pickupSlots(new Date('2026-03-10T05:00:00Z'), 3, { open_minute: 600, close_minute: 1320 }, tue);
+    expect(slots.map((d) => d.toISOString())).toEqual(['2026-03-10T08:00:00.000Z', '2026-03-10T08:30:00.000Z', '2026-03-10T09:00:00.000Z']); // 14:00, 14:30, 15:00 Dhaka
   });
 });

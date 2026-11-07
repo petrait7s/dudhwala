@@ -48,7 +48,7 @@ class LaunchTest extends TestCase
         app(\App\Services\InventoryService::class)->setStock($o->id, $v->id, 5, ['system' => 't'], 'x');
         \Artisan::call('dudhwala:preflight');
         $out = \Artisan::output();
-        foreach (['Dispatch outlet set', 'Showroom collection outlet set', 'Showroom limit approved', 'bKash/Nagad number(s) set', '1 of 1 products published', 'Stock entered'] as $needle) $this->assertStringContainsString($needle, $out);
+        foreach (['Dispatch outlet set', 'Showroom limit approved', 'bKash/Nagad number(s) set', '1 of 1 products published', 'Stock entered'] as $needle) $this->assertStringContainsString($needle, $out);
         $this->assertStringNotContainsString('WARN Showroom', $out);
     }
 

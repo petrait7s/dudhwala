@@ -44,8 +44,9 @@ class CatalogueController extends Controller
             'payment_numbers' => $s->get('payment.numbers'),
             'bulk_prepaid' => (bool) $s->get('bulk.prepaid'),
             'maintenance' => (bool) $s->get('site.maintenance'),
-            'outlets' => \App\Models\Outlet::where('status', 'ACTIVE')->orderBy('id')->get()->map(fn ($o) => [
-                'id' => $o->id, 'code' => $o->code, 'name_bn' => $o->name_bn, 'name_en' => $o->name_en,
+            'outlets' => \App\Models\Outlet::with('hours')->where('status', 'ACTIVE')->orderBy('id')->get()->map(fn ($o) => [
+                'id' => $o->id, 'code' => $o->code, 'name_bn' => $o->name_bn, 'name_en' => $o->name_en, 'address_line' => $o->address_line, 'phone' => $o->phone,
+                'hours' => $o->hours->map(fn ($h) => ['weekday' => $h->weekday, 'opens' => substr($h->opens_at, 0, 5), 'closes' => substr($h->closes_at, 0, 5)])->values()->all(),
                 'is_collection' => $o->id === $collection, 'is_dispatch' => $o->id === $dispatch,
             ])->all(),
         ])->header('Cache-Control', 'public, max-age=30');

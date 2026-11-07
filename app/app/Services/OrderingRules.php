@@ -214,8 +214,9 @@ final class OrderingRules
         if ($addr === null || Phone::normalize($addr['phone']) === null) $out[] = ['code' => 'address_phone_invalid'];
         if ($method === 'HOME_DELIVERY' && ($addr === null || trim($addr['line1']) === '')) $out[] = ['code' => 'address_line_required'];
 
+        // pickup and showroom orders are collected at a branch the customer chooses (any active outlet)
+        if (in_array($method, ['EXPRESS_PICKUP', 'BULK_ORDER'], true) && empty($i['outlet_id'])) $out[] = ['code' => 'outlet_required'];
         if ($method === 'EXPRESS_PICKUP') {
-            if (empty($i['outlet_id'])) $out[] = ['code' => 'outlet_required'];
             $c = self::validatePickup($i['now'], $i['pickup_at'] ?? null, $hours);
             if (! $c['ok']) $out[] = ['code' => ['invalid' => 'pickup_invalid', 'too_soon' => 'pickup_too_soon', 'outside_hours' => 'pickup_outside_hours'][$c['reason']]];
         }
@@ -232,6 +233,23 @@ final class OrderingRules
         if ($method === 'BULK_ORDER' && ($i['bulk_prepaid'] ?? false) && $pm === 'COD') $out[] = ['code' => 'bulk_prepayment_required'];
 
         return $out;
+    }
+
+    /**
+     * Is $at inside the branch's own opening hours (weekday 0=Sunday, Dhaka time, closing minute inclusive)?
+     * $rows: [['weekday'=>int,'opens'=>'HH:MM(:SS)','closes'=>'HH:MM(:SS)']]. No rows at all = no per-branch hours set: true.
+     */
+    public static function inBranchHours(DateTimeInterface $at, array $rows): bool
+    {
+        if ($rows === []) return true;
+        $z = self::zoned($at);
+        $m = $z->hour * 60 + $z->minute;
+        foreach ($rows as $r) {
+            if ((int) $r['weekday'] !== (int) $z->dayOfWeek) continue;
+            $o = self::hhmmToMinutes(substr($r['opens'], 0, 5)); $c = self::hhmmToMinutes(substr($r['closes'], 0, 5));
+            if ($o !== null && $c !== null && $m >= $o && $m <= $c) return true;
+        }
+        return false;
     }
 
     /* ───────────── order status flow ───────────── */

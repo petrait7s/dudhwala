@@ -38,8 +38,10 @@ import Bi from '../components/Bi.astro';
           <p class="err" id="zonebad" hidden></p>
         </div>
 
+        <div id="outletbox" hidden>
+          <div class="field" style="margin-top:1rem"><label for="outlet"><Bi bn="কোন শাখা থেকে নেবেন" en="Collect from which branch" /></label><select id="outlet"></select><p class="hint" id="branchinfo"></p></div>
+        </div>
         <div id="pickbox" hidden>
-          <div class="field" style="margin-top:1rem"><label for="outlet"><Bi bn="আউটলেট" en="Outlet" /></label><select id="outlet"></select></div>
           <div class="field"><label for="slot"><Bi bn="পিকআপের সময়" en="Pickup time" /></label><select id="slot"></select></div>
         </div>
 

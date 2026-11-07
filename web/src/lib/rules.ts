@@ -6,13 +6,15 @@ export type Zone = 'IN_CITY' | 'OUTER_CITY';
 export type Method = 'HOME_DELIVERY' | 'EXPRESS_PICKUP' | 'BULK_ORDER';
 export type OuterStatus = 'APPROVED' | 'DISABLED' | 'PENDING_VERIFICATION' | 'PENDING_CONFIRMATION' | null;
 
+export interface BranchHours { weekday: number; opens: string; closes: string }
+export interface Outlet { id: number; code: string; name_bn: string; name_en: string | null; address_line?: string | null; phone?: string | null; hours?: BranchHours[]; is_collection?: boolean; is_dispatch?: boolean }
 export interface Config {
   hours: { open_minute: number; close_minute: number };
   bulk: { min_total_quantity: number; min_total_poisha: number; approved?: boolean };
   fees: { IN_CITY: number; OUTER_CITY: number };
   payment_numbers: { bkash: string | null; nagad: string | null };
   bulk_prepaid: boolean;
-  outlets: { id: number; code: string; name_bn: string; name_en: string | null; is_collection?: boolean; is_dispatch?: boolean }[];
+  outlets: Outlet[];
 }
 export const DEFAULT_CONFIG: Config = {
   hours: { open_minute: 600, close_minute: 1320 },
@@ -78,13 +80,21 @@ export function bulkStatus(lines: { quantity: number; line_poisha: number | null
 }
 
 /** Pickup slots: every 30 min, at least 60 min ahead, inside hours (closing minute inclusive). */
-export function pickupSlots(now: Date, count = 12, h = DEFAULT_CONFIG.hours): Date[] {
+const toMin = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));
+/** Is the instant inside the branch's own hours (weekday 0=Sunday, Dhaka time, closing minute inclusive)? No rows = no extra limit. */
+export function inBranchHours(at: Date, rows: BranchHours[] | undefined): boolean {
+  if (!rows || rows.length === 0) return true;
+  const wd = new Date(at.getTime() + DHAKA_MS).getUTCDay();
+  const m = dhakaMinutes(at);
+  return rows.some((r) => r.weekday === wd && m >= toMin(r.opens) && m <= toMin(r.closes));
+}
+export function pickupSlots(now: Date, count = 12, h = DEFAULT_CONFIG.hours, branch?: BranchHours[]): Date[] {
   const step = 30 * 60_000;
   let t = Math.ceil((now.getTime() + 60 * 60_000) / step) * step;
   const out: Date[] = [];
-  for (let i = 0; i < 24 * 60 && out.length < count; i++, t += step) {
+  for (let i = 0; i < 24 * 60 * 8 && out.length < count; i++, t += step) {
     const m = dhakaMinutes(new Date(t));
-    if (m >= h.open_minute && m <= h.close_minute) out.push(new Date(t));
+    if (m >= h.open_minute && m <= h.close_minute && inBranchHours(new Date(t), branch)) out.push(new Date(t));
   }
   return out;
 }

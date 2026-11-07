@@ -3,8 +3,10 @@
   "nameEn": "Dudhwala Food Products",
   "taglineBn": "বিশুদ্ধতার সেবায়",
   "taglineEn": "Serving Purity",
-  "city": { "bn": "সিলেট", "en": "Sylhet" },
-  "showroom": { "nameBn": "মদিনা মার্কেট শাখা", "nameEn": "Modina Market Branch", "address": "", "phone": "" },
+  "city": {
+    "bn": "সিলেট",
+    "en": "Sylhet"
+  },
   "whatsapp": "",
   "phone": "",
   "email": ""

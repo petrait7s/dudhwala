@@ -7,7 +7,9 @@ import site from '../data/site.json';
   <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem;max-width:760px">
     <h1><Bi bn={site.nameBn} en={site.nameEn} /></h1>
     <p><Bi bn={`${site.nameBn} (${site.nameEn}) ${site.city.bn}ভিত্তিক। আমরা দুগ্ধজাত মিষ্টি, দই ও বেকারি পণ্য বিক্রি করি।`} en={`${site.nameEn} is based in ${site.city.en}. We sell dairy sweets, doi and bakery products.`} /></p>
-    <p><Bi bn={`শোরুম: ${site.showroom.nameBn}।`} en={`Showroom: ${site.showroom.nameEn}.`} /></p>
+    <p><Bi bn="সিলেটে আমাদের একাধিক শাখা আছে। এক্সপ্রেস পিকআপ ও শোরুম অর্ডার যেকোনো শাখা থেকে নেওয়া যায়।" en="We have several branches in Sylhet. Express pickup and showroom orders can be collected at any branch." /></p>
+    <div id="branches"></div>
+    <script>import '../scripts/branches';</script>
     <p><a class="btn primary" href="/shop"><Bi k="shop" /></a> <a class="btn" href="/contact"><Bi k="contact" /></a></p>
   </div>
 </Base>

@@ -34,7 +34,7 @@ return [
     'set_ordering_hours' => 'Ordering hours', 'open_at' => 'Opens (HH:MM)', 'close_at' => 'Closes (HH:MM)', 'bulk_rule' => 'Showroom order limit', 'bulk_qty' => 'Items at or above', 'bulk_amount' => 'Or amount at or above (৳)',
     'bulk_note' => 'Saving marks the limit as approved by the owner.', 'bulk_state_unapproved' => 'Placeholder, not approved yet', 'bulk_state_ok' => 'Approved',
     'fees' => 'Home delivery fee (৳)', 'fee_in' => 'In Sylhet', 'fee_out' => 'Outer Sylhet', 'fee_note' => 'Only home delivery is charged.',
-    'dispatch' => 'Dispatch outlet (home delivery stock)', 'collection' => 'Showroom collection outlet', 'pay_numbers' => 'Payment numbers', 'bkash' => 'bKash number', 'nagad' => 'Nagad number',
+    'dispatch' => 'Dispatch outlet (home delivery stock)', 'collection' => 'Default showroom branch (optional; customers can choose any active branch)', 'pay_numbers' => 'Payment numbers', 'bkash' => 'bKash number', 'nagad' => 'Nagad number',
     'bulk_prepaid' => 'Showroom orders must be prepaid (bKash/Nagad)', 'maintenance' => 'Maintenance mode (stop new orders)', 'none' => 'None',
     'page_slug' => 'Page address (a-z, 0-9, -)', 'title_bn' => 'Title (Bangla)', 'title_en' => 'Title (English)', 'body_bn' => 'Text (Bangla)', 'body_en' => 'Text (English)', 'add_page' => 'Add page', 'remove' => 'Remove',
     'page_note' => 'Separate paragraphs with a blank line.',

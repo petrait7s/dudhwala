@@ -68,6 +68,9 @@ class OrderService
 
         $cfg = OrderingRules::configFrom($this->settings);
         $outlet = $this->resolveOutlet($method, $in['outlet_id'] ?? null);
+        if (! empty($in['outlet_id']) && in_array($method, ['EXPRESS_PICKUP', 'BULK_ORDER'], true) && ! $outlet) {
+            throw new ShopException('CHECKOUT_INVALID', 'Checkout is not valid', ['issues' => [['code' => 'outlet_required']]]); // unknown, paused or closed branch
+        }
         $pickupAt = $method === 'EXPRESS_PICKUP' && ! empty($in['pickup_at']) ? CarbonImmutable::parse($in['pickup_at']) : null;
         $bulkPrepaid = (bool) $this->settings->get('bulk.prepaid');
 
@@ -83,6 +86,11 @@ class OrderService
             'payment_method' => $payMethod, 'payment_details' => ['trx_id' => $trx, 'sender_number' => $sender],
             'bulk_prepaid' => $bulkPrepaid, 'config' => $cfg,
         ]);
+        // express pickup must also fall inside the chosen branch's own opening hours
+        if ($method === 'EXPRESS_PICKUP' && $outlet && $pickupAt && ! in_array('pickup_outside_hours', array_column($issues, 'code'), true)
+            && ! OrderingRules::inBranchHours($pickupAt, $outlet->hours->map(fn ($h) => ['weekday' => $h->weekday, 'opens' => $h->opens_at, 'closes' => $h->closes_at])->all())) {
+            $issues[] = ['code' => 'pickup_outside_hours'];
+        }
         if ($issues) throw new ShopException('CHECKOUT_INVALID', 'Checkout is not valid', ['issues' => $issues]);
 
         if ($method !== 'EXPRESS_PICKUP' && ! $outlet) throw new ShopException('NOT_CONFIGURED', 'No fulfilling outlet is configured yet');
@@ -149,10 +157,11 @@ class OrderService
     {
         $id = match ($method) {
             'HOME_DELIVERY' => $this->settings->get('fulfilment.dispatch_outlet_id'),
-            'BULK_ORDER' => $this->settings->get('bulk.collection_outlet_id'),
+            // showroom orders: the branch the customer picked; the configured collection outlet is only the default
+            'BULK_ORDER' => $requested ?: $this->settings->get('bulk.collection_outlet_id'),
             'EXPRESS_PICKUP' => $requested,
         };
-        return $id ? Outlet::where('id', $id)->where('status', 'ACTIVE')->first() : null;
+        return $id ? Outlet::with('hours')->where('id', $id)->where('status', 'ACTIVE')->first() : null;
     }
 
     private function newNumber(): string

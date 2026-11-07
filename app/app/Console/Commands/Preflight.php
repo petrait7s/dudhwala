@@ -60,7 +60,7 @@ class Preflight extends Command
         User::where('role', 'ADMIN')->where('status', 'ACTIVE')->where('mfa_enabled', true)->exists() ? $this->row('ok', 'An admin with two-factor exists') : $this->row('warn', 'No admin with two-factor yet', 'dudhwala:create-staff, then sign in and enrol');
         $active = Outlet::where('status', 'ACTIVE')->count();
         $active ? $this->row('ok', "$active active outlet(s)") : $this->row('warn', 'No active outlet: ordering is impossible');
-        foreach (['fulfilment.dispatch_outlet_id' => 'Dispatch outlet', 'bulk.collection_outlet_id' => 'Showroom collection outlet'] as $k => $l) {
+        foreach (['fulfilment.dispatch_outlet_id' => 'Dispatch outlet'] as $k => $l) { // showroom/pickup branch is chosen by the customer; the default collection outlet is optional
             $id = $s->get($k);
             $id && Outlet::where('id', $id)->where('status', 'ACTIVE')->exists() ? $this->row('ok', "$l set") : $this->row('warn', "$l not set");
         }

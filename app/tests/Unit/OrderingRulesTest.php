@@ -176,9 +176,10 @@ class OrderingRulesTest extends TestCase
         $contact = ['name' => 'রহিম', 'phone' => '01712345678', 'line1' => ''];
         $this->assertContains('bulk_requires_collection', $this->codes($this->home(['lines' => $big])));
         $this->assertContains('bulk_requires_collection', $this->codes(['now' => $now, 'method' => 'EXPRESS_PICKUP', 'zone' => null, 'lines' => $big, 'address' => $contact, 'outlet_id' => 1, 'pickup_at' => $this->at('2026-03-10T07:00:00Z')]));
-        $this->assertSame(['address_name_required', 'address_phone_invalid'], $this->codes(['now' => $now, 'method' => 'BULK_ORDER', 'zone' => null, 'lines' => $big]));
-        $this->assertSame([], $this->codes(['now' => $now, 'method' => 'BULK_ORDER', 'zone' => null, 'lines' => $big, 'address' => $contact]));
-        $this->assertContains('not_bulk', $this->codes(['now' => $now, 'method' => 'BULK_ORDER', 'zone' => null, 'lines' => [$this->line('a')], 'address' => $contact]));
+        $this->assertSame(['address_name_required', 'address_phone_invalid', 'outlet_required'], $this->codes(['now' => $now, 'method' => 'BULK_ORDER', 'zone' => null, 'lines' => $big]));
+        $this->assertSame(['outlet_required'], $this->codes(['now' => $now, 'method' => 'BULK_ORDER', 'zone' => null, 'lines' => $big, 'address' => $contact]), 'a showroom order needs a branch');
+        $this->assertSame([], $this->codes(['now' => $now, 'method' => 'BULK_ORDER', 'zone' => null, 'lines' => $big, 'address' => $contact, 'outlet_id' => 7]));
+        $this->assertContains('not_bulk', $this->codes(['now' => $now, 'method' => 'BULK_ORDER', 'zone' => null, 'lines' => [$this->line('a')], 'address' => $contact, 'outlet_id' => 7]));
     }
 
     public function test_bulk_by_amount_forces_showroom(): void
@@ -190,7 +191,7 @@ class OrderingRulesTest extends TestCase
     public function test_showroom_prepaid_setting(): void
     {
         $now = $this->at('2026-03-10T05:00:00Z');
-        $base = ['now' => $now, 'method' => 'BULK_ORDER', 'zone' => null, 'lines' => [$this->line('a', self::BAKERY, 20)], 'address' => ['name' => 'রহিম', 'phone' => '01712345678', 'line1' => '']];
+        $base = ['now' => $now, 'method' => 'BULK_ORDER', 'zone' => null, 'outlet_id' => 7, 'lines' => [$this->line('a', self::BAKERY, 20)], 'address' => ['name' => 'রহিম', 'phone' => '01712345678', 'line1' => '']];
         $this->assertSame([], $this->codes($base + ['bulk_prepaid' => false]));
         $this->assertSame(['bulk_prepayment_required'], $this->codes($base + ['bulk_prepaid' => true]));
         $this->assertSame([], $this->codes($base + ['bulk_prepaid' => true, 'payment_method' => 'BKASH', 'payment_details' => ['trx_id' => 'AB12CD34', 'sender_number' => '01812345678']]));
@@ -211,6 +212,17 @@ class OrderingRulesTest extends TestCase
         $this->assertContains('ordering_closed', $this->codes($this->home(['now' => $t])));
         $this->assertSame([], R::validateCheckout($this->home(['now' => $t, 'config' => $cfg])));
         $this->assertContains('bulk_requires_collection', $this->codes($this->home(['now' => $t, 'config' => $cfg, 'lines' => [$this->line('a', self::BAKERY, 3)]])));
+    }
+
+    public function test_branch_hours_by_weekday(): void
+    {
+        $rows = [['weekday' => 2, 'opens' => '10:00:00', 'closes' => '22:00:00']]; // Tuesday
+        $this->assertTrue(R::inBranchHours($this->at('2026-03-10T05:00:00Z'), $rows)); // Tue 11:00 Dhaka
+        $this->assertTrue(R::inBranchHours($this->at('2026-03-10T16:00:00Z'), $rows)); // Tue 22:00, closing minute inclusive
+        $this->assertFalse(R::inBranchHours($this->at('2026-03-10T16:01:00Z'), $rows));
+        $this->assertFalse(R::inBranchHours($this->at('2026-03-10T03:59:00Z'), $rows)); // Tue 09:59
+        $this->assertFalse(R::inBranchHours($this->at('2026-03-11T05:00:00Z'), $rows)); // Wednesday: branch closed that day
+        $this->assertTrue(R::inBranchHours($this->at('2026-03-11T05:00:00Z'), []), 'no hours set for the branch: no extra limit');
     }
 
     public function test_hhmm_helpers(): void

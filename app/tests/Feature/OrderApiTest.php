@@ -235,6 +235,91 @@ class OrderApiTest extends TestCase
         $this->assertContains('outlet_required', array_column($r->json('error.issues'), 'code'));
     }
 
+    /* ───────── any branch can serve pickup and showroom orders ───────── */
+
+    private function branch(string $code, string $status = 'ACTIVE'): \App\Models\Outlet
+    {
+        $o = TestData::outlet($code);
+        if ($status !== 'ACTIVE') $o->update(['status' => $status]);
+        return $o;
+    }
+
+    private function stockAt(\App\Models\Outlet $o, \App\Models\ProductVariant $v, int $qty): void
+    {
+        app(InventoryService::class)->setStock($o->id, $v->id, $qty, ['system' => 't'], 'init');
+    }
+
+    public function test_showroom_order_is_collected_at_the_branch_the_customer_picks(): void
+    {
+        $v = $this->stocked(1000, 100); // stocked at MODINA (default collection outlet)
+        $other = $this->branch('ZINDABAZAR'); $this->stockAt($other, $v, 30);
+        $b = ['_v' => $v, 'method' => 'BULK_ORDER', 'zone' => null, 'items' => [['variant_id' => $v->id, 'quantity' => 20]]];
+
+        $this->postJson('/api/orders', $this->body($b + ['outlet_id' => $other->id]))->assertCreated();
+        $o = Order::latest('id')->first();
+        $this->assertSame($other->id, $o->outlet_id);
+        $this->assertSame(20, (int) DB::table('inventory')->where(['outlet_id' => $other->id, 'product_variant_id' => $v->id])->value('reserved_quantity'));
+        $this->assertSame(0, $this->inv($v->id)->reserved_quantity, 'the default branch was not touched');
+
+        // no branch given: falls back to the default collection outlet
+        $this->postJson('/api/orders', $this->body($b))->assertCreated();
+        $this->assertSame($this->outlet->id, Order::latest('id')->first()->outlet_id);
+    }
+
+    public function test_showroom_branch_must_have_the_stock(): void
+    {
+        $v = $this->stocked(1000, 100);
+        $empty = $this->branch('EMPTY'); $this->stockAt($empty, $v, 5);
+        $r = $this->postJson('/api/orders', $this->body(['_v' => $v, 'method' => 'BULK_ORDER', 'zone' => null, 'outlet_id' => $empty->id, 'items' => [['variant_id' => $v->id, 'quantity' => 20]]]));
+        $r->assertStatus(409)->assertJsonPath('error.code', 'OUT_OF_STOCK');
+        $this->assertSame(0, Order::count());
+    }
+
+    public function test_unknown_or_paused_branch_is_refused_for_showroom_and_pickup(): void
+    {
+        $v = $this->stocked(1000, 100);
+        $paused = $this->branch('PAUSED1', 'PAUSED');
+        foreach ([$paused->id, 9999] as $id) {
+            $r = $this->postJson('/api/orders', $this->body(['_v' => $v, 'method' => 'BULK_ORDER', 'zone' => null, 'outlet_id' => $id, 'items' => [['variant_id' => $v->id, 'quantity' => 20]]]));
+            $r->assertStatus(422); $this->assertContains('outlet_required', array_column($r->json('error.issues'), 'code'));
+            $r = $this->postJson('/api/orders', $this->body(['_v' => $v, 'method' => 'EXPRESS_PICKUP', 'zone' => null, 'outlet_id' => $id, 'pickup_at' => '2026-03-10T06:30:00Z']));
+            $r->assertStatus(422); $this->assertContains('outlet_required', array_column($r->json('error.issues'), 'code'));
+        }
+        $this->assertSame(0, Order::count());
+    }
+
+    public function test_showroom_without_branch_or_default_needs_a_branch(): void
+    {
+        app(SettingsService::class)->set('bulk.collection_outlet_id', null);
+        $v = $this->stocked(1000, 100);
+        $r = $this->postJson('/api/orders', $this->body(['_v' => $v, 'method' => 'BULK_ORDER', 'zone' => null, 'items' => [['variant_id' => $v->id, 'quantity' => 20]]]));
+        $this->assertContains('outlet_required', array_column($r->json('error.issues'), 'code'));
+    }
+
+    public function test_pickup_follows_the_chosen_branchs_own_hours(): void
+    {
+        $v = $this->stocked(1000, 100);
+        $b = $this->branch('LATE'); $this->stockAt($b, $v, 10);
+        // opens only Tuesdays 14:00-18:00 Dhaka. "now" is Tuesday 11:00; 06:30Z = 12:30 Dhaka, 09:00Z = 15:00 Dhaka
+        $b->hours()->create(['weekday' => 2, 'opens_at' => '14:00', 'closes_at' => '18:00']);
+        $base = ['_v' => $v, 'method' => 'EXPRESS_PICKUP', 'zone' => null, 'outlet_id' => $b->id];
+        $r = $this->postJson('/api/orders', $this->body($base + ['pickup_at' => '2026-03-10T06:30:00Z']));
+        $this->assertSame(['pickup_outside_hours'], array_column($r->json('error.issues'), 'code'));
+        $this->postJson('/api/orders', $this->body($base + ['pickup_at' => '2026-03-10T09:00:00Z']))->assertCreated();
+        $this->assertSame($b->id, Order::latest('id')->first()->outlet_id);
+    }
+
+    public function test_config_lists_every_active_branch_with_address_phone_and_hours(): void
+    {
+        $b = $this->branch('ZINDABAZAR'); $b->update(['address_line' => 'Zindabazar, Sylhet', 'phone' => '01711111111']);
+        $b->hours()->create(['weekday' => 1, 'opens_at' => '09:00', 'closes_at' => '21:00']);
+        $this->branch('OLD', 'CLOSED');
+        $o = collect($this->getJson('/api/config')->assertOk()->json('outlets'));
+        $this->assertCount(2, $o);
+        $z = $o->firstWhere('code', 'ZINDABAZAR');
+        $this->assertSame(['Zindabazar, Sylhet', '01711111111', [['weekday' => 1, 'opens' => '09:00', 'closes' => '21:00']]], [$z['address_line'], $z['phone'], $z['hours']]);
+    }
+
     public function test_same_phone_is_same_customer(): void
     {
         $v = $this->stocked(1000, 100);
