@@ -13,7 +13,7 @@ class CatalogueController extends Controller
     /** Public read model. Customers see availability (in_stock), never stock counts. Hidden products are not listed. */
     public function index(InventoryService $inventory, SettingsService $settings)
     {
-        $products = Product::with('variants')->where('active', true)
+        $products = Product::with(['variants', 'gallery'])->where('active', true)
             ->whereHas('category', fn ($q) => $q->where('active', true))->orderBy('id')->get();
         $variantIds = $products->flatMap(fn ($p) => $p->variants->pluck('id'))->all();
         $avail = $variantIds ? $inventory->availableAt($variantIds) : [];
@@ -22,6 +22,9 @@ class CatalogueController extends Controller
         $out = $products->map(fn ($p) => [
             'slug' => $p->slug,
             'image_url' => $p->image_path ? Storage::disk('public')->url($p->image_path).'?v='.$p->image_version : null,
+            // cover first, then the extra photos in order
+            'images' => collect([$p->image_path ? Storage::disk('public')->url($p->image_path).'?v='.$p->image_version : null])
+                ->merge($p->gallery->map(fn ($g) => Storage::disk('public')->url($g->path)))->filter()->values()->all(),
             'variants' => $p->variants->sortBy('sort_order')->values()->map(fn ($v) => [
                 'id' => $v->id, 'label_bn' => $v->label_bn, 'label_en' => $v->label_en,
                 'price_poisha' => $v->price_poisha, 'max_qty' => $v->max_qty,

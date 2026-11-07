@@ -30,6 +30,14 @@
       @if($product->image_path)<img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($product->image_path) }}?v={{ $product->image_version }}" alt="" style="width:120px;height:120px;object-fit:cover;border-radius:10px">@endif
       @if($canManage)<label>{{ __('admin.upload') }}<input type="file" wire:model="photo" accept="image/jpeg,image/png,image/webp"></label>@endif
     </div>
+    <h4>{{ __('admin.gallery') }}</h4>
+    <div class="row">
+      @foreach($gallery as $g)
+        <div><img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($g->path) }}" alt="" style="width:90px;height:90px;object-fit:cover;border-radius:8px;display:block">
+          @if($canManage)<button class="btn alt" style="margin-top:.2rem;padding:.15rem .6rem" wire:click="removeExtra({{ $g->id }})" wire:confirm="?">{{ __('admin.remove') }}</button>@endif</div>
+      @endforeach
+      @if($canManage && $gallery->count() < 5)<label>{{ __('admin.gallery_add') }}<input type="file" wire:model="extra" accept="image/jpeg,image/png,image/webp"></label>@endif
+    </div>
   </div>
 
   <div class="card">

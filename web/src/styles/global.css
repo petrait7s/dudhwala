@@ -126,7 +126,7 @@ footer.ft ul{list-style:none;padding:0;margin:0;display:grid;gap:.35rem}
 
 /* product */
 .pdp{display:grid;gap:1.4rem;margin-top:1rem}
-@media (min-width:860px){.pdp{grid-template-columns:1.05fr 1fr;gap:2.4rem}}
+@media (min-width:860px){.pdp{grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:2.6rem;align-items:start}}
 .pdp .pic{aspect-ratio:1/1;border-radius:var(--dw-r-xl);overflow:hidden;background:linear-gradient(135deg,var(--dw-brand-50),var(--dw-accent-100));display:grid;place-items:center;color:var(--dw-brand-500);border:1px solid var(--dw-line)}
 .pdp .pic svg{width:34%;opacity:.5}.pdp .pic img{width:100%;height:100%;object-fit:cover}
 .price{font-size:1.8rem;font-weight:800;color:var(--dw-brand-700)}
@@ -279,9 +279,9 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 .pc .ph{position:relative;aspect-ratio:5/4;display:grid;place-items:center;overflow:hidden;
   --a1:var(--dw-brand-500);--a2:var(--dw-brand-100);--a3:var(--dw-brand-600);--hi:#fff;
   background:radial-gradient(120% 90% at 50% 8%,#fff 0%,transparent 55%),linear-gradient(160deg,var(--dw-brand-50),var(--dw-accent-100))}
-.pc .ph[data-cat='bakery'],.pic[data-cat='bakery']{--a1:#d9962b;--a2:#f3c97a;--a3:#a8661a;background:radial-gradient(120% 90% at 50% 8%,#fff 0%,transparent 55%),linear-gradient(160deg,var(--dw-warn-bg),var(--dw-brand-50))}
-.pc .ph[data-cat='doi-dairy'],.pic[data-cat='doi-dairy']{--a1:var(--dw-accent-500);--a2:var(--dw-accent-100);--a3:var(--dw-accent-ink)}
-.pc .ph[data-cat='dairy-sweets'],.pic[data-cat='dairy-sweets']{--a1:#f2b8c6;--a2:#fde4ea;--a3:#c9788f}
+.pc .ph[data-cat='bakery'],.gal[data-cat='bakery']{--a1:#d9962b;--a2:#f3c97a;--a3:#a8661a;background:radial-gradient(120% 90% at 50% 8%,#fff 0%,transparent 55%),linear-gradient(160deg,var(--dw-warn-bg),var(--dw-brand-50))}
+.pc .ph[data-cat='doi-dairy'],.gal[data-cat='doi-dairy']{--a1:var(--dw-accent-500);--a2:var(--dw-accent-100);--a3:var(--dw-accent-ink)}
+.pc .ph[data-cat='dairy-sweets'],.gal[data-cat='dairy-sweets']{--a1:#f2b8c6;--a2:#fde4ea;--a3:#c9788f}
 :root[data-theme='dark'] .pc .ph{--hi:#dfe4ff;background:radial-gradient(120% 90% at 50% 8%,rgba(160,172,255,.18) 0%,transparent 55%),linear-gradient(160deg,var(--dw-brand-50),var(--dw-accent-100))}
 .art{width:62%;max-width:190px;height:auto;display:block;overflow:visible}
 .art .shadow{fill:rgba(18,23,63,.16)}
@@ -337,3 +337,44 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 #pays .opt:has(input:checked){border-color:var(--dw-brand-600);background:var(--dw-brand-50);box-shadow:0 0 0 2px var(--dw-brand-600) inset}
 #payhow b{letter-spacing:.02em}
 @media (min-width:900px){.lay>div:first-child{position:sticky;top:132px;align-self:start}}
+
+/* product photo slider */
+.gal{position:relative;overflow:hidden;border-radius:24px;border:1px solid var(--dw-line);
+  --a1:var(--dw-brand-500);--a2:var(--dw-brand-100);--a3:var(--dw-brand-600);--hi:#fff;background:linear-gradient(160deg,var(--dw-brand-50),var(--dw-accent-100))}
+:root[data-theme='dark'] .gal{--hi:#dfe4ff}
+.gal-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:5/4;overscroll-behavior-x:contain}
+.gal-track::-webkit-scrollbar{display:none}
+.gal-track:focus-visible{outline-offset:-4px}
+.gal-slide{flex:0 0 100%;scroll-snap-align:center;margin:0;position:relative;overflow:hidden;display:grid;place-items:center;height:100%}
+.gal-slide img{width:100%;height:100%;object-fit:cover}
+.gal-slide .art{width:54%;max-width:300px;position:relative;z-index:1}
+.gal-slide.v1{background:radial-gradient(120% 90% at 50% 8%,#fff 0%,transparent 58%)}
+.gal-slide.v2{background:radial-gradient(70% 70% at 25% 20%,rgba(255,255,255,.9) 0%,transparent 60%),linear-gradient(200deg,var(--a2),transparent 70%)}
+.gal-slide.v2 .art{width:96%;max-width:520px;transform:translate(-8%,10%) rotate(-4deg)}
+.gal-slide.v3{background:radial-gradient(circle at 80% 15%,rgba(255,255,255,.85) 0 18%,transparent 19%),radial-gradient(circle at 12% 85%,var(--a2) 0 22%,transparent 23%),linear-gradient(20deg,var(--dw-brand-50),transparent 70%)}
+.gal-slide.v3 .art{width:44%;transform:rotate(8deg) translateY(-4%)}
+.gal[data-multi='0'] .gal-nav,.gal[data-multi='0'] .gal-dots{display:none}
+.gal-nav{position:absolute;top:50%;translate:0 -50%;z-index:3;width:42px;height:42px;border-radius:50%;border:1px solid var(--dw-line-strong);background:var(--dw-surface);color:var(--dw-ink);font-size:1.5rem;line-height:1;cursor:pointer;box-shadow:var(--dw-shadow-1);display:grid;place-items:center;padding:0 0 .15rem}
+.gal-nav.prev{left:.6rem}.gal-nav.next{right:.6rem}
+.gal-nav:disabled{opacity:.35;cursor:default}
+@media (hover:hover){.gal-nav{opacity:0;transition:opacity .25s}.gal:hover .gal-nav{opacity:1}.gal:hover .gal-nav:disabled{opacity:.35}}
+.gal-dots{position:absolute;left:0;right:0;bottom:.7rem;z-index:3;display:flex;justify-content:center;gap:.4rem}
+.gal-dots button{width:8px;height:8px;border-radius:99px;border:0;padding:0;background:var(--dw-line-strong);cursor:pointer;transition:width .25s var(--dw-ease),background .25s}
+.gal-dots button[aria-current='true']{width:22px;background:var(--dw-brand-600)}
+.gal-thumbs{display:flex;gap:.5rem;margin-top:.6rem;overflow-x:auto}
+.gal-thumbs:empty{display:none}
+.gal-thumbs button{flex:none;width:64px;height:64px;border-radius:12px;overflow:hidden;border:2px solid transparent;padding:0;background:var(--dw-surface);cursor:pointer;opacity:.7}
+.gal-thumbs button img{width:100%;height:100%;object-fit:cover;display:block}
+.gal-thumbs button[aria-current='true']{border-color:var(--dw-brand-600);opacity:1}
+@media (max-width:859px){.gal{border-radius:18px}}
+@media (prefers-reduced-motion:reduce){.gal-track{scroll-behavior:auto}}
+.gal-slide .art{margin-bottom:1.6rem}
+.gal-slide.v2 .art{margin-bottom:0}
+/* phones: the zone bar stays one slim row */
+@media (max-width:859px){
+  .zb{flex-wrap:nowrap;overflow-x:auto;gap:.5rem;padding-block:.35rem;scrollbar-width:none}
+  .zb::-webkit-scrollbar{display:none}
+  .zb-l,[data-status]{display:none}
+  .zb>*{flex:none}
+  .zb-act{min-height:34px;padding:0 .8rem}
+}

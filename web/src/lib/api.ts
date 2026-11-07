@@ -4,7 +4,7 @@ export const API = (import.meta.env.PUBLIC_API_URL as string | undefined)?.repla
 export const hasApi = () => API !== '';
 
 export interface ApiVariant { id: number; label_bn: string; label_en: string | null; price_poisha: number | null; max_qty: number; in_stock: boolean }
-export interface ApiProduct { slug: string; image_url: string | null; variants: ApiVariant[] }
+export interface ApiProduct { slug: string; image_url: string | null; images?: string[]; variants: ApiVariant[] }
 
 async function j<T>(path: string, init?: RequestInit): Promise<T> {
   const r = await fetch(API + path, { ...init, headers: { Accept: 'application/json', ...(init?.body ? { 'Content-Type': 'application/json' } : {}), ...init?.headers } });

@@ -171,4 +171,41 @@ class CatalogueTest extends TestCase
         $this->expectException(ShopException::class);
         app(ProductImageService::class)->store($p, UploadedFile::fake()->createWithContent('x.png', '<?php echo 1;'));
     }
+
+    public function test_gallery_photos_are_listed_after_the_cover_and_limited_to_five(): void
+    {
+        Storage::fake('public');
+        $v = TestData::variant(1000); $p = $v->product;
+        $admin = \App\Models\User::create(['name' => 'A', 'email' => 'g@x.test', 'role' => 'ADMIN', 'password' => 'long-enough-pass'])->fresh();
+        $svc = app(\App\Services\AdminCatalogueService::class);
+        $svc->uploadImage($admin, $p, UploadedFile::fake()->image('cover.jpg', 800, 600));
+        $svc->addGalleryImage($admin, $p->fresh(), UploadedFile::fake()->image('b.jpg', 900, 900));
+        $svc->addGalleryImage($admin, $p->fresh(), UploadedFile::fake()->image('c.png', 700, 500));
+        $imgs = $this->getJson('/api/catalogue')->json('products.0.images');
+        $this->assertCount(3, $imgs);
+        $this->assertStringContainsString('-1.webp', $imgs[0], 'cover first');
+        foreach ($imgs as $u) $this->assertTrue(Storage::disk('public')->exists(preg_replace('#^.*/storage/#', '', strtok($u, '?'))));
+        $this->assertDatabaseHas('audit_logs', ['action' => 'product.gallery_added']);
+
+        $id = $p->gallery()->first()->id;
+        $svc->removeGalleryImage($admin, $p->fresh(), $id);
+        $this->assertCount(2, $this->getJson('/api/catalogue')->json('products.0.images'));
+        $this->assertDatabaseHas('audit_logs', ['action' => 'product.gallery_removed']);
+
+        for ($i = 0; $i < 4; $i++) $svc->addGalleryImage($admin, $p->fresh(), UploadedFile::fake()->image("x$i.jpg", 300, 300));
+        $this->expectException(\App\Exceptions\ShopException::class);
+        $svc->addGalleryImage($admin, $p->fresh(), UploadedFile::fake()->image('too-many.jpg', 300, 300));
+    }
+
+    public function test_gallery_rejects_non_images_and_non_admins(): void
+    {
+        Storage::fake('public');
+        $p = TestData::variant()->product;
+        $svc = app(\App\Services\AdminCatalogueService::class);
+        $admin = \App\Models\User::create(['name' => 'A', 'email' => 'g2@x.test', 'role' => 'ADMIN', 'password' => 'long-enough-pass'])->fresh();
+        $mgr = \App\Models\User::create(['name' => 'M', 'email' => 'm2@x.test', 'role' => 'MANAGER', 'password' => 'long-enough-pass'])->fresh();
+        try { $svc->addGalleryImage($mgr, $p, UploadedFile::fake()->image('a.jpg')); $this->fail(); } catch (ShopException $e) { $this->assertSame('FORBIDDEN', $e->errorCode); }
+        try { $svc->addGalleryImage($admin, $p, UploadedFile::fake()->createWithContent('x.png', '<?php echo 1;')); $this->fail(); } catch (ShopException $e) { $this->assertSame('VALIDATION_FAILED', $e->errorCode); }
+        $this->assertSame(0, $p->gallery()->count());
+    }
 }

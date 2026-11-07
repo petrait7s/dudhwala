@@ -82,6 +82,22 @@ class AdminCatalogueService
         $this->audit->log('product.image_changed', 'product', $p->id, ['image' => $old], ['image' => $path], $by);
     }
 
+    public function addGalleryImage(User $by, Product $p, UploadedFile $file): void
+    {
+        $this->admin($by);
+        $img = $this->images->addExtra($p, $file);
+        $this->audit->log('product.gallery_added', 'product', $p->id, null, ['path' => $img->path], $by);
+    }
+
+    public function removeGalleryImage(User $by, Product $p, int $imageId): void
+    {
+        $this->admin($by);
+        $img = \App\Models\ProductImage::where('product_id', $p->id)->findOrFail($imageId);
+        $path = $img->path;
+        $this->images->removeExtra($img);
+        $this->audit->log('product.gallery_removed', 'product', $p->id, ['path' => $path], null, $by);
+    }
+
     /* ───────── variants ───────── */
 
     /** price: taka string ("250", "250.50", "") or null = not priced. */

@@ -29,6 +29,7 @@ class ProductEdit extends Component
     public array $stock = [];
     public string $stockReason = '';
     public $photo = null;
+    public $extra = null;
 
     public function mount(?Product $product = null): void
     {
@@ -108,9 +109,22 @@ class ProductEdit extends Component
         $this->product->refresh();
     }
 
+    public function updatedExtra(AdminCatalogueService $svc): void
+    {
+        if (! $this->product || ! $this->extra) return;
+        $this->attempt(fn () => $svc->addGalleryImage(Auth::user(), $this->product, new \Illuminate\Http\UploadedFile($this->extra->getRealPath(), $this->extra->getClientOriginalName(), null, null, true)));
+        $this->extra = null;
+    }
+
+    public function removeExtra(int $id, AdminCatalogueService $svc): void
+    {
+        $this->attempt(fn () => $svc->removeGalleryImage(Auth::user(), $this->product, $id));
+    }
+
     public function render()
     {
         return view('livewire.admin.product-edit', [
+            'gallery' => $this->product ? $this->product->gallery()->get() : collect(),
             'categories' => Category::orderBy('sort_order')->get(), 'outlets' => Outlet::orderBy('id')->get(),
             'canManage' => Auth::user()->isAdmin(), 'outerOptions' => AdminCatalogueService::OUTER,
         ]);

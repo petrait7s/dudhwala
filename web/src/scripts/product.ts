@@ -4,10 +4,13 @@ import { formatTaka } from '../lib/money';
 import { getZone, onZone } from '../lib/zone';
 import { REASON_TEXT, zoneReason, zoneEligible, type OuterStatus } from '../lib/rules';
 import { fillPrices } from './prices';
+import { initGallery } from './gallery';
 
 const root = document.querySelector<HTMLElement>('[data-product]')!;
 const $ = <T extends HTMLElement>(s: string) => root.parentElement!.querySelector<T>(s)!;
 const slug = root.dataset.slug!;
+const galRoot = document.querySelector<HTMLElement>('[data-gal]');
+const gallery = galRoot ? initGallery(galRoot) : undefined;
 let variants: ApiVariant[] = [];
 let cur: ApiVariant | null = null;
 let qty = 1;
@@ -75,7 +78,8 @@ getCatalogue().then((cat) => {
   const p = cat[slug];
   if (!p) return;
   variants = p.variants;
-  if (p.image_url) { const pic = $('[data-pic]'); pic.innerHTML = ''; const im = new Image(); im.src = p.image_url; im.alt = ''; im.decoding = 'async'; pic.appendChild(im); }
+  const imgs = p.images?.length ? p.images : p.image_url ? [p.image_url] : [];
+  if (imgs.length) { gallery?.setImages(imgs); gallery?.restart(); }
   const box = $('[data-sizes]');
   variants.forEach((v) => {
     const b = document.createElement('button');

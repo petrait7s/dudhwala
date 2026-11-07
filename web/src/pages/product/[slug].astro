@@ -21,7 +21,17 @@ const outer = zoneReason(p.category, (p.outerCity ? p.outerCity.toUpperCase() : 
   <div class="wrap has-buybar" data-product data-slug={p.id} data-cat={p.category} data-outer={p.outerCity ?? ''} data-name-bn={p.nameBn} data-name-en={p.nameEn}>
     <p class="crumbs"><a href="/shop"><Bi k="shop" /></a> / <a href={`/category/${cat.slug}`}><Bi bn={cat.nameBn} en={cat.nameEn} /></a></p>
     <div class="pdp">
-      <div class="pic" data-pic data-cat={p.category}><Art kind={p.kind} /></div>
+      <div>
+        <div class="gal" data-gal data-cat={p.category}>
+          <div class="gal-track" data-track tabindex="0" role="region" aria-roledescription="carousel" aria-label="Product photos">
+            {[1, 2, 3].map((n) => <figure class={`gal-slide v${n}`} data-placeholder><Art kind={p.kind} /></figure>)}
+          </div>
+          <button class="gal-nav prev" type="button" data-prev aria-label="Previous photo">‹</button>
+          <button class="gal-nav next" type="button" data-next aria-label="Next photo">›</button>
+          <div class="gal-dots" data-dots></div>
+        </div>
+        <div class="gal-thumbs" data-thumbs></div>
+      </div>
       <div>
         <h1><Bi bn={p.nameBn} en={p.nameEn} /></h1>
         <p class="muted"><Bi bn={cat.nameBn} en={cat.nameEn} /></p>

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\ShopException;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,7 +18,8 @@ class ProductImageService
     public const MAX_SIDE = 1200;
     private const TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-    public function store(Product $p, UploadedFile $file): string
+    /** Decode, validate, resize and re-encode to WebP bytes. */
+    private function encode(UploadedFile $file): string
     {
         if ($file->getSize() > self::MAX_BYTES) throw new ShopException('VALIDATION_FAILED', 'Image is larger than 8 MB');
         $info = @getimagesize($file->getRealPath());
@@ -41,12 +43,34 @@ class ProductImageService
 
         ob_start();
         imagewebp($dst, null, 82);
-        $bytes = ob_get_clean();
+        return (string) ob_get_clean();
+    }
 
+    public function store(Product $p, UploadedFile $file): string
+    {
+        $bytes = $this->encode($file);
         $path = "products/{$p->id}-".($p->image_version + 1).'.webp';
         Storage::disk('public')->put($path, $bytes);
         if ($p->image_path) Storage::disk('public')->delete($p->image_path);
         $p->update(['image_path' => $path, 'image_version' => $p->image_version + 1]);
         return $path;
+    }
+
+    public const MAX_EXTRA = 5;
+
+    /** Additional gallery photo (up to 5 besides the cover). */
+    public function addExtra(Product $p, UploadedFile $file): ProductImage
+    {
+        if ($p->gallery()->count() >= self::MAX_EXTRA) throw new ShopException('CONFLICT', 'A product can have at most '.self::MAX_EXTRA.' extra photos');
+        $bytes = $this->encode($file);
+        $path = "products/{$p->id}-x".bin2hex(random_bytes(4)).'.webp';
+        Storage::disk('public')->put($path, $bytes);
+        return $p->gallery()->create(['path' => $path, 'sort_order' => (int) $p->gallery()->max('sort_order') + 1]);
+    }
+
+    public function removeExtra(ProductImage $img): void
+    {
+        Storage::disk('public')->delete($img->path);
+        $img->delete();
     }
 }
