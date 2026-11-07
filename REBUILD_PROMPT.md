@@ -28,7 +28,7 @@ Same shop, same rules, new stack and new face:
 - Cart lives in the browser (localStorage). The server never trusts browser prices: it recomputes every price, fee and total from product/variant ids.
 - Public API is small: catalogue read (or build-time export), config (hours, thresholds, fees, payment numbers), create order, track order by order number + phone. CORS limited to the site domain.
 - Images are stored on the host (`storage/app/public`), resized on upload. No object storage.
-- Background work (retry alerts, expiry, backups) runs from cron. Alerts go to Telegram. No SMS unless the owner chooses a provider later.
+- Background work (retry alerts, expiry, backups) runs from cron. No Telegram. New-order alerts use the `OrderNotifier` interface (log only for now; a WhatsApp notifier is added once the owner supplies the contact). No SMS unless the owner chooses a provider later.
 - Money is stored as integers (poisha), never floats, as in `packages/shared/src/money.ts`. Phone numbers are stored as `01XXXXXXXXX` (normalise `+880` and `880`).
 - Rate limit and honeypot on the public order endpoint. CSRF on admin. Secrets only in `.env`.
 - Port the shared rules into one PHP service class with the same test cases (see section 9). A small TypeScript copy may exist in `web/` for display only; the server is the authority.
@@ -120,7 +120,7 @@ Suggested phases:
 1. Foundation: `app/` Laravel skeleton, migrations for the data model (MySQL), roles, TOTP, audit, artisan commands, config and settings.
 2. Rules engine: port `ordering.ts` to PHP with the full test suite (hours boundaries, zones, eligibility, pickup, bulk by quantity and by amount, fees, status flow, money, phone).
 3. Catalogue and stock: products, variants, categories, per-outlet stock with atomic reserve/commit/release and a parallel-order test, photo upload, catalogue import.
-4. Orders and payments: order API (server pricing, idempotency, honeypot, rate limit), payments table with TrxID rules, admin order screens, Telegram alert.
+4. Orders and payments: order API (server pricing, idempotency, honeypot, rate limit), payments table with TrxID rules, admin order screens, `OrderNotifier` alert (WhatsApp later).
 5. `web/` Astro site: layout, design system from `dw.css`, home with hero slideshow, shop, product, cart and checkout against the API, track order, PWA.
 6. Admin polish, content pages, search, i18n files, backups and cron.
 7. Launch: real data import, SSL, domain/DNS, deploy steps, README, restore test.
@@ -129,7 +129,7 @@ Suggested phases:
 
 The rebuild is done when:
 - Every rule in section 3 has a passing automated test in the new stack (hours boundaries, zones and eligibility, pickup lead time, bulk by quantity and by amount, fees only on home delivery, forward-only status flow, no overselling under parallel orders, idempotent order, unpriced item blocked, manager read-only, audit entries).
-- A real order from the site reaches the admin panel and Telegram; staff move it through its flow; a bKash/Nagad payment is verified by TrxID and a second use of the same TrxID is refused; COD is marked PAID by staff.
+- A real order from the site reaches the admin panel; staff move it through its flow; a bKash/Nagad payment is verified by TrxID and a second use of the same TrxID is refused; COD is marked PAID by staff.
 - The site passes the mobile performance rules in section 7, with measured numbers.
 - Dudhwala's colours and logo are unchanged and light/dark themes work.
 - A database backup restores cleanly on the host.
