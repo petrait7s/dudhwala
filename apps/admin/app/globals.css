@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+@import '../../../packages/ui/styles/dw.css';
+@source '../../../packages/ui/src';
+
+/* Admin-specific styles. Everything else (tokens, buttons, fields, cards, tables, badges, dialogs, theme) is shared in dw.css. */
+
+.admin { font-size: 0.9375rem; line-height: 1.55; }

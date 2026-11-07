@@ -1,0 +1,23 @@
+{
+  "outlets": [
+    {
+      "code": "MODINA-MARKET",
+      "nameBn": "মদিনা মার্কেট শাখা",
+      "nameEn": "Modina Market Branch",
+      "addressLine": "Madina Market Point",
+      "phone": "01609347600",
+      "status": "ACTIVE",
+      "hours": [
+        { "weekday": 0, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 1, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 2, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 3, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 4, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 5, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 6, "opens": "10:00", "closes": "22:00" }
+      ]
+    }
+  ],
+  "dispatchOutletCode": "MODINA-MARKET",
+  "collectionOutletCode": "MODINA-MARKET"
+}

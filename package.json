@@ -1,0 +1,24 @@
+{
+  "name": "dudhwala",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "prepare:codegen": "pnpm --filter @dudhwala/shared build && pnpm --filter @dudhwala/api prisma:generate",
+    "build": "pnpm -r --if-present build",
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "test:demo": "node --test demo/mock-api/catalogue.test.mjs demo/mock-api/server.test.mjs",
+    "test:demo:browser": "node e2e/demo/run.cjs"
+  },
+  "pnpm": {
+    "overrides": {
+      "body-parser": ">=2.4.0",
+      "multer": ">=2.5.0",
+      "fast-uri": ">=3.1.9"
+    }
+  }
+}
