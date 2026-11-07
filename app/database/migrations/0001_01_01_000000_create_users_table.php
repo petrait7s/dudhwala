@@ -6,19 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        // Staff only. Customers are guests keyed by phone (see customers table).
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', 120);
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role', 16); // ADMIN | MANAGER
+            $table->string('status', 16)->default('ACTIVE'); // ACTIVE | SUSPENDED
+            $table->text('mfa_secret')->nullable(); // encrypted via model cast
+            $table->boolean('mfa_enabled')->default(false);
+            $table->unsignedInteger('mfa_last_step')->nullable(); // replay guard
+            $table->unsignedSmallInteger('failed_logins')->default(0);
+            $table->timestamp('locked_until')->nullable();
+            $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
+        });
+
+        Schema::create('mfa_recovery_codes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('code_hash');
+            $table->timestamp('used_at')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -37,13 +49,11 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('mfa_recovery_codes');
+        Schema::dropIfExists('users');
     }
 };

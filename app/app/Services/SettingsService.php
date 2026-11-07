@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Setting;
+use Illuminate\Support\Facades\Validator;
+
+/**
+ * Typed settings. Missing row => default. Values that the owner has not approved
+ * are flagged `approved => false` until saved in the admin.
+ */
+class SettingsService
+{
+    /** @return array<string, array{rules: array, default: mixed}> */
+    public static function registry(): array
+    {
+        return [
+            'ordering.hours' => ['rules' => ['open_minute' => 'required|integer|min:0|max:1439', 'close_minute' => 'required|integer|min:1|max:1440'],
+                'default' => ['open_minute' => 600, 'close_minute' => 1320]], // 10:00-22:00 Asia/Dhaka
+            'bulk.rule' => ['rules' => ['min_total_quantity' => 'required|integer|min:1|max:100000', 'min_total_poisha' => 'required|integer|min:100|max:10000000000', 'approved' => 'required|boolean'],
+                'default' => ['min_total_quantity' => 20, 'min_total_poisha' => 2000000, 'approved' => false]], // placeholder 20 items / ৳20,000
+            'bulk.collection_outlet_id' => ['rules' => ['*' => 'nullable|integer'], 'default' => null],
+            'fulfilment.dispatch_outlet_id' => ['rules' => ['*' => 'nullable|integer'], 'default' => null],
+            'delivery.fees' => ['rules' => ['IN_CITY' => 'required|integer|min:0|max:1000000', 'OUTER_CITY' => 'required|integer|min:0|max:1000000'],
+                'default' => ['IN_CITY' => 0, 'OUTER_CITY' => 0]],
+            'payment.numbers' => ['rules' => ['bkash' => 'nullable|string|max:20', 'nagad' => 'nullable|string|max:20'],
+                'default' => ['bkash' => null, 'nagad' => null]],
+            'bulk.prepaid' => ['rules' => ['*' => 'boolean'], 'default' => false], // owner decision pending
+            'site.maintenance' => ['rules' => ['*' => 'boolean'], 'default' => false],
+        ];
+    }
+
+    public function get(string $key): mixed
+    {
+        $def = self::registry()[$key] ?? throw new \InvalidArgumentException("Unknown setting: $key");
+        $row = Setting::find($key);
+        if (! $row) return $def['default'];
+        return $this->valid($key, $row->value) ? $row->value : $def['default'];
+    }
+
+    public function set(string $key, mixed $value, ?int $actorId = null): void
+    {
+        $def = self::registry()[$key] ?? throw new \InvalidArgumentException("Unknown setting: $key");
+        if (! $this->valid($key, $value)) {
+            throw new \InvalidArgumentException("Invalid value for setting: $key");
+        }
+        if ($key === 'ordering.hours' && $value['open_minute'] >= $value['close_minute']) {
+            throw new \InvalidArgumentException('open must be before close');
+        }
+        Setting::updateOrCreate(['key' => $key], ['value' => $value, 'updated_by' => $actorId, 'updated_at' => now()]);
+    }
+
+    private function valid(string $key, mixed $value): bool
+    {
+        $rules = self::registry()[$key]['rules'];
+        if (array_key_exists('*', $rules)) {
+            return Validator::make(['v' => $value], ['v' => $rules['*']])->passes();
+        }
+        return is_array($value) && Validator::make($value, $rules)->passes();
+    }
+}
