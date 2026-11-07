@@ -1,3 +1,11 @@
+# Dudhwala
+
+> **Current system (rebuild):** `web/` (Astro storefront, deploys to Vercel) and `app/` (Laravel + Livewire + MySQL: admin and order API, deploys to cPanel).
+> Start with [`docs/DEPLOY_HOSTING.md`](docs/DEPLOY_HOSTING.md). Behaviour proof: [`docs/PARITY.md`](docs/PARITY.md). Package the app with `scripts/package-app.sh`.
+> `apps/`, `packages/`, `demo/` and most of `docs/` describe the **old** NestJS/Next.js system and are kept only as the behaviour reference.
+
+---
+
 # Dudhwala — online ordering platform
 
 Storefront, admin panel and backend for **Dudhwala Food Products** (দুধওয়ালা), Sylhet. Three ways to order: **home delivery** (In Sylhet / Outer Sylhet), **express pickup** (at least 1 hour ahead, outlet hours) and **bulk orders** (prepaid, collected at Modina Market Branch). Ordering hours 10:00–22:00 Asia/Dhaka.
