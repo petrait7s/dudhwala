@@ -1,0 +1,26 @@
+{
+  "outlets": [
+    {
+      "code": "MODINA-MARKET",
+      "nameBn": "মদিনা মার্কেট শাখা",
+      "nameEn": "Modina Market Branch",
+      "addressLine": "মদিনা মার্কেট, সিলেট",
+      "phone": "01609347600",
+      "status": "ACTIVE",
+      "hours": [
+        { "weekday": 0, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 1, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 2, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 3, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 4, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 5, "opens": "10:00", "closes": "22:00" },
+        { "weekday": 6, "opens": "10:00", "closes": "22:00" }
+      ]
+    },
+    { "code": "SUPPLY-ROAD", "nameBn": "সাপ্লাই রোড শাখা", "nameEn": "Supply Road Branch", "addressLine": "সাপ্লাই রোড, সিলেট", "status": "ACTIVE" },
+    { "code": "MIRJAJANGAL", "nameBn": "মীরজাজঙ্গল শাখা", "nameEn": "Mirjajangal Branch", "addressLine": "মীরজাজঙ্গল, সিলেট", "status": "ACTIVE" },
+    { "code": "UPOSHOHOR", "nameBn": "উপশহর শাখা", "nameEn": "Uposhohor Branch", "addressLine": "উপশহর, সিলেট", "status": "ACTIVE" }
+  ],
+  "dispatchOutletCode": "MODINA-MARKET",
+  "collectionOutletCode": "MODINA-MARKET"
+}

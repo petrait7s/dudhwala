@@ -10,7 +10,7 @@ import site from '../data/site.json';
     <p class="notice" role="note"><Bi
       bn="পণ্য বেছে সংখ্যা দিন। আমাদের যেকোনো শাখা থেকে সংগ্রহ করা যাবে (চেকআউটে শাখা বেছে নেবেন); হোম ডেলিভারি নেই। আগে পেমেন্ট লাগে।"
       en="Pick products and quantities. Collect from any of our branches (you choose at checkout); no home delivery. Payment is required in advance." /></p>
-    <div id="branches"></div>
+    <div id="branches" data-select style="margin-top:1rem"></div>
     <script>import '../scripts/branches';</script>
     <p class="muted" id="limit"></p>
     <p class="notice warn" id="noapi" hidden><Bi bn="অনলাইন অর্ডার এখনো চালু হয়নি। শীঘ্রই আসছে।" en="Online ordering is not open yet. Coming soon." /></p>
@@ -25,7 +25,7 @@ import site from '../data/site.json';
         <h2 style="font-size:1.2rem"><Bi bn={c.nameBn} en={c.nameEn} /></h2>
         <ul class="bulk-list">
           {products.filter((p) => p.category === c.slug).map((p) => (
-            <li class="bulk-row" data-slug={p.id} data-name={`${p.nameBn} ${p.nameEn}`.toLowerCase()} data-cat={c.slug}>
+            <li class="bulk-row" data-slug={p.id} data-name={`${p.nameBn} ${p.nameEn}`.toLowerCase()} data-cat={c.slug} data-nbn={p.nameBn} data-nen={p.nameEn} data-cbn={c.nameBn} data-cen={c.nameEn}>
               <span class="nm"><Bi bn={p.nameBn} en={p.nameEn} /> <small class="muted" data-note></small></span>
               <div class="qty sm" role="group">
                 <button type="button" data-d="-1" aria-label="−">−</button>

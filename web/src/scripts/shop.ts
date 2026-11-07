@@ -1,4 +1,4 @@
-import aliases from '../data/search_aliases.json';
+import { buildSearchIndex, searchIndex, suggestCorrections } from '../lib/search';
 import { fillPrices } from './prices';
 import { getZone, onZone } from '../lib/zone';
 import { zoneEligible, type OuterStatus } from '../lib/rules';
@@ -14,27 +14,27 @@ let cat = params.get('c') || '';
 if (q && params.get('q')) q.value = params.get('q')!.slice(0, 80);
 if (q && params.get('focus')) setTimeout(() => q.focus(), 50);
 
-function expand(text: string): string[] {
-  const t = text.toLowerCase().trim();
-  if (!t) return [];
-  const words = t.split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean);
-  const out = new Set([t]);
-  for (const g of aliases as string[][]) {
-    const lg = g.map((x) => x.toLowerCase());
-    if ([t, ...words].some((w) => lg.includes(w))) lg.forEach((x) => out.add(x));
-  }
-  return [...out];
+/* fuzzy index: typo-tolerant, sound-alike, alias-aware (doi / dahi / yogurt / দই), Bangla and English */
+const index = buildSearchIndex(cards.map((c) => ({ item: c, primary: [c.dataset.nbn!, c.dataset.nen!], secondary: [c.dataset.cbn!, c.dataset.cen!] })));
+const rank = new Map<HTMLElement, number>();
+let query = '';
+function runSearch() {
+  query = (q?.value ?? '').trim();
+  rank.clear();
+  if (!query) return;
+  searchIndex(index, query, 500).forEach((h, i) => rank.set(h.item, i));
 }
 
 function apply() {
-  const terms = expand(q?.value ?? '');
+  runSearch();
+  const searching = query !== '';
   let shown = 0, hiddenByZone = 0;
   const zone = getZone();
   for (const c of cards) {
     const okZone = zoneEligible(c.dataset.cat!, (c.dataset.outer || null) as OuterStatus, zone);
     if (!okZone && (!cat || c.dataset.cat === cat)) hiddenByZone++;
     const okCat = !cat || c.dataset.cat === cat;
-    const okQ = !terms.length || terms.some((t) => c.dataset.name!.includes(t) || c.dataset.cat!.includes(t));
+    const okQ = !searching || rank.has(c);
     const on = okCat && okQ && okZone;
     c.hidden = !on;
     if (on) shown++;
@@ -45,7 +45,7 @@ function apply() {
   // category pill counts follow the search and the zone (not the selected category)
   const per = new Map<string, number>(); let all = 0;
   for (const c of cards) {
-    const okQ2 = !terms.length || terms.some((t) => c.dataset.name!.includes(t) || c.dataset.cat!.includes(t));
+    const okQ2 = !searching || rank.has(c);
     if (okQ2 && zoneEligible(c.dataset.cat!, (c.dataset.outer || null) as OuterStatus, zone)) { all++; per.set(c.dataset.cat!, (per.get(c.dataset.cat!) ?? 0) + 1); }
   }
   document.querySelectorAll<HTMLElement>('[data-n]').forEach((b) => { const k = b.dataset.n!; b.textContent = toBn(String(k === '' ? all : per.get(k) ?? 0)); });
@@ -59,7 +59,22 @@ function apply() {
   const price = (c: HTMLElement) => (c.dataset.price ? Number(c.dataset.price) : Infinity);
   const sorted = [...cards].sort((a, b) =>
     mode === 'low' ? price(a) - price(b) : mode === 'high' ? (price(b) === Infinity ? -1 : price(b)) - (price(a) === Infinity ? -1 : price(a)) : 0);
-  if (mode !== 'name') sorted.forEach((c) => grid.appendChild(c)); else cards.forEach((c) => grid.appendChild(c));
+  if (mode !== 'name') sorted.forEach((c) => grid.appendChild(c));
+  else if (searching) [...cards].sort((a, b) => (rank.get(a) ?? 0) - (rank.get(b) ?? 0)).forEach((c) => grid.appendChild(c)); // best match first
+  else cards.forEach((c) => grid.appendChild(c));
+
+  // "did you mean": when nothing matched, offer the closest words
+  if (none && shown === 0 && searching) {
+    const sg = suggestCorrections(index, query, 3);
+    let box = document.getElementById('sugg');
+    if (!box) { box = document.createElement('span'); box.id = 'sugg'; none.appendChild(box); }
+    box.innerHTML = '';
+    if (sg.length) {
+      box.append(' ');
+      const lead = document.createElement('span'); lead.innerHTML = '<span class="bn">আপনি কি বোঝাতে চেয়েছেন: </span><span class="en">Did you mean: </span>'; box.appendChild(lead);
+      sg.forEach((w) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'pill'; b.style.marginRight = '.4rem'; b.textContent = w; b.addEventListener('click', () => { if (q) { q.value = w; apply(); } }); box!.appendChild(b); });
+    }
+  } else document.getElementById('sugg')?.replaceChildren();
 }
 
 document.querySelectorAll<HTMLElement>('[data-chip]').forEach((b) => b.addEventListener('click', () => {

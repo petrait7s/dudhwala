@@ -1,4 +1,4 @@
-import aliases from '../data/search_aliases.json';
+import { buildSearchIndex, searchIndex } from '../lib/search';
 import { getCatalogue, getConfig, hasApi, type ApiVariant } from '../lib/api';
 import { addToCart, clearCart } from '../lib/cart';
 import { formatTaka } from '../lib/money';
@@ -49,16 +49,13 @@ rows.forEach((r) => {
   meta.set(slug, { nameBn: names[0]?.textContent ?? '', nameEn: names[1]?.textContent ?? '', cat: r.dataset.cat! });
 });
 
-/* search (aliases, Bangla + English) */
-function expand(text: string): string[] {
-  const t = text.toLowerCase().trim(); if (!t) return [];
-  const words = t.split(/[^\p{L}\p{M}\p{N}]+/u).filter(Boolean); const out = new Set([t]);
-  for (const g of aliases as string[][]) { const lg = g.map((x) => x.toLowerCase()); if ([t, ...words].some((w) => lg.includes(w))) lg.forEach((x) => out.add(x)); }
-  return [...out];
-}
+/* fuzzy search: typo-tolerant, sound-alike, aliases, Bangla + English */
+const index = buildSearchIndex(rows.map((r) => ({ item: r, primary: [r.dataset.nbn!, r.dataset.nen!], secondary: [r.dataset.cbn!, r.dataset.cen!] })));
 ($('bq') as HTMLInputElement).addEventListener('input', (e) => {
-  const terms = expand((e.target as HTMLInputElement).value); let n = 0;
-  rows.forEach((r) => { const on = !terms.length || terms.some((t) => r.dataset.name!.includes(t) || r.dataset.cat!.includes(t)); r.hidden = !on; if (on) n++; });
+  const text = (e.target as HTMLInputElement).value.trim();
+  const hit = new Set(text ? searchIndex(index, text, 500).map((h) => h.item) : rows);
+  let n = 0;
+  rows.forEach((r) => { const on = hit.has(r); r.hidden = !on; if (on) n++; });
   document.querySelectorAll<HTMLElement>('section[data-cat]').forEach((s) => (s.hidden = !Array.from(s.querySelectorAll<HTMLElement>('.bulk-row')).some((r) => !r.hidden)));
   $('none').hidden = n > 0;
 });

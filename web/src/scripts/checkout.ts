@@ -2,6 +2,7 @@ import { clearCart, readCart, removeLine, setQty, type CartLine } from '../lib/c
 import { createOrder, getConfig, hasApi } from '../lib/api';
 import { formatTaka, normalizePhone } from '../lib/money';
 import { getZone, onZone, setZone } from '../lib/zone';
+import { getBranch, setBranch } from '../lib/branch';
 import { toBn } from './bn';
 import { DELIVERY_ESTIMATE, bulkStatus, deliveryFee, orderingOpen, pickupSlots, zoneEligible, hhmm, dhakaMinutes, DEFAULT_CONFIG, type Config, type Method, type OuterStatus, type Zone } from '../lib/rules';
 
@@ -147,7 +148,8 @@ function fillOutlets() {
   const outs = cfg.outlets;
   o.innerHTML = outs.length ? outs.map((x) => `<option value="${x.id}">${esc(x.name_bn)}${x.name_en ? ' / ' + esc(x.name_en) : ''}</option>`).join('') : '<option value="">—</option>';
   const def = outs.find((x) => x.is_collection) ?? outs[0];
-  o.value = keep && outs.some((x) => String(x.id) === keep) ? keep : String(def?.id ?? '');
+  const saved = getBranch(); // the branch picked on the showroom page
+  o.value = keep && outs.some((x) => String(x.id) === keep) ? keep : outs.some((x) => String(x.id) === saved) ? saved : String(def?.id ?? '');
   fillPickup();
 }
 
@@ -192,7 +194,7 @@ $('lines').addEventListener('click', (e) => {
 });
 ['change', 'input'].forEach((ev) => $('f').addEventListener(ev, (e) => {
   const t = e.target as HTMLElement;
-  if (t.matches('select#outlet')) { fillPickup(); showBranch(); return; }
+  if (t.matches('select#outlet')) { setBranch(val('outlet')); fillPickup(); showBranch(); return; }
   if (t.matches('select#zone')) { setZone(val('zone') as Zone); return; } // the zone bar and this form share one zone
   if (t.matches('input[type=radio]')) render();
 }));

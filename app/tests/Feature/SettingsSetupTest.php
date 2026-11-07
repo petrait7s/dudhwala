@@ -72,4 +72,19 @@ class SettingsSetupTest extends TestCase
         $this->expectException(\LogicException::class);
         $ev->delete();
     }
+
+    public function test_owner_branches_file_loads_all_four_sylhet_branches_without_placeholders(): void
+    {
+        $file = database_path('data/owner-branches.json');
+        $this->artisan('dudhwala:setup', ['--file' => $file])->assertSuccessful(); // refuses REPLACE_WITH_* values
+        $this->artisan('dudhwala:setup', ['--file' => $file])->assertSuccessful(); // idempotent
+        $this->assertSame(['MIRJAJANGAL', 'MODINA-MARKET', 'SUPPLY-ROAD', 'UPOSHOHOR'], Outlet::orderBy('code')->pluck('code')->all());
+        $modina = Outlet::where('code', 'MODINA-MARKET')->first();
+        $this->assertSame(['01609347600', 7], [$modina->phone, $modina->hours()->count()]);
+        $s = app(SettingsService::class);
+        $this->assertSame($modina->id, $s->get('fulfilment.dispatch_outlet_id'));
+        $cfg = collect($this->getJson('/api/config')->json('outlets'));
+        $this->assertCount(4, $cfg);
+        $this->assertTrue($cfg->firstWhere('code', 'MODINA-MARKET')['is_collection']);
+    }
 }

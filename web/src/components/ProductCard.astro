@@ -1,10 +1,12 @@
 ---
 import Bi from './Bi.astro';
 import Art from './Art.astro';
+import { catName } from '../lib/catalogue';
 interface Props { slug: string; nameBn: string; nameEn: string; category: string; outer?: string | null; kind?: string }
 const { slug, nameBn, nameEn, category, outer = null, kind = 'sweet' } = Astro.props;
+const cn = catName(category);
 ---
-<div class="card pc reveal" data-slug={slug} data-cat={category} data-outer={outer ?? ''} data-name={`${nameBn} ${nameEn}`.toLowerCase()}>
+<div class="card pc reveal" data-slug={slug} data-cat={category} data-outer={outer ?? ''} data-name={`${nameBn} ${nameEn}`.toLowerCase()} data-nbn={nameBn} data-nen={nameEn} data-cbn={cn?.nameBn ?? ''} data-cen={cn?.nameEn ?? ''}>
   <a class="pcl" href={`/product/${slug}`} style="display:flex;flex-direction:column;flex:1;color:inherit">
     <div class="ph" data-ph data-cat={category}><Art kind={kind} /></div>
     <div class="bd">
