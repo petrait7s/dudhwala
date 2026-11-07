@@ -22,13 +22,13 @@ input,select,textarea{font:inherit;padding:.5rem .7rem;border:1px solid #b4bce0;
 </head>
 <body>
 <header><strong>{{ __('admin.title') }}</strong>
-@auth<div class="row"><span>{{ auth()->user()->name }} · {{ auth()->user()->role }}</span>
+@auth<div class="row"><a href="{{ route('admin.account') }}">{{ auth()->user()->name }} · {{ auth()->user()->role }}</a>
 <form method="post" action="{{ route('admin.logout') }}">@csrf<button class="btn alt" style="color:#12173f">{{ __('admin.logout') }}</button></form></div>@endauth
 </header>
 @auth
 @if(auth()->user()->mfa_enabled || ! auth()->user()->isAdmin())
 <nav style="background:#fff;border-bottom:1px solid var(--line);padding:.4rem 1rem;display:flex;gap:.3rem;flex-wrap:wrap">
-  @php($items = ['admin.orders' => 'orders', 'admin.products' => 'products'] + (auth()->user()->isAdmin() ? ['admin.categories' => 'categories', 'admin.outlets' => 'outlets', 'admin.settings' => 'settings', 'admin.pages' => 'pages', 'admin.audit' => 'audit'] : []))
+  @php($items = ['admin.orders' => 'orders', 'admin.products' => 'products'] + (auth()->user()->isAdmin() ? ['admin.categories' => 'categories', 'admin.outlets' => 'outlets', 'admin.settings' => 'settings', 'admin.pages' => 'pages', 'admin.staff' => 'staff', 'admin.audit' => 'audit'] : []))
   @foreach($items as $r => $k)<a href="{{ route($r) }}" style="padding:.3rem .8rem;border-radius:99px;text-decoration:none;color:#12173f;{{ request()->routeIs($r.'*') ? 'background:#e2e6ff;font-weight:700' : '' }}">{{ __('admin.nav.'.$k) }}</a>@endforeach
 </nav>
 @endif

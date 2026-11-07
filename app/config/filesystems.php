@@ -40,7 +40,8 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            // PUBLIC_DISK_IN_PUBLIC=true: hosts that forbid symlinks keep photos directly inside the web folder instead of storage/app/public
+            'root' => env('PUBLIC_DISK_IN_PUBLIC') ? public_path('storage') : storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,

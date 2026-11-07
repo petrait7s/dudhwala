@@ -31,6 +31,13 @@ class Orders extends Component
             })
             ->orderByDesc('id')->paginate(25);
         $summary = $orders->getCollection()->mapWithKeys(fn ($o) => [$o->id => $payments->summary($o)]);
-        return view('livewire.admin.orders', ['orders' => $orders, 'summary' => $summary, 'statuses' => array_keys(__('admin.s'))]);
+        $today = \Carbon\CarbonImmutable::now('Asia/Dhaka')->startOfDay()->utc();
+        $stats = [
+            'today' => Order::where('created_at', '>=', $today)->count(),
+            'new' => Order::whereIn('status', ['PLACED', 'PICKUP_REQUESTED'])->count(),
+            'verify' => \App\Models\Payment::where('status', 'PENDING_VERIFICATION')->whereHas('order', fn ($o) => $o->where('status', '!=', 'CANCELLED'))->count(),
+            'cod_due' => \App\Models\Payment::where('method', 'COD')->where('status', 'UNPAID')->whereHas('order', fn ($o) => $o->where('status', '!=', 'CANCELLED'))->count(),
+        ];
+        return view('livewire.admin.orders', ['orders' => $orders, 'summary' => $summary, 'statuses' => array_keys(__('admin.s')), 'stats' => $stats, 'canExport' => auth()->user()->isAdmin()]);
     }
 }

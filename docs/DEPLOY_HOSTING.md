@@ -18,34 +18,39 @@ Host needs: PHP 8.2+ with `pdo_mysql, mbstring, openssl, gd (WebP), sodium, file
 ## 1. Build the upload (on your computer)
 
 ```bash
-scripts/package-app.sh            # writes dudhwala-app.zip (about 19 MB: vendor included, no dev packages, no secrets)
+scripts/package-app.sh
 ```
+
+Writes two files next to each other:
+
+- `dudhwala-app.zip` (about 19 MB): the whole app, vendor included, no dev packages, no secrets.
+- `dudhwala-public_html.zip` (a few KB): only the web folder, for hosts where you cannot point the (sub)domain at `app/public`. Its `index.php` finds the app at `<document root>/../dudhwala/app` (change with `APP_REL=/path scripts/package-app.sh`).
 
 ## 2. cPanel: app
 
-1. **Subdomain** `admin.yourdomain.com`. Set its **document root to `app/public`** (for example `/home/USER/dudhwala/app/public`). Upload and unzip `dudhwala-app.zip` into `/home/USER/dudhwala/` so only `public/` is web-reachable. If the host forces the docroot to `public_html/admin`, keep `app/` outside `public_html` and make `public_html/admin` a symlink to `app/public`.
-2. **PHP version**: Select PHP 8.2 or newer for the subdomain (MultiPHP Manager) and enable the extensions above.
-3. **Database**: MySQL Databases: create a database and user, grant all privileges.
-4. **Config**: copy `.env.production.example` to `.env` and fill `APP_URL`, `DB_*`, `CORS_ALLOWED_ORIGINS=https://www.yourdomain.com`. Keep `APP_DEBUG=false`. Set `HASH_DRIVER=argon2id` only on a fresh install (switching later invalidates existing passwords); use `bcrypt` if the PHP has no Argon2id.
-5. **First run** (cPanel Terminal or SSH, inside `app/`):
+1. **Subdomain** `admin.yourdomain.com` (cPanel → Domains).
+2. **Upload**
+   - *Best (you can set the document root):* unzip `dudhwala-app.zip` into `/home/USER/dudhwala/` and set the subdomain's document root to `/home/USER/dudhwala/app/public`.
+   - *Document root is fixed (for example `/home/USER/admin.yourdomain.com`):* unzip `dudhwala-app.zip` into `/home/USER/dudhwala/` and unzip `dudhwala-public_html.zip` into the subdomain's document root. Then run the install below with `--public-path=<that document root>`.
+   Either way only the web folder is reachable from the internet.
+3. **PHP**: MultiPHP Manager: PHP 8.2 or newer for the subdomain, with `pdo_mysql, mbstring, openssl, gd (WebP), sodium, fileinfo, ctype, xml` (Select PHP Version → Extensions).
+4. **Database**: MySQL Databases: create a database and a user, grant all privileges.
+5. **Config**: copy `.env.production.example` to `.env` in `/home/USER/dudhwala/app/` and fill `APP_URL`, `DB_*` and `CORS_ALLOWED_ORIGINS=https://www.yourdomain.com`. Keep `APP_DEBUG=false`. Use `HASH_DRIVER=argon2id` only on a fresh install (or `bcrypt` if the PHP has no Argon2id).
+6. **Install (one command)**, in cPanel Terminal or SSH, inside `/home/USER/dudhwala/app/`:
 
 ```bash
-php artisan key:generate --force
-php artisan migrate --force
-php artisan storage:link                      # product photos (if exec/symlink is blocked: ask the host, or symlink public/storage -> ../storage/app/public in File Manager)
-php artisan dudhwala:setup --file=owner-setup.json    # outlets, hours, dispatch + showroom outlet (see apps/api/data/setup.example.json; real values only, placeholders are refused)
-php artisan dudhwala:import-catalogue         # the 59 products, hidden and unpriced
-php artisan dudhwala:create-staff owner@example.com "Owner" --role=ADMIN
-php artisan config:cache && php artisan route:cache && php artisan view:cache
-php artisan dudhwala:preflight
+php artisan dudhwala:install --admin-email=owner@yourdomain.com --admin-name="Owner"
+# document root is not app/public:   add  --public-path=/home/USER/admin.yourdomain.com
 ```
 
-No terminal? Create a temporary cron job (every minute) with the command, wait one minute, then delete it. Do this for each command above in order.
+It generates the app key, migrates the database, links photo storage (or, if the host forbids symlinks, keeps photos inside the web folder and sets `PUBLIC_DISK_IN_PUBLIC=true`), loads the four Sylhet branches from `database/data/owner-branches.json`, imports the 59 products (hidden, unpriced), creates the first admin (a temporary password is printed once unless you pass `--admin-password`), caches config/routes/views and finishes with the preflight report. It is safe to run again after an update.
 
-6. **Cron** (one line, every minute): `* * * * * cd /home/USER/dudhwala/app && /usr/local/bin/php artisan schedule:run >> /dev/null 2>&1`. It runs the daily 03:00 (Dhaka) database backup.
-7. Sign in at `https://admin.yourdomain.com/admin`, enrol the authenticator app, **save the recovery codes**, then in the admin:
-   Settings (hours, showroom limit, fees, outlets, bKash/Nagad numbers) → Products (prices, stock per outlet, photos, Outer Sylhet status) → publish.
-8. Create a **Manager** for view-only staff: `php artisan dudhwala:create-staff manager@example.com "Name" --role=MANAGER`.
+No terminal? Create a temporary cron job (every minute) with the same command, wait for the minute to pass, read the result in the cron email or add `> /home/USER/install.log 2>&1`, then delete the cron job.
+
+7. **Cron** (one line, every minute): `* * * * * cd /home/USER/dudhwala/app && /usr/local/bin/php artisan schedule:run >> /dev/null 2>&1` runs the daily 03:00 (Dhaka) database backup.
+8. Sign in at `https://admin.yourdomain.com/admin`, enrol the authenticator app (admins must), **save the recovery codes**, then in the admin:
+   **Outlets** (real address, phone, hours for each branch) → **Settings** (hours, showroom limit, fees, bKash/Nagad numbers, courier link formats) → **Products** (prices, stock per branch, photos, Outer Sylhet status) → publish.
+9. **Staff**: Admin → *Staff* creates Managers (view only) or more Admins, suspends people, resets two-factor or issues a temporary password. Everyone changes their own password under their name in the top bar.
 
 ## 3. Vercel: storefront
 

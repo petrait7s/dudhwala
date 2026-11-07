@@ -1,5 +1,12 @@
 <div>
-  <h2>{{ __('admin.orders') }}</h2>
+  <div class="row" style="justify-content:space-between"><h2>{{ __('admin.orders') }}</h2>
+    @if($canExport)<a class="btn alt" href="{{ route('admin.export', array_filter(['status' => $status])) }}">{{ __('admin.export_csv') }}</a>@endif</div>
+  <div class="grid2" style="margin-bottom:1rem">
+    <div class="card" style="margin:0"><div class="muted">{{ __('admin.stat_today') }}</div><strong style="font-size:1.6rem">{{ $stats['today'] }}</strong></div>
+    <div class="card" style="margin:0"><div class="muted">{{ __('admin.stat_new') }}</div><strong style="font-size:1.6rem">{{ $stats['new'] }}</strong></div>
+    <div class="card" style="margin:0"><div class="muted">{{ __('admin.stat_verify') }}</div><strong style="font-size:1.6rem">{{ $stats['verify'] }}</strong></div>
+    <div class="card" style="margin:0"><div class="muted">{{ __('admin.stat_cod') }}</div><strong style="font-size:1.6rem">{{ $stats['cod_due'] }}</strong></div>
+  </div>
   <div class="card row">
     <div class="grow"><input wire:model.live.debounce.400ms="q" placeholder="{{ __('admin.search') }}"></div>
     <div><select wire:model.live="status"><option value="">{{ __('admin.filter_status') }}: {{ __('admin.all') }}</option>

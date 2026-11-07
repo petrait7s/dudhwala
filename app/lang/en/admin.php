@@ -21,7 +21,7 @@ return [
     's' => ['PLACED' => 'Placed', 'PICKUP_REQUESTED' => 'Pickup requested', 'PREPARING' => 'Preparing', 'OUT_FOR_DELIVERY' => 'Out for delivery', 'READY_FOR_PICKUP' => 'Ready for pickup', 'READY_FOR_COLLECTION' => 'Ready for collection', 'DELIVERED' => 'Delivered', 'PICKED_UP' => 'Picked up', 'COLLECTED' => 'Collected', 'CANCELLED' => 'Cancelled'],
     'p' => ['UNPAID' => 'Unpaid', 'PENDING_VERIFICATION' => 'Needs verification', 'PAID' => 'Paid', 'VOID' => 'Void'],
 
-    'nav' => ['orders' => 'Orders', 'products' => 'Products', 'categories' => 'Categories', 'outlets' => 'Outlets', 'settings' => 'Settings', 'pages' => 'Content pages', 'audit' => 'Audit log'],
+    'nav' => ['orders' => 'Orders', 'products' => 'Products', 'categories' => 'Categories', 'outlets' => 'Outlets', 'settings' => 'Settings', 'pages' => 'Content pages', 'audit' => 'Audit log', 'staff' => 'Staff'],
     'save' => 'Save', 'add' => 'Add', 'delete' => 'Delete', 'edit' => 'Edit', 'new' => 'New', 'active' => 'Visible', 'hidden' => 'Hidden', 'publish' => 'Publish', 'hide' => 'Hide', 'actions' => 'Actions',
     'name_bn' => 'Name (Bangla)', 'name_en' => 'Name (English)', 'slug' => 'Slug', 'category' => 'Category', 'sort' => 'Sort order', 'code' => 'Code', 'status_label' => 'Status',
     'outer_city' => 'Outer Sylhet', 'outer_default' => 'Category default', 'outer' => ['APPROVED' => 'Approved', 'DISABLED' => 'Disabled', 'PENDING_VERIFICATION' => 'Pending verification', 'PENDING_CONFIRMATION' => 'Pending confirmation'],
@@ -43,4 +43,7 @@ return [
     'courier' => 'Courier / rider', 'courier_ref' => 'Tracking / consignment code', 'courier_note' => 'Rider name, phone or note', 'cr' => ['STEADFAST' => 'Steadfast', 'PATHAO' => 'Pathao', 'OWN_RIDER' => 'Own rider', 'OTHER' => 'Other courier'],
     'gallery' => 'More photos (shown as a slider on the product page)', 'gallery_add' => 'Add another photo (up to 5)',
     'courier_track' => 'Courier tracking links', 'courier_track_note' => 'Customers get a button to follow their parcel on the courier site. Use {code} for the tracking code and {phone} for the customer phone. Leave empty to hide the button.',
+    'role' => 'Role', 'roles' => ['ADMIN' => 'Admin', 'MANAGER' => 'Manager'], 'suspended' => 'Suspended', 'suspend' => 'Suspend', 'activate' => 'Activate', 'reset_password' => 'New temporary password', 'reset_2fa' => 'Reset two-factor', 'generate' => 'Generate', 'temp_password' => 'Temporary password (shown once, hand it over safely)',
+    'account' => 'My account', 'current_password' => 'Current password', 'new_password' => 'New password (at least 12 characters)',
+    'export_csv' => 'Download CSV', 'stat_today' => 'Orders today', 'stat_new' => 'New, not started', 'stat_verify' => 'Payments to verify', 'stat_cod' => 'Cash on delivery not collected',
 ];

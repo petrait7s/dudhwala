@@ -6,14 +6,11 @@ Admin panel (`/admin`) and public order API (`/api`). PHP 8.2+. No queue worker,
 
 ```bash
 composer install --no-dev
-cp .env.example .env && php artisan key:generate
-# set DB_*, APP_URL, CORS_ALLOWED_ORIGINS (the storefront URL, comma separated)
-php artisan migrate --force
-php artisan dudhwala:setup --file=owner-setup.json        # outlets, hours, dispatch + collection outlet (see apps/api/data/setup.example.json)
-php artisan dudhwala:import-catalogue                     # 59 products, hidden and unpriced; add --activate to publish
-php artisan dudhwala:create-staff owner@example.com "Owner" --role=ADMIN
-php artisan storage:link
+cp .env.production.example .env        # fill APP_URL, DB_*, CORS_ALLOWED_ORIGINS
+php artisan dudhwala:install --admin-email=owner@example.com --admin-name="Owner"
 ```
+
+`dudhwala:install` does everything (key, migrate, storage, branches from `database/data/owner-branches.json`, catalogue, first admin, caches, preflight) and can be re-run. See `docs/DEPLOY_HOSTING.md`.
 
 Admins must enrol an authenticator app on first sign-in (recovery codes are shown once). `php artisan dudhwala:reset-mfa <email>` clears it.
 
@@ -49,4 +46,4 @@ gunzip -c storage/app/backups/dudhwala-YYYYMMDD-HHMMSS.sql.gz | mysql -u USER -p
 
 ## Admin areas
 
-ADMIN: orders, products (prices, per-outlet stock, outer-city status, photo), categories, outlets and hours, settings (hours, showroom limit, fees, outlets, payment numbers, prepaid, maintenance), content pages, audit log. MANAGER: orders and products, view only. Every change writes an audit row with before and after.
+ADMIN: orders (with CSV export and a needs-attention summary), staff accounts, products (prices, per-outlet stock, outer-city status, photo), categories, outlets and hours, settings (hours, showroom limit, fees, outlets, payment numbers, prepaid, maintenance), content pages, audit log. MANAGER: orders and products, view only. Every change writes an audit row with before and after.

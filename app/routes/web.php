@@ -23,6 +23,7 @@ Route::prefix('admin')->group(function () {
     Route::middleware(['auth', 'staff'])->group(function () {
         Route::get('/', Admin\Orders::class)->name('admin.orders');
         Route::get('/orders/{order}', Admin\OrderShow::class)->name('admin.order');
+        Route::get('/account', Admin\Account::class)->name('admin.account');
         Route::get('/products', Admin\Products::class)->name('admin.products');
         Route::get('/products/{product}', Admin\ProductEdit::class)->name('admin.product');
 
@@ -34,6 +35,8 @@ Route::prefix('admin')->group(function () {
             Route::get('/settings', Admin\Settings::class)->name('admin.settings');
             Route::get('/pages', Admin\ContentPages::class)->name('admin.pages');
             Route::get('/audit', Admin\AuditLogView::class)->name('admin.audit');
+            Route::get('/staff', Admin\Staff::class)->name('admin.staff');
+            Route::get('/orders-export', \App\Http\Controllers\OrderExportController::class)->name('admin.export');
         });
     });
 });
