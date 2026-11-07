@@ -11,7 +11,7 @@ The storefront only calls `https://admin.yourdomain.com/api`. Prices, stock and 
 
 ## 0. Before you start (owner provides)
 
-bKash and Nagad numbers, delivery fee per zone, approved showroom limit, outlet addresses/phones/hours, prices, photos, WhatsApp number, whether showroom orders are prepaid. Anything missing shows up as a WARN in `php artisan dudhwala:preflight`.
+bKash and Nagad numbers, delivery fee per zone, approved showroom limit, outlet addresses/phones/hours, prices, photos, WhatsApp number, (showroom orders are prepaid by default, like the old system; untick it in Settings if the owner decides otherwise). Anything missing shows up as a WARN in `php artisan dudhwala:preflight`.
 
 Host needs: PHP 8.2+ with `pdo_mysql, mbstring, openssl, gd (WebP), sodium, fileinfo, ctype, xml`; MySQL 8 / MariaDB 10.6+; cron; a subdomain whose document root you can point at `app/public`; SSL (AutoSSL / Let's Encrypt in cPanel). `mysqldump` is needed for backups. SSH or cPanel Terminal makes the first-run commands easy; without it use the one-off cron trick below.
 

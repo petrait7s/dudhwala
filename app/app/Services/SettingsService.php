@@ -25,7 +25,7 @@ class SettingsService
                 'default' => ['IN_CITY' => 0, 'OUTER_CITY' => 0]],
             'payment.numbers' => ['rules' => ['bkash' => 'nullable|string|max:20', 'nagad' => 'nullable|string|max:20'],
                 'default' => ['bkash' => null, 'nagad' => null]],
-            'bulk.prepaid' => ['rules' => ['*' => 'boolean'], 'default' => false], // owner decision pending
+            'bulk.prepaid' => ['rules' => ['*' => 'boolean'], 'default' => true], // old system: showroom orders are paid first
             'content.pages' => ['rules' => [
                 '*' => 'array|max:30',
                 'v.*.slug' => ['required', 'regex:/^[a-z0-9-]{2,40}$/', 'distinct'],

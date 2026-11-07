@@ -1,6 +1,8 @@
 import { clearCart, readCart, removeLine, setQty, type CartLine } from '../lib/cart';
 import { createOrder, getConfig, hasApi } from '../lib/api';
 import { formatTaka, normalizePhone } from '../lib/money';
+import { getZone, onZone, setZone } from '../lib/zone';
+import { toBn } from './bn';
 import { DELIVERY_ESTIMATE, bulkStatus, deliveryFee, orderingOpen, pickupSlots, zoneEligible, hhmm, dhakaMinutes, DEFAULT_CONFIG, type Config, type Method, type OuterStatus, type Zone } from '../lib/rules';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -41,7 +43,7 @@ const msg = (c: string) => both((l) => (MSG[c] ?? ['কিছু একটা �
 const val = (id: string) => ($(id) as HTMLInputElement).value.trim();
 const method = (): Method => (document.querySelector<HTMLInputElement>('input[name=method]:checked')?.value as Method) || 'HOME_DELIVERY';
 const pay = () => document.querySelector<HTMLInputElement>('input[name=pay]:checked')?.value || 'COD';
-const zone = (): Zone | null => (val('zone') as Zone) || null;
+const zone = (): Zone | null => (val('zone') as Zone) || getZone();
 const lineTotals = () => lines.map((l) => ({ quantity: l.quantity, line_poisha: l.unitPoisha * l.quantity }));
 
 function bulk() { return bulkStatus(lineTotals(), cfg.bulk); }
@@ -79,17 +81,20 @@ function render() {
   const note = $('bulknote');
   note.hidden = !b.isBulk;
   if (b.isBulk) note.innerHTML = both((l) => l === 'bn'
-    ? `বেশি পরিমাণ (${b.qty} পিস${b.total !== null ? ', ' + formatTaka(b.total, 'bn') : ''}): শুধু শোরুম থেকে সংগ্রহ করা যাবে।`
-    : `Large order (${b.qty} items${b.total !== null ? ', ' + formatTaka(b.total, 'en') : ''}): collection at the showroom only.`);
+    ? `শোরুম থেকে অর্ডার (${toBn(String(b.qty))} পিস${b.total !== null ? ', ' + formatTaka(b.total, 'bn') : ''}): হোম ডেলিভারি ও এক্সপ্রেস পিকআপ নেই; শুধু মদিনা মার্কেট শাখা থেকে সংগ্রহ।${cfg.bulk_prepaid ? ' আগে পেমেন্ট করতে হবে।' : ''}`
+    : `Showroom order (${b.qty} items${b.total !== null ? ', ' + formatTaka(b.total, 'en') : ''}): no home delivery or express pickup; collect at Modina Market Branch only.${cfg.bulk_prepaid ? ' Payment is required in advance.' : ''}`);
   if (cfg.bulk.approved === false && b.isBulk) note.innerHTML += ' ' + both((l) => (l === 'bn' ? '(সীমা এখনো চূড়ান্ত নয়)' : '(threshold not final yet)'));
 
   $('zonebox').hidden = m !== 'HOME_DELIVERY';
   $('addrbox').hidden = m !== 'HOME_DELIVERY';
   $('pickbox').hidden = m !== 'EXPRESS_PICKUP';
   const z = zone();
-  $('eta').innerHTML = m === 'HOME_DELIVERY' && z ? both((l) => (l === 'bn' ? 'ডেলিভারি: ' : 'Delivery: ') + DELIVERY_ESTIMATE[z][l]) : '';
+  $('eta').innerHTML = m === 'HOME_DELIVERY' && z ? both((l) => DELIVERY_ESTIMATE[z][l]) : '';
 
   renderLines();
+  const bad = m === 'HOME_DELIVERY' && z ? lines.filter((l) => !zoneEligible(l.category, l.outer as OuterStatus, z)) : [];
+  $('inel').hidden = bad.length === 0;
+  if (bad.length) $('inelmsg').innerHTML = both((l) => (l === 'bn' ? `${toBn(String(bad.length))}টি পণ্য আউটার সিলেটে ডেলিভারি করা যায় না। চেকআউটের আগে জোন বদলান অথবা সরান। কিছু নিজে থেকে সরানো হবে না।` : `${bad.length} item(s) cannot be delivered to Outer Sylhet. Change the zone or remove them before checkout. Nothing is removed automatically.`));
 
   const sub = lines.reduce((s, l) => s + l.unitPoisha * l.quantity, 0);
   const fee = deliveryFee(m, m === 'HOME_DELIVERY' ? z : null, cfg.fees);
@@ -166,7 +171,17 @@ $('lines').addEventListener('click', (e) => {
   if (t.matches('[data-rm]')) removeLine(id);
   else if (t.dataset.d) setQty(id, l.quantity + Number(t.dataset.d));
 });
-['change', 'input'].forEach((ev) => $('f').addEventListener(ev, (e) => { if ((e.target as HTMLElement).matches('input[type=radio],select#zone')) render(); }));
+['change', 'input'].forEach((ev) => $('f').addEventListener(ev, (e) => {
+  const t = e.target as HTMLElement;
+  if (t.matches('select#zone')) { setZone(val('zone') as Zone); return; } // the zone bar and this form share one zone
+  if (t.matches('input[type=radio]')) render();
+}));
+onZone(() => { $<HTMLSelectElement>('zone').value = getZone(); render(); });
+$('toin').addEventListener('click', () => setZone('IN_CITY'));
+$('rmbad').addEventListener('click', () => {
+  const z = zone(); if (!z) return;
+  lines.filter((l) => !zoneEligible(l.category, l.outer as OuterStatus, z)).forEach((l) => removeLine(l.variantId));
+});
 window.addEventListener('dw:cart', render);
 
 $('f').addEventListener('submit', async (e) => {
@@ -203,4 +218,5 @@ $('f').addEventListener('submit', async (e) => {
 
 const qs = new URLSearchParams(location.search);
 getConfig().then((c) => { cfg = c; fillPickup(); const want = qs.get('method'); if (want === 'BULK_ORDER' && bulk().isBulk) document.querySelector<HTMLInputElement>('input[value=BULK_ORDER]')!.checked = true; render(); });
+$<HTMLSelectElement>('zone').value = getZone();
 fillPickup(); render();

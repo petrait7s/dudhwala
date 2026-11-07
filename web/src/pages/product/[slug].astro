@@ -3,9 +3,11 @@ import Base from '../../layouts/Base.astro';
 import Bi from '../../components/Bi.astro';
 import Icons from '../../components/Icons.astro';
 import { products, catName } from '../../lib/catalogue';
+import { zoneReason, DELIVERY_ESTIMATE, REASON_TEXT, type OuterStatus } from '../../lib/rules';
 export function getStaticPaths() { return products.map((p) => ({ params: { slug: p.id }, props: { p } })); }
 const { p } = Astro.props;
 const cat = catName(p.category)!;
+const outer = zoneReason(p.category, (p.outerCity ? p.outerCity.toUpperCase() : null) as OuterStatus, 'OUTER_CITY');
 ---
 <Base titleBn={p.nameBn} titleEn={p.nameEn} nav="shop" buybar>
   <div class="wrap has-buybar" data-product data-slug={p.id} data-cat={p.category} data-outer={p.outerCity ?? ''} data-name-bn={p.nameBn} data-name-en={p.nameEn}>
@@ -24,6 +26,10 @@ const cat = catName(p.category)!;
           <label><Bi k="qty" /></label>
           <div class="qty"><button type="button" data-minus aria-label="−">−</button><output data-qty>1</output><button type="button" data-plus aria-label="+">+</button></div>
         </div>
+        <ul class="dlv" aria-label="Delivery zones">
+          <li><b><Bi bn="ইন সিলেট:" en="In Sylhet:" /></b> <Bi bn={DELIVERY_ESTIMATE.IN_CITY.bn} en={DELIVERY_ESTIMATE.IN_CITY.en} /></li>
+          <li class={outer.eligible ? '' : 'no'}><b><Bi bn="আউটার সিলেট:" en="Outer Sylhet:" /></b> {outer.eligible ? <Bi bn={DELIVERY_ESTIMATE.OUTER_CITY.bn} en={DELIVERY_ESTIMATE.OUTER_CITY.en} /> : <Bi bn={REASON_TEXT[outer.reason].bn} en={REASON_TEXT[outer.reason].en} />}</li>
+        </ul>
         <p class="notice warn" data-na hidden><Bi k="unavailable" /></p>
         <div class="stat" style="margin-top:1rem">
           <button class="btn primary" type="button" data-add disabled><Bi k="addToCart" /></button>

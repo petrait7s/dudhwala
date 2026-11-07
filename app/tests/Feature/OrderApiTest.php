@@ -35,6 +35,7 @@ class OrderApiTest extends TestCase
         $s->set('fulfilment.dispatch_outlet_id', $this->outlet->id);
         $s->set('bulk.collection_outlet_id', $this->outlet->id);
         $s->set('delivery.fees', ['IN_CITY' => 6000, 'OUTER_CITY' => 12000]);
+        $s->set('bulk.prepaid', false); // most tests use COD; the real default (true) is covered below
         RateLimiter::clear('x');
     }
 
@@ -151,6 +152,17 @@ class OrderApiTest extends TestCase
         $v = $this->stocked(2000000, 5);
         $r = $this->postJson('/api/orders', $this->body(['_v' => $v, 'items' => [['variant_id' => $v->id, 'quantity' => 1]]]));
         $this->assertContains('bulk_requires_collection', array_column($r->json('error.issues'), 'code'));
+    }
+
+    public function test_showroom_orders_are_prepaid_by_default_like_the_old_system(): void
+    {
+        \App\Models\Setting::where('key', 'bulk.prepaid')->delete();
+        $this->assertTrue(app(SettingsService::class)->get('bulk.prepaid'));
+        $v = $this->stocked(1000, 100);
+        $b = ['_v' => $v, 'method' => 'BULK_ORDER', 'zone' => null, 'items' => [['variant_id' => $v->id, 'quantity' => 20]]];
+        $this->assertContains('bulk_prepayment_required', array_column($this->postJson('/api/orders', $this->body($b))->json('error.issues'), 'code'));
+        $this->postJson('/api/orders', $this->body($b + ['payment' => ['method' => 'BKASH', 'trx_id' => 'PRE00001', 'sender_number' => '01812345678']]))->assertCreated();
+        $this->assertSame('PENDING_VERIFICATION', Payment::first()->status);
     }
 
     public function test_showroom_prepaid_setting_forces_mobile_payment(): void

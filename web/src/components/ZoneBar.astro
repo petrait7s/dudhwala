@@ -1,0 +1,17 @@
+---
+import Bi from './Bi.astro';
+---
+<div class="zonebar" data-zonebar>
+  <div class="wrap zb">
+    <span class="zb-l"><Bi bn="ডেলিভারি জোন:" en="Delivery zone:" /></span>
+    <div class="seg-group" role="group" aria-label="Delivery zone">
+      <button type="button" class="seg" data-z="IN_CITY"><Bi bn="ইন সিলেট" en="In Sylhet" /></button>
+      <button type="button" class="seg" data-z="OUTER_CITY"><Bi bn="আউটার সিলেট" en="Outer Sylhet" /></button>
+    </div>
+    <a class="zb-act" href="/showroom"><Bi k="showroom" /></a>
+    <span class="zb-eta" data-eta></span>
+    <span class="zchip" data-status role="status"></span>
+    <a class="zchip warn" data-warn href="/cart" hidden role="alert"></a>
+  </div>
+</div>
+<script>import '../scripts/zonebar';</script>

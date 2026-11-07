@@ -13,6 +13,10 @@ import Bi from '../components/Bi.astro';
 
     <div class="lay" id="main-lay" hidden>
       <div>
+        <div id="inel" class="notice bad" hidden>
+          <p><strong id="inelmsg"></strong></p>
+          <div class="stat"><button type="button" class="btn primary sm" id="toin"><Bi bn="ইন সিলেট বেছে নিন" en="Choose In Sylhet" /></button><button type="button" class="btn sm" id="rmbad"><Bi bn="চিহ্নিত পণ্যগুলো সরান" en="Remove marked items" /></button></div>
+        </div>
         <div class="card" id="lines"></div>
         <p id="bulknote" class="notice" hidden style="margin-top:1rem"></p>
       </div>
@@ -27,8 +31,7 @@ import Bi from '../components/Bi.astro';
         <div id="zonebox" class="field" style="margin-top:1rem">
           <label for="zone"><Bi bn="এলাকা" en="Area" /></label>
           <select id="zone" name="zone">
-            <option value="">— —</option>
-            <option value="IN_CITY">ইন সিলেট / In Sylhet</option>
+                        <option value="IN_CITY">ইন সিলেট / In Sylhet</option>
             <option value="OUTER_CITY">আউটার সিলেট / Outer Sylhet</option>
           </select>
           <p class="hint" id="eta"></p>

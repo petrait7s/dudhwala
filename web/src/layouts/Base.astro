@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Bi from '../components/Bi.astro';
 import Icons from '../components/Icons.astro';
+import ZoneBar from '../components/ZoneBar.astro';
 import site from '../data/site.json';
 interface Props { titleBn: string; titleEn: string; descBn?: string; descEn?: string; nav?: 'home' | 'shop' | 'info' | 'cart' | ''; buybar?: boolean }
 const { titleBn, titleEn, descBn = 'দুধওয়ালা: সিলেটের দুগ্ধজাত মিষ্টি, দই ও বেকারি।', descEn = 'Dudhwala: dairy sweets, doi and bakery from Sylhet.', nav = '', buybar = false } = Astro.props;
@@ -57,6 +58,7 @@ const url = new URL(path, Astro.site).toString();
       </div>
     </div>
   </header>
+  <ZoneBar />
 
   <main id="main"><slot /></main>
 

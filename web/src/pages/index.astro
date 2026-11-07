@@ -11,7 +11,7 @@ const featured = products.filter((_, i) => i % 7 === 0).slice(0, 8);
   <div class="wrap">
     <div class="bento">
       <div class="card b"><strong><Bi bn="অর্ডারের সময়" en="Ordering hours" /></strong><span class="muted" data-hours>১০:০০ – ২২:০০</span></div>
-      <div class="card b"><strong><Bi bn="ডেলিভারি" en="Delivery" /></strong><span class="muted"><Bi bn="ইন সিলেট: ২৪ ঘণ্টার মধ্যে · আউটার সিলেট: ২৪–৪৮ ঘণ্টা" en="In Sylhet: within 24h · Outer Sylhet: 24–48h" /></span></div>
+      <div class="card b"><strong><Bi bn="ডেলিভারি" en="Delivery" /></strong><span class="muted"><Bi bn="ইন সিলেট: ২৪ ঘণ্টার মধ্যে · আউটার সিলেট: ১-২ দিনের মধ্যে" en="In Sylhet: within 24h · Outer Sylhet: within 1-2 days" /></span></div>
       <div class="card b"><strong><Bi k="showroom" /></strong><span class="muted"><Bi bn="মদিনা মার্কেট শাখা থেকে সংগ্রহ" en="Collect at Modina Market Branch" /></span></div>
       <div class="card b"><strong><Bi bn="পেমেন্ট" en="Payment" /></strong><span class="muted"><Bi bn="ক্যাশ অন ডেলিভারি, বিকাশ, নগদ" en="Cash on delivery, bKash, Nagad" /></span></div>
     </div>
@@ -19,7 +19,7 @@ const featured = products.filter((_, i) => i % 7 === 0).slice(0, 8);
     <section class="s below">
       <h2><Bi bn="আমাদের পণ্য" en="Our products" /></h2>
       <div class="grid" id="grid">
-        {featured.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} />)}
+        {featured.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} outer={p.outerCity ? p.outerCity.toUpperCase() : null} />)}
       </div>
       <p style="margin-top:1.2rem"><a class="btn primary" href="/shop"><Bi k="allProducts" /></a></p>
     </section>
@@ -35,10 +35,12 @@ const featured = products.filter((_, i) => i % 7 === 0).slice(0, 8);
     </section>
 
     <section class="s below">
-      <div class="cta">
-        <h2><Bi bn="আজই অর্ডার করুন" en="Order today" /></h2>
-        <p><Bi bn="অনেক পরিমাণে দরকার? শোরুম অর্ডারে সংগ্রহ করুন।" en="Need a large quantity? Order from the showroom." /></p>
-        <a class="btn accent" href="/shop"><Bi k="shop" /></a>
+      <div class="card" style="padding:1.2rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between">
+        <div style="flex:1;min-width:240px">
+          <h2 style="font-size:1.2rem;margin-bottom:.3rem"><Bi k="showroom" /></h2>
+          <p class="muted" style="margin:0" data-bulkpromo><Bi bn="অনুষ্ঠান বা বড় চাহিদার জন্য একসাথে অনেক পণ্য অর্ডার করুন। সংগ্রহ শুধু মদিনা মার্কেট শাখা থেকে।" en="Ordering a lot for an event or a big need? Collect at Modina Market Branch." /></p>
+        </div>
+        <a class="btn primary" href="/showroom"><Bi bn="শোরুম থেকে অর্ডার করুন" en="Order from showroom" /></a>
       </div>
     </section>
   </div>
@@ -49,6 +51,8 @@ const featured = products.filter((_, i) => i % 7 === 0).slice(0, 8);
     import { toBn } from '../scripts/bn';
     fillPrices();
     getConfig().then((c) => {
+      const bp = document.querySelector('[data-bulkpromo]');
+      if (bp) bp.innerHTML = `<span class="bn">অনুষ্ঠান বা বড় চাহিদার জন্য একসাথে অনেক পণ্য অর্ডার করুন। ন্যূনতম${c.bulk.approved === false ? ' (চূড়ান্ত নয়)' : ''}: ${toBn(String(c.bulk.min_total_quantity))} টি। সংগ্রহ শুধু মদিনা মার্কেট শাখা থেকে।</span><span class="en">Ordering a lot for an event or a big need? Minimum${c.bulk.approved === false ? ' (not final)' : ''}: ${c.bulk.min_total_quantity} items. Collect at Modina Market Branch only.</span>`;
       const el = document.querySelector('[data-hours]');
       if (el) { const t = `${hhmm(c.hours.open_minute)} – ${hhmm(c.hours.close_minute)}`; el.innerHTML = `<span class="bn">${toBn(t)}</span><span class="en">${t}</span>`; }
     });

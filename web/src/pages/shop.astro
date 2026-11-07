@@ -19,8 +19,9 @@ import { products, categories } from '../lib/catalogue';
       <button class="chip" type="button" data-chip="" aria-pressed="true"><Bi k="allProducts" /></button>
       {categories.map((c) => <button class="chip" type="button" data-chip={c.slug} aria-pressed="false"><Bi bn={c.nameBn} en={c.nameEn} /></button>)}
     </div>
+    <p id="zonenote" class="notice" hidden style="margin-top:1rem"></p>
     <div class="grid" id="grid" style="margin-top:1rem">
-      {products.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} />)}
+      {products.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} outer={p.outerCity ? p.outerCity.toUpperCase() : null} />)}
     </div>
     <p id="none" class="notice" hidden><Bi k="noResults" /></p>
   </div>

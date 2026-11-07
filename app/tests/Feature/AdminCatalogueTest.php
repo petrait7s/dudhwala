@@ -166,7 +166,7 @@ class AdminCatalogueTest extends TestCase
             'delivery.fees' => ['IN_CITY' => 6000, 'OUTER_CITY' => 12000],
             'bulk.rule' => ['min_total_quantity' => 15, 'min_total_poisha' => 1500000, 'approved' => true],
             'payment.numbers' => ['bkash' => '01700000000', 'nagad' => '01800000000'],
-            'fulfilment.dispatch_outlet_id' => $o->id, 'bulk.collection_outlet_id' => $o->id, 'bulk.prepaid' => true,
+            'fulfilment.dispatch_outlet_id' => $o->id, 'bulk.collection_outlet_id' => $o->id, 'bulk.prepaid' => false,
         ]);
         $this->assertSame(12000, $s->get('delivery.fees')['OUTER_CITY']);
         $this->assertTrue($s->get('bulk.rule')['approved']);
@@ -176,7 +176,7 @@ class AdminCatalogueTest extends TestCase
 
         // unchanged value writes no audit row
         $n = AuditLog::count();
-        $this->svc->saveSettings($this->admin, ['bulk.prepaid' => true]);
+        $this->svc->saveSettings($this->admin, ['bulk.prepaid' => false]);
         $this->assertSame($n, AuditLog::count());
 
         // one bad value => nothing from this save is kept

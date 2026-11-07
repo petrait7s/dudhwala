@@ -1,27 +1,47 @@
 ---
 import Base from '../layouts/Base.astro';
 import Bi from '../components/Bi.astro';
+import { products, categories } from '../lib/catalogue';
 import site from '../data/site.json';
 ---
 <Base titleBn="শোরুম থেকে অর্ডার" titleEn="Order From Showroom">
-  <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem;max-width:760px">
+  <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem">
     <h1><Bi k="showroom" /></h1>
-    <p><Bi bn={`বেশি পরিমাণে দরকার হলে ${site.showroom.nameBn} থেকে সংগ্রহ করুন। কার্টে পণ্যের পরিমাণ বা মোট দাম নির্ধারিত সীমায় পৌঁছালে চেকআউটে শুধু শোরুম অপশন পাবেন।`} en={`For larger quantities, collect from ${site.showroom.nameEn}. When the quantity or total in your cart reaches the set limit, checkout offers the showroom option only.`} /></p>
-    <div class="card" style="padding:1.1rem;margin:1rem 0">
-      <div class="row"><span><Bi bn="সংগ্রহের স্থান" en="Collection point" /></span><strong><Bi bn={site.showroom.nameBn} en={site.showroom.nameEn} /></strong></div>
-      {site.showroom.address && <div class="row"><span><Bi bn="ঠিকানা" en="Address" /></span><span>{site.showroom.address}</span></div>}
-      <div class="row"><span><Bi bn="বর্তমান সীমা" en="Current limit" /></span><span id="lim" class="muted">—</span></div>
+    <p class="notice" role="note"><Bi
+      bn={`পণ্য বেছে সংখ্যা দিন। সংগ্রহ শুধু ${site.showroom.nameBn} থেকে; হোম ডেলিভারি নেই। আগে পেমেন্ট লাগে।`}
+      en={`Pick products and quantities. Collection only at ${site.showroom.nameEn}; no home delivery. Payment is required in advance.`} /></p>
+    <p class="muted" id="limit"></p>
+    <p class="notice warn" id="noapi" hidden><Bi bn="অনলাইন অর্ডার এখনো চালু হয়নি। শীঘ্রই আসছে।" en="Online ordering is not open yet. Coming soon." /></p>
+
+    <div class="field" style="max-width:420px;margin-top:1rem">
+      <label for="bq"><Bi bn="খুঁজুন" en="Search" /></label>
+      <input id="bq" type="search" data-ph-bn="দই, সন্দেশ, কেক…" data-ph-en="doi, sandesh, cake…" placeholder="দই, সন্দেশ, কেক…" />
     </div>
-    <a class="btn primary" href="/shop"><Bi bn="পণ্য বাছুন" en="Choose products" /></a>
-    <a class="btn" href="/cart"><Bi k="cart" /></a>
+
+    {categories.map((c) => (
+      <section style="margin-top:1.4rem" data-cat={c.slug}>
+        <h2 style="font-size:1.2rem"><Bi bn={c.nameBn} en={c.nameEn} /></h2>
+        <ul class="bulk-list">
+          {products.filter((p) => p.category === c.slug).map((p) => (
+            <li class="bulk-row" data-slug={p.id} data-name={`${p.nameBn} ${p.nameEn}`.toLowerCase()} data-cat={c.slug}>
+              <span class="nm"><Bi bn={p.nameBn} en={p.nameEn} /> <small class="muted" data-note></small></span>
+              <div class="qty sm" role="group">
+                <button type="button" data-d="-1" aria-label="−">−</button>
+                <input class="bulk-qty" inputmode="numeric" placeholder="0" aria-label="Quantity" />
+                <button type="button" data-d="1" aria-label="+">+</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+    <p id="none" class="notice" hidden><Bi k="noResults" /></p>
+
+    <div class="actbar" role="region" aria-label="Showroom order summary">
+      <p style="margin:0" id="sum"></p>
+      <span class="err" id="err" role="alert"></span>
+      <button class="btn primary" type="button" id="go" disabled><Bi bn="চেকআউটে যান" en="Go to checkout" /></button>
+    </div>
   </div>
-  <script>
-    import { getConfig } from '../lib/api';
-    import { formatTaka } from '../lib/money';
-    getConfig().then((c) => {
-      const q = c.bulk.min_total_quantity, a = c.bulk.min_total_poisha;
-      const pend = c.bulk.approved === false;
-      (document.getElementById('lim') as HTMLElement).innerHTML = `<span class="bn">${q} পিস বা ${formatTaka(a, 'bn')}${pend ? ' (চূড়ান্ত নয়)' : ''}</span><span class="en">${q} items or ${formatTaka(a, 'en')}${pend ? ' (not final)' : ''}</span>`;
-    });
-  </script>
+  <script>import '../scripts/showroom';</script>
 </Base>

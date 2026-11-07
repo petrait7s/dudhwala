@@ -19,13 +19,17 @@ export const DEFAULT_CONFIG: Config = {
   bulk: { min_total_quantity: 20, min_total_poisha: 2_000_000, approved: false },
   fees: { IN_CITY: 0, OUTER_CITY: 0 },
   payment_numbers: { bkash: null, nagad: null },
-  bulk_prepaid: false,
+  bulk_prepaid: true,
   outlets: [],
 };
 
 export const DELIVERY_ESTIMATE: Record<Zone, { bn: string; en: string }> = {
-  IN_CITY: { bn: '২৪ ঘণ্টার মধ্যে', en: 'within 24 hours' },
-  OUTER_CITY: { bn: '২৪ থেকে ৪৮ ঘণ্টা', en: '24 to 48 hours' },
+  IN_CITY: { bn: '২৪ ঘণ্টার মধ্যে ডেলিভারি', en: 'Delivery within 24 hours' },
+  OUTER_CITY: { bn: '১-২ দিনের মধ্যে ডেলিভারি', en: 'Delivery within 1-2 days' },
+};
+export const ZONE_LABEL: Record<Zone, { bn: string; en: string }> = {
+  IN_CITY: { bn: 'ইন সিলেট', en: 'In Sylhet' },
+  OUTER_CITY: { bn: 'আউটার সিলেট', en: 'Outer Sylhet' },
 };
 
 const DHAKA_MS = 6 * 3600_000;
@@ -36,6 +40,26 @@ export function orderingOpen(now: Date, h = DEFAULT_CONFIG.hours): boolean {
   return m >= h.open_minute && m < h.close_minute;
 }
 export const hhmm = (m: number) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+
+export type Reason = 'in_city_all' | 'category_rule' | 'approved_item' | 'pending_verification' | 'pending_confirmation' | 'disabled' | 'item_not_approved';
+/** Why an item can or cannot go to a zone (same logic as the server). */
+export function zoneReason(categorySlug: string, status: OuterStatus, zone: Zone): { eligible: boolean; reason: Reason } {
+  if (zone === 'IN_CITY') return { eligible: true, reason: 'in_city_all' };
+  if (status === 'PENDING_VERIFICATION') return { eligible: false, reason: 'pending_verification' };
+  if (status === 'PENDING_CONFIRMATION') return { eligible: false, reason: 'pending_confirmation' };
+  if (status === 'DISABLED') return { eligible: false, reason: 'disabled' };
+  if (status === 'APPROVED') return { eligible: true, reason: 'approved_item' };
+  return categorySlug.toLowerCase() === 'bakery' ? { eligible: true, reason: 'category_rule' } : { eligible: false, reason: 'item_not_approved' };
+}
+export const REASON_TEXT: Record<Reason, { bn: string; en: string }> = {
+  in_city_all: { bn: 'ইন সিলেটে সব পণ্য ডেলিভারি হয়।', en: 'All products are delivered in Sylhet.' },
+  category_rule: { bn: 'আউটার সিলেটে ডেলিভারি হয়।', en: 'Delivered to Outer Sylhet.' },
+  approved_item: { bn: 'আউটার সিলেটে ডেলিভারি হয়।', en: 'Delivered to Outer Sylhet.' },
+  pending_verification: { bn: 'আউটার সিলেটের জন্য এখনো যাচাই হয়নি।', en: 'Not yet verified for Outer Sylhet.' },
+  pending_confirmation: { bn: 'আউটার সিলেটের জন্য এখনো নিশ্চিত হয়নি।', en: 'Not yet confirmed for Outer Sylhet.' },
+  disabled: { bn: 'আউটার সিলেটে এই পণ্য বন্ধ আছে।', en: 'This product is off for Outer Sylhet.' },
+  item_not_approved: { bn: 'আউটার সিলেটে এই পণ্য ডেলিভারি হয় না।', en: 'This product is not delivered to Outer Sylhet.' },
+};
 
 export function zoneEligible(categorySlug: string, status: OuterStatus, zone: Zone): boolean {
   if (zone === 'IN_CITY') return true;

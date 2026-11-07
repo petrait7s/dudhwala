@@ -14,7 +14,8 @@ const list = products.filter((p) => p.category === c.slug);
     <div class="bar"><select id="sort" aria-label="Sort">
       <option value="name">নাম / Name</option><option value="low">দাম কম → বেশি / Price low → high</option><option value="high">দাম বেশি → কম / Price high → low</option>
     </select></div>
-    <div class="grid" id="grid">{list.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} />)}</div>
+    <p id="zonenote" class="notice" hidden></p>
+    <div class="grid" id="grid">{list.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} outer={p.outerCity ? p.outerCity.toUpperCase() : null} />)}</div>
     <p id="none" hidden></p>
   </div>
   <script>import '../../scripts/shop';</script>
