@@ -50,4 +50,10 @@ class CatalogueController extends Controller
             ])->all(),
         ])->header('Cache-Control', 'public, max-age=30');
     }
+
+    /** Owner-written content pages (About, FAQ, policies). */
+    public function pages(SettingsService $s)
+    {
+        return response()->json(['pages' => array_values($s->get('content.pages'))])->header('Cache-Control', 'public, max-age=60');
+    }
 }

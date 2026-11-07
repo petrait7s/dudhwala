@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Bi from '../components/Bi.astro';
+---
+<Base titleBn="তথ্য" titleEn="Information">
+  <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem;max-width:760px">
+    <div id="page"><p class="muted"><Bi bn="লোড হচ্ছে…" en="Loading…" /></p></div>
+    <p id="nf" hidden class="notice"><Bi bn="পেজটি পাওয়া যায়নি।" en="Page not found." /></p>
+  </div>
+  <script>
+    import { getPages } from '../lib/api';
+    const slug = new URLSearchParams(location.search).get('p');
+    const box = document.getElementById('page')!;
+    const span = (cls: string, text: string) => { const s = document.createElement('span'); s.className = cls; s.textContent = text; return s; };
+    getPages().then((pages) => {
+      const p = pages.find((x) => x.slug === slug);
+      if (!p) { box.hidden = true; document.getElementById('nf')!.hidden = false; return; }
+      box.textContent = '';
+      const h = document.createElement('h1'); h.append(span('bn', p.title_bn), span('en', p.title_en || p.title_bn)); box.appendChild(h);
+      const bn = p.body_bn.split(/\n{2,}/), en = (p.body_en || p.body_bn).split(/\n{2,}/);
+      bn.forEach((t, i) => { const el = document.createElement('p'); el.append(span('bn', t), span('en', en[i] ?? t)); box.appendChild(el); });
+      document.title = `${p.title_bn} | ${p.title_en || p.title_bn}`;
+    });
+  </script>
+</Base>

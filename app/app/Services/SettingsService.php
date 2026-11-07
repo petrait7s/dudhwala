@@ -26,6 +26,12 @@ class SettingsService
             'payment.numbers' => ['rules' => ['bkash' => 'nullable|string|max:20', 'nagad' => 'nullable|string|max:20'],
                 'default' => ['bkash' => null, 'nagad' => null]],
             'bulk.prepaid' => ['rules' => ['*' => 'boolean'], 'default' => false], // owner decision pending
+            'content.pages' => ['rules' => [
+                '*' => 'array|max:30',
+                'v.*.slug' => ['required', 'regex:/^[a-z0-9-]{2,40}$/', 'distinct'],
+                'v.*.title_bn' => 'required|string|max:120', 'v.*.title_en' => 'nullable|string|max:120',
+                'v.*.body_bn' => 'required|string|max:20000', 'v.*.body_en' => 'nullable|string|max:20000',
+            ], 'default' => []],
             'site.maintenance' => ['rules' => ['*' => 'boolean'], 'default' => false],
         ];
     }
@@ -54,7 +60,9 @@ class SettingsService
     {
         $rules = self::registry()[$key]['rules'];
         if (array_key_exists('*', $rules)) {
-            return Validator::make(['v' => $value], ['v' => $rules['*']])->passes();
+            $all = ['v' => $rules['*']];
+            foreach ($rules as $k => $r) if (str_starts_with($k, 'v.')) $all[$k] = $r;
+            return Validator::make(['v' => $value], $all)->passes();
         }
         return is_array($value) && Validator::make($value, $rules)->passes();
     }

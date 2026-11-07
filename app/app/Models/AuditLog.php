@@ -12,6 +12,8 @@ class AuditLog extends Model
     protected $guarded = [];
     protected $casts = ['before' => 'array', 'after' => 'array', 'created_at' => 'datetime'];
 
+    public function actor() { return $this->belongsTo(User::class, 'actor_user_id'); }
+
     protected static function booted(): void
     {
         static::updating(fn () => throw new LogicException('audit_logs is append-only'));

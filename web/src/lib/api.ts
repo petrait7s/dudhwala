@@ -39,3 +39,12 @@ export interface OrderRequest {
 export interface OrderResult { order_number: string; status: string; total_poisha: number; subtotal_poisha: number; delivery_fee_poisha: number }
 export const createOrder = (b: OrderRequest) => j<OrderResult>('/orders', { method: 'POST', body: JSON.stringify(b) });
 export const trackOrder = (order_number: string, phone: string) => j<any>('/orders/track', { method: 'POST', body: JSON.stringify({ order_number, phone }) });
+
+export interface InfoPage { slug: string; title_bn: string; title_en: string | null; body_bn: string; body_en: string | null }
+let pages: Promise<InfoPage[]> | null = null;
+/** Owner-written pages (policies, FAQ) edited in the admin. */
+export function getPages(): Promise<InfoPage[]> {
+  if (!hasApi()) return Promise.resolve([]);
+  pages ??= j<{ pages: InfoPage[] }>('/pages').then((r) => r.pages).catch(() => []);
+  return pages;
+}

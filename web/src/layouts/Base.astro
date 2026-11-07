@@ -3,7 +3,6 @@ import '../styles/global.css';
 import Bi from '../components/Bi.astro';
 import Icons from '../components/Icons.astro';
 import site from '../data/site.json';
-import pages from '../data/pages.json';
 interface Props { titleBn: string; titleEn: string; descBn?: string; descEn?: string; nav?: 'home' | 'shop' | 'info' | 'cart' | ''; buybar?: boolean }
 const { titleBn, titleEn, descBn = 'দুধওয়ালা: সিলেটের দুগ্ধজাত মিষ্টি, দই ও বেকারি।', descEn = 'Dudhwala: dairy sweets, doi and bakery from Sylhet.', nav = '', buybar = false } = Astro.props;
 const path = Astro.url.pathname;
@@ -77,7 +76,7 @@ const url = new URL(path, Astro.site).toString();
       <ul>
         <li><a href="/about"><Bi k="info" /></a></li>
         <li><a href="/contact"><Bi k="contact" /></a></li>
-        {(pages as { slug: string; titleBn: string; titleEn?: string }[]).map((p) => <li><a href={`/info/${p.slug}`}><Bi bn={p.titleBn} en={p.titleEn ?? p.titleBn} /></a></li>)}
+        <li hidden data-pages-end></li>
       </ul>
     </div>
     <div class="wrap" style="margin-top:1.2rem;font-size:.85rem">© {new Date().getFullYear()} {site.nameEn}</div>

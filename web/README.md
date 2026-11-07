@@ -26,7 +26,6 @@ npm run build    # -> dist/
 |---|---|
 | `src/data/site.json` | Shop name, showroom address and phone, **WhatsApp number** (digits with country code, e.g. `8801XXXXXXXXX`; the Contact page shows the button only when set), phone, email |
 | `src/data/hero.json` | Hero slideshow photos (empty = calm brand-gradient hero) |
-| `src/data/pages.json` | Content pages (policies, FAQ): `[{ "slug", "titleBn", "titleEn", "bodyBn", "bodyEn" }]`; each becomes `/info/<slug>` and a footer link |
 | `src/data/catalogue.json` | Product names (59). Prices, variants and photos come live from the API |
 
 ### Hero photos
@@ -42,6 +41,7 @@ All JSON. Money is integer poisha. Phones `01XXXXXXXXX`.
 | `GET /catalogue` | `{ products: [{ slug, image_url, variants: [{ id, label_bn, label_en, price_poisha \| null, max_qty, in_stock }] }] }` (slug = catalogue id, e.g. `ds-01`) |
 | `GET /config` | `{ hours:{open_minute,close_minute}, bulk:{min_total_quantity,min_total_poisha,approved}, fees:{IN_CITY,OUTER_CITY}, payment_numbers:{bkash,nagad}, bulk_prepaid, outlets:[{id,code,name_bn,name_en}] }` |
 | `POST /orders` | body `{ idempotency_key, method, zone, items:[{variant_id,quantity}], contact:{name,phone,address_line1?,landmark?}, outlet_id?, pickup_at?, payment:{method,trx_id?,sender_number?}, website }` -> `201 { order_number, status, total_poisha, subtotal_poisha, delivery_fee_poisha }`; errors `{ error:{ code, issues:[{code,line?}] } }` (issue codes = `OrderingRules::validateCheckout`) |
+| `GET /pages` | `{ pages: [{ slug, title_bn, title_en, body_bn, body_en }] }` (owner-written policies and FAQ, edited in the admin; shown at `/info?p=<slug>` and linked in the footer, no redeploy needed) |
 | `POST /orders/track` | `{ order_number, phone }` -> `{ order_number, method, status, payment_status, total_poisha, items:[{name_bn,variant_label_bn,quantity,line_total_poisha}] }`, 404 when the pair does not match |
 
 `website` is the honeypot: it must stay empty. The browser prices shown are for display; the server re-prices from `variant_id`.

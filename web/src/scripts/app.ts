@@ -1,4 +1,5 @@
 import { cartCount, readCart } from '../lib/cart';
+import { getPages } from '../lib/api';
 
 const root = document.documentElement;
 const safe = (f: () => void) => { try { f(); } catch { /* storage blocked */ } };
@@ -69,3 +70,16 @@ observeReveal();
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
 }
+
+/* footer links to owner-written pages (managed in the admin) */
+getPages().then((pages) => {
+  const end = document.querySelector('[data-pages-end]');
+  if (!end) return;
+  for (const p of pages) {
+    const li = document.createElement('li'); const a = document.createElement('a');
+    a.href = `/info?p=${encodeURIComponent(p.slug)}`;
+    const bn = document.createElement('span'); bn.className = 'bn'; bn.textContent = p.title_bn;
+    const en = document.createElement('span'); en.className = 'en'; en.textContent = p.title_en || p.title_bn;
+    a.append(bn, en); li.appendChild(a); end.before(li);
+  }
+});

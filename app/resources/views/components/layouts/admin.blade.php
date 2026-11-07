@@ -14,7 +14,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.5rem;bo
 input,select,textarea{font:inherit;padding:.5rem .7rem;border:1px solid #b4bce0;border-radius:8px;width:100%}
 .btn{font:inherit;font-weight:600;border:1px solid var(--edge);background:var(--brand);color:#fff;border-radius:8px;padding:.45rem 1rem;cursor:pointer}
 .btn.alt{background:#fff;color:var(--ink);border-color:#b4bce0}.btn.bad{background:var(--bad);border-color:var(--bad)}
-.pill{display:inline-block;padding:.05rem .6rem;border-radius:99px;background:#e2e6ff;font-size:.85rem}.pill.ok{background:var(--okbg);color:var(--ok)}.pill.warn{background:var(--warnbg);color:var(--warn)}.pill.bad{background:var(--badbg);color:var(--bad)}
+.err{color:var(--bad);font-size:.85rem}label{display:block;font-weight:600;font-size:.9rem}.grid2{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.pill{display:inline-block;padding:.05rem .6rem;border-radius:99px;background:#e2e6ff;font-size:.85rem}.pill.ok{background:var(--okbg);color:var(--ok)}.pill.warn{background:var(--warnbg);color:var(--warn)}.pill.bad{background:var(--badbg);color:var(--bad)}
 .note{padding:.6rem .9rem;border-radius:8px;margin-bottom:.8rem;background:#ddf2fc}.note.warn{background:var(--warnbg);color:var(--warn)}.note.bad{background:var(--badbg);color:var(--bad)}.note.ok{background:var(--okbg);color:var(--ok)}
 .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}.grow{flex:1}.muted{color:var(--muted)}
 </style>
@@ -25,6 +25,14 @@ input,select,textarea{font:inherit;padding:.5rem .7rem;border:1px solid #b4bce0;
 @auth<div class="row"><span>{{ auth()->user()->name }} · {{ auth()->user()->role }}</span>
 <form method="post" action="{{ route('admin.logout') }}">@csrf<button class="btn alt" style="color:#12173f">{{ __('admin.logout') }}</button></form></div>@endauth
 </header>
+@auth
+@if(auth()->user()->mfa_enabled || ! auth()->user()->isAdmin())
+<nav style="background:#fff;border-bottom:1px solid var(--line);padding:.4rem 1rem;display:flex;gap:.3rem;flex-wrap:wrap">
+  @php($items = ['admin.orders' => 'orders', 'admin.products' => 'products'] + (auth()->user()->isAdmin() ? ['admin.categories' => 'categories', 'admin.outlets' => 'outlets', 'admin.settings' => 'settings', 'admin.pages' => 'pages', 'admin.audit' => 'audit'] : []))
+  @foreach($items as $r => $k)<a href="{{ route($r) }}" style="padding:.3rem .8rem;border-radius:99px;text-decoration:none;color:#12173f;{{ request()->routeIs($r.'*') ? 'background:#e2e6ff;font-weight:700' : '' }}">{{ __('admin.nav.'.$k) }}</a>@endforeach
+</nav>
+@endif
+@endauth
 <main>{{ $slot }}</main>
 @livewireScripts
 </body></html>
