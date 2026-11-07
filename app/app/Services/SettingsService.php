@@ -32,6 +32,11 @@ class SettingsService
                 'v.*.title_bn' => 'required|string|max:120', 'v.*.title_en' => 'nullable|string|max:120',
                 'v.*.body_bn' => 'required|string|max:20000', 'v.*.body_en' => 'nullable|string|max:20000',
             ], 'default' => []],
+            // where a customer follows the parcel on the courier's own site; {code} = tracking code, {phone} = customer phone
+            'courier.tracking_urls' => ['rules' => [
+                'STEADFAST' => ['nullable', 'string', 'max:300', 'regex:/^https?:\/\/\S*\{code\}\S*$/'],
+                'PATHAO' => ['nullable', 'string', 'max:300', 'regex:/^https?:\/\/\S*\{code\}\S*$/'],
+            ], 'default' => ['STEADFAST' => 'https://steadfast.com.bd/t/{code}', 'PATHAO' => 'https://merchant.pathao.com/tracking?consignment_id={code}&phone={phone}']],
             'site.maintenance' => ['rules' => ['*' => 'boolean'], 'default' => false],
         ];
     }

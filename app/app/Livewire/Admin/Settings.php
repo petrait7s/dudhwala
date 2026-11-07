@@ -30,6 +30,7 @@ class Settings extends Component
             'fee_in' => rtrim(rtrim(number_format($fees['IN_CITY'] / 100, 2, '.', ''), '0'), '.') ?: '0', 'fee_out' => rtrim(rtrim(number_format($fees['OUTER_CITY'] / 100, 2, '.', ''), '0'), '.') ?: '0',
             'dispatch' => (string) ($s->get('fulfilment.dispatch_outlet_id') ?? ''), 'collection' => (string) ($s->get('bulk.collection_outlet_id') ?? ''),
             'bkash' => $pn['bkash'] ?? '', 'nagad' => $pn['nagad'] ?? '',
+            'cur_steadfast' => $s->get('courier.tracking_urls')['STEADFAST'] ?? '', 'cur_pathao' => $s->get('courier.tracking_urls')['PATHAO'] ?? '',
             'prepaid' => (bool) $s->get('bulk.prepaid'), 'maintenance' => (bool) $s->get('site.maintenance'),
         ];
     }
@@ -50,6 +51,7 @@ class Settings extends Component
                 'fulfilment.dispatch_outlet_id' => $f['dispatch'] === '' ? null : (int) $f['dispatch'],
                 'bulk.collection_outlet_id' => $f['collection'] === '' ? null : (int) $f['collection'],
                 'payment.numbers' => ['bkash' => $f['bkash'] === '' ? null : $f['bkash'], 'nagad' => $f['nagad'] === '' ? null : $f['nagad']],
+                'courier.tracking_urls' => ['STEADFAST' => trim($f['cur_steadfast']) ?: null, 'PATHAO' => trim($f['cur_pathao']) ?: null],
                 'bulk.prepaid' => (bool) $f['prepaid'], 'site.maintenance' => (bool) $f['maintenance'],
             ]);
             $this->bulkApproved = true;

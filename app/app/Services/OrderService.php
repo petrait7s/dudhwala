@@ -242,6 +242,15 @@ class OrderService
         });
     }
 
+    /** The courier's own tracking page for this parcel, or null (own rider, no code, no template). */
+    public function courierUrl(Order $o): ?string
+    {
+        if (! $o->courier || ! $o->courier_ref) return null;
+        $tpl = ($this->settings->get('courier.tracking_urls')[$o->courier] ?? null);
+        if (! $tpl) return null;
+        return str_replace(['{code}', '{phone}'], [rawurlencode($o->courier_ref), rawurlencode($o->contact_phone)], $tpl);
+    }
+
     /** How many earlier cancelled orders this phone has (shown to staff as a warning). */
     public function cancelledCountForPhone(string $phone, ?int $excludeOrderId = null): int
     {

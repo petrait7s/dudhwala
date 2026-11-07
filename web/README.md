@@ -42,7 +42,7 @@ All JSON. Money is integer poisha. Phones `01XXXXXXXXX`.
 | `GET /config` | `{ hours:{open_minute,close_minute}, bulk:{min_total_quantity,min_total_poisha,approved}, fees:{IN_CITY,OUTER_CITY}, payment_numbers:{bkash,nagad}, bulk_prepaid, outlets:[{id,code,name_bn,name_en}] }` |
 | `POST /orders` | body `{ idempotency_key, method, zone, items:[{variant_id,quantity}], contact:{name,phone,address_line1?,landmark?}, outlet_id?, pickup_at?, payment:{method,trx_id?,sender_number?}, website }` -> `201 { order_number, status, total_poisha, subtotal_poisha, delivery_fee_poisha }`; errors `{ error:{ code, issues:[{code,line?}] } }` (issue codes = `OrderingRules::validateCheckout`) |
 | `GET /pages` | `{ pages: [{ slug, title_bn, title_en, body_bn, body_en }] }` (owner-written policies and FAQ, edited in the admin; shown at `/info?p=<slug>` and linked in the footer, no redeploy needed) |
-| `POST /orders/track` | `{ order_number, phone }` -> `{ order_number, method, status, payment_status, total_poisha, items:[{name_bn,variant_label_bn,quantity,line_total_poisha}] }`, 404 when the pair does not match |
+| `POST /orders/track` | `{ order_number, phone }` -> `{ order_number, method, status, payment_status, total_poisha, courier, courier_ref, courier_url, items:[{name_bn,variant_label_bn,quantity,line_total_poisha}] }`, 404 when the pair does not match |
 
 `website` is the honeypot: it must stay empty. The browser prices shown are for display; the server re-prices from `variant_id`.
 

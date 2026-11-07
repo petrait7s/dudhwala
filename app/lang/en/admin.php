@@ -42,4 +42,5 @@ return [
     'err_fields' => 'Please check the highlighted fields.',
     'courier' => 'Courier / rider', 'courier_ref' => 'Tracking / consignment code', 'courier_note' => 'Rider name, phone or note', 'cr' => ['STEADFAST' => 'Steadfast', 'PATHAO' => 'Pathao', 'OWN_RIDER' => 'Own rider', 'OTHER' => 'Other courier'],
     'gallery' => 'More photos (shown as a slider on the product page)', 'gallery_add' => 'Add another photo (up to 5)',
+    'courier_track' => 'Courier tracking links', 'courier_track_note' => 'Customers get a button to follow their parcel on the courier site. Use {code} for the tracking code and {phone} for the customer phone. Leave empty to hide the button.',
 ];

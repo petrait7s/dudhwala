@@ -511,6 +511,32 @@ class OrderApiTest extends TestCase
         $this->assertStringNotContainsString('call before', $r->getContent());
     }
 
+    public function test_track_gives_the_couriers_own_tracking_link(): void
+    {
+        $o = $this->placed(); $a = $this->admin(); $svc = app(OrderService::class);
+        $url = fn () => $this->postJson('/api/orders/track', ['order_number' => $o->order_number, 'phone' => $o->contact_phone])->json('courier_url');
+        $this->assertNull($url(), 'no courier yet');
+        $svc->setCourier($o, $a, 'STEADFAST', 'SF 12/3', null);
+        $this->assertSame('https://steadfast.com.bd/t/SF%2012%2F3', $url(), 'code is url-encoded');
+        $svc->setCourier($o->fresh(), $a, 'PATHAO', 'PT9', null);
+        $this->assertSame('https://merchant.pathao.com/tracking?consignment_id=PT9&phone='.$o->contact_phone, $url());
+        $svc->setCourier($o->fresh(), $a, 'OWN_RIDER', null, 'Rahim');
+        $this->assertNull($url(), 'own rider has no link');
+        app(SettingsService::class)->set('courier.tracking_urls', ['STEADFAST' => null, 'PATHAO' => null]);
+        $svc->setCourier($o->fresh(), $a, 'STEADFAST', 'SF1', null);
+        $this->assertNull($url(), 'link template removed in Settings');
+    }
+
+    public function test_tracking_link_templates_are_validated(): void
+    {
+        $s = app(SettingsService::class);
+        foreach (['javascript:alert(1)//{code}', 'https://x.test/no-code', 'ftp://x.test/{code}'] as $bad) {
+            try { $s->set('courier.tracking_urls', ['STEADFAST' => $bad, 'PATHAO' => null]); $this->fail($bad); } catch (\InvalidArgumentException) {}
+        }
+        $s->set('courier.tracking_urls', ['STEADFAST' => 'https://x.test/t/{code}', 'PATHAO' => null]);
+        $this->assertSame('https://x.test/t/{code}', $s->get('courier.tracking_urls')['STEADFAST']);
+    }
+
     public function test_courier_rules(): void
     {
         $o = $this->placed(); $a = $this->admin(); $svc = app(OrderService::class);

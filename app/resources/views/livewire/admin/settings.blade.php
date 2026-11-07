@@ -17,6 +17,9 @@
     </div></div>
   <div class="card"><h3>{{ __('admin.pay_numbers') }}</h3>
     <div class="grid2"><label>{{ __('admin.bkash') }}<input wire:model="f.bkash" inputmode="tel"></label><label>{{ __('admin.nagad') }}<input wire:model="f.nagad" inputmode="tel"></label></div></div>
+  <div class="card"><h3>{{ __('admin.courier_track') }}</h3>
+    <div class="grid2"><label>Steadfast<input wire:model="f.cur_steadfast" placeholder="https://…/{code}"></label><label>Pathao<input wire:model="f.cur_pathao" placeholder="https://…{code}…{phone}"></label></div>
+    <p class="muted">{{ __('admin.courier_track_note') }}</p></div>
   <div class="card"><label><input type="checkbox" style="width:auto" wire:model="f.maintenance"> {{ __('admin.maintenance') }}</label></div>
   <p><button class="btn" type="submit">{{ __('admin.save') }}</button></p>
 </form>

@@ -42,7 +42,7 @@ class OrderController extends Controller
     }
 
     /** Ownership check: order number AND phone must match. Mismatch is indistinguishable from "not found". */
-    public function track(Request $r, PaymentService $payments): JsonResponse
+    public function track(Request $r, PaymentService $payments, OrderService $orders): JsonResponse
     {
         $num = strtoupper(trim((string) $r->input('order_number')));
         $phone = Phone::normalize((string) $r->input('phone'));
@@ -52,7 +52,7 @@ class OrderController extends Controller
         return response()->json([
             'order_number' => $o->order_number, 'method' => $o->method, 'status' => $o->status, 'payment_status' => $payments->summary($o),
             'subtotal_poisha' => $o->subtotal_poisha, 'delivery_fee_poisha' => $o->delivery_fee_poisha, 'total_poisha' => $o->total_poisha,
-            'courier' => $o->courier, 'courier_ref' => $o->courier_ref,
+            'courier' => $o->courier, 'courier_ref' => $o->courier_ref, 'courier_url' => $orders->courierUrl($o),
             'items' => $o->items->map(fn ($i) => ['name_bn' => $i->product_name_bn, 'variant_label_bn' => $i->variant_label_bn, 'quantity' => $i->quantity, 'line_total_poisha' => $i->line_total_poisha])->all(),
         ]);
     }
