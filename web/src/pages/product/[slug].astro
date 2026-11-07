@@ -1,11 +1,19 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Bi from '../../components/Bi.astro';
-import Icons from '../../components/Icons.astro';
+import Art from '../../components/Art.astro';
+import ProductCard from '../../components/ProductCard.astro';
 import { products, catName } from '../../lib/catalogue';
 import { zoneReason, DELIVERY_ESTIMATE, REASON_TEXT, type OuterStatus } from '../../lib/rules';
-export function getStaticPaths() { return products.map((p) => ({ params: { slug: p.id }, props: { p } })); }
-const { p } = Astro.props;
+export function getStaticPaths() {
+  return products.map((p) => {
+    // same category first, then the rest, never the product itself
+    const same = products.filter((x) => x.category === p.category && x.id !== p.id);
+    const other = products.filter((x) => x.category !== p.category);
+    return { params: { slug: p.id }, props: { p, related: [...same, ...other].slice(0, 8) } };
+  });
+}
+const { p, related } = Astro.props;
 const cat = catName(p.category)!;
 const outer = zoneReason(p.category, (p.outerCity ? p.outerCity.toUpperCase() : null) as OuterStatus, 'OUTER_CITY');
 ---
@@ -13,7 +21,7 @@ const outer = zoneReason(p.category, (p.outerCity ? p.outerCity.toUpperCase() : 
   <div class="wrap has-buybar" data-product data-slug={p.id} data-cat={p.category} data-outer={p.outerCity ?? ''} data-name-bn={p.nameBn} data-name-en={p.nameEn}>
     <p class="crumbs"><a href="/shop"><Bi k="shop" /></a> / <a href={`/category/${cat.slug}`}><Bi bn={cat.nameBn} en={cat.nameEn} /></a></p>
     <div class="pdp">
-      <div class="pic" data-pic><Icons name="jar" /></div>
+      <div class="pic" data-pic data-cat={p.category}><Art kind={p.kind} /></div>
       <div>
         <h1><Bi bn={p.nameBn} en={p.nameEn} /></h1>
         <p class="muted"><Bi bn={cat.nameBn} en={cat.nameEn} /></p>
@@ -38,6 +46,12 @@ const outer = zoneReason(p.category, (p.outerCity ? p.outerCity.toUpperCase() : 
         <p class="hint" data-outer-note></p>
       </div>
     </div>
+    <section class="related" aria-labelledby="rel-t">
+      <h2 id="rel-t"><Bi bn="আরও পণ্য দেখুন" en="You may also like" /></h2>
+      <ul class="rel-list" id="grid">
+        {related.map((r) => <li><ProductCard slug={r.id} nameBn={r.nameBn} nameEn={r.nameEn} category={r.category} outer={r.outerCity ? r.outerCity.toUpperCase() : null} kind={r.kind} /></li>)}
+      </ul>
+    </section>
   </div>
   <div class="buybar" data-bar>
     <div class="tot" data-bartotal></div>

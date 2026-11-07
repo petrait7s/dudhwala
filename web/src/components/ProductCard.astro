@@ -1,12 +1,12 @@
 ---
 import Bi from './Bi.astro';
-import Icons from './Icons.astro';
-interface Props { slug: string; nameBn: string; nameEn: string; category: string; outer?: string | null }
-const { slug, nameBn, nameEn, category, outer = null } = Astro.props;
+import Art from './Art.astro';
+interface Props { slug: string; nameBn: string; nameEn: string; category: string; outer?: string | null; kind?: string }
+const { slug, nameBn, nameEn, category, outer = null, kind = 'sweet' } = Astro.props;
 ---
 <div class="card pc reveal" data-slug={slug} data-cat={category} data-outer={outer ?? ''} data-name={`${nameBn} ${nameEn}`.toLowerCase()}>
   <a class="pcl" href={`/product/${slug}`} style="display:flex;flex-direction:column;flex:1;color:inherit">
-    <div class="ph" data-ph><Icons name="jar" /></div>
+    <div class="ph" data-ph data-cat={category}><Art kind={kind} /></div>
     <div class="bd">
       <div class="nm"><span class="bn">{nameBn}</span><span class="en">{nameEn}</span></div>
       {nameEn && nameEn !== nameBn && <div class="en-name bn">{nameEn}</div>}

@@ -2,7 +2,8 @@ import { getCatalogue, type ApiVariant } from '../lib/api';
 import { addToCart } from '../lib/cart';
 import { formatTaka } from '../lib/money';
 import { getZone, onZone } from '../lib/zone';
-import { REASON_TEXT, zoneReason, type OuterStatus } from '../lib/rules';
+import { REASON_TEXT, zoneReason, zoneEligible, type OuterStatus } from '../lib/rules';
+import { fillPrices } from './prices';
 
 const root = document.querySelector<HTMLElement>('[data-product]')!;
 const $ = <T extends HTMLElement>(s: string) => root.parentElement!.querySelector<T>(s)!;
@@ -61,6 +62,10 @@ click('[data-minus]', () => { qty = Math.max(1, qty - 1); render(); });
 click('[data-plus]', () => { if (cur) qty = Math.min(cur.max_qty, qty + 1); render(); });
 
 onZone(render);
+/* related products: live prices, and only what can go to the chosen zone */
+const rel = Array.from(document.querySelectorAll<HTMLElement>('.rel-list .pc'));
+const relZone = () => rel.forEach((c) => { (c.closest('li') as HTMLElement).hidden = !zoneEligible(c.dataset.cat!, (c.dataset.outer || null) as OuterStatus, getZone()); });
+relZone(); onZone(relZone); fillPrices();
 const note = root.dataset.outer;
 if (note === 'DISABLED' || note === 'PENDING_VERIFICATION' || note === 'PENDING_CONFIRMATION') {
   $('[data-outer-note]').innerHTML = '<span class="bn">আউটার সিলেটে ডেলিভারি এখন নেই।</span><span class="en">Not available for Outer Sylhet delivery.</span>';

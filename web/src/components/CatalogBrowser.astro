@@ -22,7 +22,7 @@ import { products, categories } from '../lib/catalogue';
     </select>
   </div>
   <div class="grid" id="grid">
-    {products.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} outer={p.outerCity ? p.outerCity.toUpperCase() : null} />)}
+    {products.map((p) => <ProductCard slug={p.id} nameBn={p.nameBn} nameEn={p.nameEn} category={p.category} outer={p.outerCity ? p.outerCity.toUpperCase() : null} kind={p.kind} />)}
   </div>
   <p id="none" class="notice" hidden><Bi k="noResults" /></p>
 </section>

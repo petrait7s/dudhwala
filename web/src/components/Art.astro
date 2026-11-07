@@ -1,0 +1,51 @@
+---
+/** Aesthetic placeholder illustrations (until real photos exist). Pure SVG, colours come from CSS variables set per category. */
+interface Props { kind?: string }
+const { kind = 'sweet' } = Astro.props;
+---
+<svg class="art" viewBox="0 0 160 128" role="img" aria-hidden="true" focusable="false">
+  <ellipse class="shadow" cx="80" cy="112" rx="46" ry="7" />
+  {kind === 'sweet' && (<g class="float">
+    <path class="a2" d="M30 74h100c0 26-22 38-50 38s-50-12-50-38Z" />
+    <path class="a3" d="M30 74h100" stroke-width="3" fill="none" />
+    <circle class="a1" cx="56" cy="62" r="17" /><circle class="a1" cx="86" cy="58" r="19" /><circle class="a1" cx="114" cy="64" r="15" />
+    <circle class="hi" cx="50" cy="56" r="5" /><circle class="hi" cx="80" cy="51" r="6" /><circle class="hi" cx="109" cy="59" r="4.5" />
+    <path class="a3" d="M72 20c4 4 4 9 0 13m12-14c4 4 4 9 0 13" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".6" />
+  </g>)}
+  {kind === 'cup' && (<g class="float">
+    <path class="a2" d="M38 46h84l-9 62c-1 4-4 6-8 6H55c-4 0-7-2-8-6Z" />
+    <rect class="a1" x="34" y="38" width="92" height="14" rx="7" />
+    <path class="hi" d="M48 60l5 44" stroke-width="5" stroke-linecap="round" fill="none" opacity=".5" />
+    <path class="a3" d="M58 78h44M62 92h36" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7" />
+    <ellipse class="hi" cx="80" cy="38" rx="34" ry="4" opacity=".7" />
+  </g>)}
+  {kind === 'bottle' && (<g class="float">
+    <rect class="a1" x="68" y="14" width="24" height="14" rx="4" />
+    <path class="a2" d="M70 28h20v14c10 6 18 16 18 32v30c0 6-4 10-10 10H62c-6 0-10-4-10-10V74c0-16 8-26 18-32Z" />
+    <path class="hi" d="M66 52c-5 8-6 18-6 28" stroke-width="5" stroke-linecap="round" fill="none" opacity=".55" />
+    <rect class="a3" x="60" y="76" width="40" height="22" rx="5" opacity=".85" />
+    <path class="hi" d="M68 87h24" stroke-width="3" stroke-linecap="round" />
+  </g>)}
+  {kind === 'jar' && (<g class="float">
+    <rect class="a1" x="52" y="22" width="56" height="14" rx="5" />
+    <path class="a2" d="M56 36h48c8 4 12 12 12 22v36c0 10-6 16-16 16H60c-10 0-16-6-16-16V58c0-10 4-18 12-22Z" />
+    <rect class="a3" x="56" y="62" width="48" height="26" rx="6" opacity=".85" /><path class="hi" d="M66 75h28" stroke-width="3" stroke-linecap="round" />
+    <path class="hi" d="M54 44c-4 6-5 14-5 22" stroke-width="5" stroke-linecap="round" fill="none" opacity=".5" />
+  </g>)}
+  {kind === 'loaf' && (<g class="float">
+    <path class="a2" d="M26 74c0-22 24-38 54-38s54 16 54 38c0 8-4 12-10 12H36c-6 0-10-4-10-12Z" />
+    <rect class="a3" x="30" y="84" width="100" height="22" rx="9" opacity=".9" />
+    <path class="hi" d="M56 48l-8 24m34-28l-8 28m34-24l-8 22" stroke-width="5" stroke-linecap="round" fill="none" opacity=".55" />
+    <path class="hi" d="M44 56c10-10 26-14 40-14" stroke-width="4" stroke-linecap="round" fill="none" opacity=".45" />
+  </g>)}
+  {kind === 'cookie' && (<g class="float">
+    <circle class="a2" cx="62" cy="76" r="30" /><circle class="a1" cx="98" cy="62" r="28" />
+    <g class="a3"><circle cx="52" cy="68" r="4" /><circle cx="70" cy="84" r="4" /><circle cx="64" cy="64" r="3" /><circle cx="90" cy="54" r="4" /><circle cx="106" cy="70" r="4" /><circle cx="100" cy="50" r="3" /></g>
+    <path class="hi" d="M44 88c6 8 16 12 26 10" stroke-width="4" stroke-linecap="round" fill="none" opacity=".5" />
+  </g>)}
+  {kind === 'pouch' && (<g class="float">
+    <path class="a2" d="M44 22h72l6 8-5 74c0 6-4 8-9 8H52c-5 0-9-2-9-8l-5-74Z" />
+    <path class="a1" d="M44 22h72l4 8H40Z" /><path class="hi" d="M48 34v68" stroke-width="5" stroke-linecap="round" opacity=".45" fill="none" />
+    <rect class="a3" x="54" y="52" width="52" height="34" rx="8" opacity=".9" /><circle class="hi" cx="80" cy="69" r="9" />
+  </g>)}
+</svg>
