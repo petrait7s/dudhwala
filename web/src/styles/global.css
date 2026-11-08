@@ -459,3 +459,7 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 
 .ab-plate{display:inline-block;padding:6px;border-radius:16px;background:linear-gradient(145deg,#c9d0ff,#e6e9ff);line-height:0}
 .ab-plate .ab-logo{background:none;border:0;padding:0;border-radius:12px;mix-blend-mode:multiply;backdrop-filter:none}
+/* footer credit centred */
+.ft-bottom{flex-direction:column;justify-content:center;text-align:center;gap:.7rem}
+.petra{justify-content:center}
+.petra span{text-align:left}
