@@ -593,3 +593,15 @@ button,.btn,.pill,.seg,.tabs a,.zb-act,.zb-about{-webkit-user-select:none;user-s
   .tabs .tab-ind{background:var(--dw-brand-100);border-radius:999px}
   .tabs .badge{top:2px;right:calc(50% - 24px)}
 }
+
+/* tab bar icons: solid, tonal when idle, full brand colour when active */
+.tabs a svg[data-solid]{fill:currentColor;stroke:none;opacity:.55;transition:opacity var(--dw-t1),transform var(--dw-t2) var(--dw-spring)}
+.tabs a[aria-current=page] svg[data-solid]{fill:currentColor;fill-opacity:1;opacity:1;stroke:none;transform:translateY(-1px) scale(1.08)}
+/* steady bars while scrolling: own compositor layers, no live blur, no height-jumping sections */
+.top,.tabs{transform:translateZ(0);will-change:transform;backface-visibility:hidden}
+.below{content-visibility:visible;contain-intrinsic-size:none}
+@media (max-width:859px){
+  html{overscroll-behavior-y:auto}
+  .tabs{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.96)}
+  :root[data-theme='dark'] .tabs{background:rgba(24,30,84,.96)}
+}
