@@ -408,3 +408,29 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 .paybox .pb-num code{font-size:1.35rem;font-weight:800;letter-spacing:.04em}
 .paybox .pb-steps{margin:.2rem 0 .4rem;padding-left:1.2rem;display:grid;gap:.3rem}
 .paybox .pb-n{margin:.4rem 0 0;font-size:.85rem;color:var(--dw-muted)}
+
+/* zone bar: About us on the left, delivery controls pushed to the right */
+.zb{justify-content:space-between}
+.zb-r{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;margin-left:auto;justify-content:flex-end}
+.zb-about{display:inline-flex;align-items:center;gap:.4rem;font-weight:700;color:#fff;white-space:nowrap;padding:.3rem .2rem}
+.zb-about svg{stroke:currentColor}
+@media (hover:hover){.zb-about:hover{text-decoration:underline}}
+@media (max-width:859px){.zb-r{flex-wrap:nowrap;margin-left:0;gap:.5rem}.zb-r>*{flex:none}.zb-about{min-height:34px}}
+
+/* about page */
+.ab-hero{background:linear-gradient(135deg,var(--dw-bar-2),var(--dw-bar));color:#fff;padding:2rem 0 1.6rem}
+.ab-hero h1{color:#fff;max-width:22ch;text-wrap:balance;margin:.2rem 0 1rem}
+.ab-logo{background:#fff;border-radius:12px;padding:6px;height:auto}
+.ab-eyebrow{letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;opacity:.8;margin:.8rem 0 0}
+.ab-facts{display:flex;flex-wrap:wrap;gap:.7rem}
+.ab-facts div{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:.6rem 1rem;display:grid;min-width:110px}
+.ab-facts b{font-size:1.5rem;line-height:1.1}.ab-facts span{font-size:.8rem;opacity:.85}
+.ab{display:grid;gap:1.6rem;padding-block:1.6rem 2.4rem}
+.ab h2{font-size:1.25rem;margin:0 0 .7rem}
+.ab-story{padding:1.2rem 1.4rem;max-width:760px}.ab-story p{line-height:1.8}
+.ab-grid{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.ab-p{padding:1rem 1.1rem;display:block}.ab-p h3{margin:0 0 .3rem;font-size:1.05rem}.ab-p p{margin:0}
+.ab-cta{display:flex;flex-wrap:wrap;gap:.6rem}
+.branch .sf{margin:-.8rem -1rem .5rem;border-radius:var(--dw-r-lg) var(--dw-r-lg) 0 0;overflow:hidden;line-height:0;aspect-ratio:320/132;background:#2b2f9e}
+.branch .sf svg,.branch .sf img{width:100%;height:100%;object-fit:cover;display:block}
+[data-brand] .branches{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}@media (min-width:760px){[data-brand] .branches{grid-template-columns:repeat(2,1fr)}}

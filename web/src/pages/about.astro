@@ -2,14 +2,60 @@
 import Base from '../layouts/Base.astro';
 import Bi from '../components/Bi.astro';
 import site from '../data/site.json';
+import about from '../data/about.json';
+import { categories, products } from '../lib/catalogue';
+const count = (slug: string) => products.filter((p) => p.category === slug).length;
 ---
-<Base titleBn="পরিচিতি" titleEn="About" nav="info">
-  <div class="wrap" style="padding:1rem var(--dw-s-4) 2rem;max-width:760px">
-    <h1><Bi bn={site.nameBn} en={site.nameEn} /></h1>
-    <p><Bi bn={`${site.nameBn} (${site.nameEn}) ${site.city.bn}ভিত্তিক। আমরা দুগ্ধজাত মিষ্টি, দই ও বেকারি পণ্য বিক্রি করি।`} en={`${site.nameEn} is based in ${site.city.en}. We sell dairy sweets, doi and bakery products.`} /></p>
-    <p><Bi bn="সিলেটে আমাদের একাধিক শাখা আছে। এক্সপ্রেস পিকআপ ও শোরুম অর্ডার যেকোনো শাখা থেকে নেওয়া যায়।" en="We have several branches in Sylhet. Express pickup and showroom orders can be collected at any branch." /></p>
-    <div id="branches"></div>
-    <script>import '../scripts/branches';</script>
-    <p><a class="btn primary" href="/shop"><Bi k="shop" /></a> <a class="btn" href="/contact"><Bi k="contact" /></a></p>
+<Base titleBn="আমাদের সম্পর্কে" titleEn="About us" nav="info">
+  <section class="ab-hero">
+    <div class="wrap">
+      <img src="/logo.png" width="120" height="64" alt={site.nameEn} class="ab-logo" />
+      <p class="ab-eyebrow"><Bi bn={site.taglineBn} en={site.taglineEn} /></p>
+      <h1><Bi bn={`${site.nameBn}: সিলেটের খাঁটি দুগ্ধজাত স্বাদ`} en={`${site.nameEn}: pure dairy taste of Sylhet`} /></h1>
+      <div class="ab-facts">
+        <div><b>{categories.length}</b><span><Bi bn="পণ্য বিভাগ" en="Categories" /></span></div>
+        <div><b>{products.length}+</b><span><Bi bn="পণ্য" en="Products" /></span></div>
+        <div><b id="ab-branches">4</b><span><Bi bn="শাখা" en="Branches" /></span></div>
+        <div><b>10–22</b><span><Bi bn="অর্ডারের সময়" en="Order hours" /></span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap ab">
+    <section class="ab-story card">
+      <h2><Bi bn="আমাদের গল্প" en="Our story" /></h2>
+      {about.storyBn.map((t, i) => <p><Bi bn={t} en={about.storyEn[i] ?? t} /></p>)}
+    </section>
+
+    <section>
+      <h2><Bi bn="আমরা কী কথা দিই" en="What we promise" /></h2>
+      <div class="ab-grid">
+        {about.promises.map((p) => <div class="card ab-p"><h3><Bi bn={p.bn} en={p.en} /></h3><p class="muted"><Bi bn={p.bnText} en={p.enText} /></p></div>)}
+      </div>
+    </section>
+
+    <section>
+      <h2><Bi bn="আমরা যা তৈরি করি" en="What we make" /></h2>
+      <div class="ab-grid">
+        {categories.map((c) => <a class="card ab-p" href={`/category/${c.slug}`} style="color:inherit"><h3><Bi bn={c.nameBn} en={c.nameEn} /></h3><p class="muted"><Bi bn={`${count(c.slug)}টি পণ্য →`} en={`${count(c.slug)} products →`} /></p></a>)}
+      </div>
+    </section>
+
+    <section>
+      <h2><Bi bn="কীভাবে পাবেন" en="How to get it" /></h2>
+      <div class="ab-grid">
+        <div class="card ab-p"><h3><Bi bn="ঘরে ডেলিভারি" en="Home delivery" /></h3><p class="muted"><Bi bn="সিলেট শহরের ভেতরে ও বাইরে। কুরিয়ার বা রাইডারে পৌঁছে যায়।" en="Inside and outside Sylhet city, by courier or rider." /></p></div>
+        <div class="card ab-p"><h3><Bi bn="এক্সপ্রেস পিকআপ" en="Express pickup" /></h3><p class="muted"><Bi bn="অর্ডার করে পছন্দের শাখা থেকে নিয়ে নিন।" en="Order ahead and collect from the branch you pick." /></p></div>
+        <div class="card ab-p"><h3><Bi bn="শোরুম / বাল্ক অর্ডার" en="Showroom / bulk" /></h3><p class="muted"><Bi bn="অনুষ্ঠান বা বড় চাহিদার জন্য, যেকোনো শাখা থেকে সংগ্রহ।" en="For events or big needs, collect from any branch." /></p></div>
+        <div class="card ab-p"><h3><Bi bn="পেমেন্ট" en="Payment" /></h3><p class="muted"><Bi bn="ক্যাশ অন ডেলিভারি, বিকাশ বা নগদ।" en="Cash on delivery, bKash or Nagad." /></p></div>
+      </div>
+    </section>
+
+    <section>
+      <div id="branches" data-brand></div>
+    </section>
+
+    <p class="ab-cta"><a class="btn primary" href="/shop"><Bi k="shop" /></a> <a class="btn" href="/track"><Bi k="track" /></a> <a class="btn" href="/contact"><Bi k="contact" /></a></p>
   </div>
+  <script>import '../scripts/branches';</script>
 </Base>

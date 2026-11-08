@@ -1,0 +1,19 @@
+{
+  "_notice": "Draft copy for the About page. Edit freely; it only uses facts already on the site (Sylhet, dairy sweets, doi, bakery, branches). Add the founding year or founder's story here when you have it.",
+  "storyBn": [
+    "দুধওয়ালা সিলেটের একটি দুগ্ধজাত খাবারের প্রতিষ্ঠান। আমাদের শুরু একটাই লক্ষ্য নিয়ে: খাঁটি দুধ থেকে তৈরি মিষ্টি, দই ও বেকারি পণ্য সিলেটের মানুষের হাতে পৌঁছে দেওয়া।",
+    "আমাদের ট্যাগলাইন \"বিশুদ্ধতার সেবায়\"। এটা শুধু স্লোগান নয়। প্রতিটি পণ্যে উপাদানের মান, তাজা ভাব আর পরিচ্ছন্নতা আমাদের প্রথম শর্ত।",
+    "সিলেট শহরের একাধিক শাখা থেকে আপনি সরাসরি কিনতে পারেন। ঘরে বসে অর্ডার করলে আমরা পৌঁছে দিই। অনুষ্ঠান বা বড় চাহিদার জন্য শোরুম থেকে একসাথে অনেক পণ্য অর্ডার করা যায়।"
+  ],
+  "storyEn": [
+    "Dudhwala is a dairy food business in Sylhet. We started with one aim: to put sweets, doi and bakery made from pure milk into the hands of Sylhet's people.",
+    "Our tagline is \"Serving Purity\". It is more than a slogan. In every product, ingredient quality, freshness and cleanliness come first.",
+    "You can buy directly from our branches across Sylhet city. Order from home and we deliver. For events or large needs, order in bulk through the showroom."
+  ],
+  "promises": [
+    { "bn": "বিশুদ্ধতা", "en": "Purity", "bnText": "খাঁটি দুধ আর ভালো উপাদান দিয়ে তৈরি।", "enText": "Made with pure milk and good ingredients." },
+    { "bn": "তাজা পণ্য", "en": "Freshness", "bnText": "প্রতিদিনের তাজা মিষ্টি, দই ও বেকারি।", "enText": "Fresh sweets, doi and bakery, every day." },
+    { "bn": "সিলেটের স্বাদ", "en": "Taste of Sylhet", "bnText": "সিলেটের মানুষের পছন্দের ঘরোয়া স্বাদ।", "enText": "The familiar flavours Sylhet loves." },
+    { "bn": "সহজ অর্ডার", "en": "Easy ordering", "bnText": "ডেলিভারি, পিকআপ বা শোরুম, যেভাবে সুবিধা।", "enText": "Delivery, pickup or showroom, whichever suits you." }
+  ]
+}
