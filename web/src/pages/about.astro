@@ -9,15 +9,9 @@ const count = (slug: string) => products.filter((p) => p.category === slug).leng
 <Base titleBn="আমাদের সম্পর্কে" titleEn="About us" nav="info">
   <section class="ab-hero">
     <div class="wrap">
-      <img src="/logo.png" width="120" height="64" alt={site.nameEn} class="ab-logo" />
+      <span class="ab-plate"><img src="/logo.png" width="120" height="64" alt={site.nameEn} class="ab-logo" /></span>
       <p class="ab-eyebrow"><Bi bn={site.taglineBn} en={site.taglineEn} /></p>
       <h1><Bi bn={`${site.nameBn}: সিলেটের খাঁটি দুগ্ধজাত স্বাদ`} en={`${site.nameEn}: pure dairy taste of Sylhet`} /></h1>
-      <div class="ab-facts">
-        <div><b>{categories.length}</b><span><Bi bn="পণ্য বিভাগ" en="Categories" /></span></div>
-        <div><b>{products.length}+</b><span><Bi bn="পণ্য" en="Products" /></span></div>
-        <div><b id="ab-branches">4</b><span><Bi bn="শাখা" en="Branches" /></span></div>
-        <div><b>10–22</b><span><Bi bn="অর্ডারের সময়" en="Order hours" /></span></div>
-      </div>
     </div>
   </section>
 

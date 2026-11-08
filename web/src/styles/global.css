@@ -445,3 +445,17 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 .petra img{width:30px;height:30px;border-radius:8px;display:block}
 .petra span{display:grid;line-height:1.25}
 .petra b{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#9fe3e5}
+
+/* colour grade: no plain white plates, everything sits on the Dudhwala blue/lilac palette */
+.ab-logo{background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(2px);mix-blend-mode:normal;padding:8px;border-radius:16px}
+.ab .card{background:linear-gradient(160deg,#eef0ff 0%,#dfe3ff 100%);border-color:#c9cffa;box-shadow:0 6px 18px rgba(43,47,158,.10)}
+.ab .ab-story{background:linear-gradient(160deg,#e9ecff 0%,#d8dcff 60%,#e6f3f6 100%)}
+.ab .ab-p h3{color:var(--dw-brand-700)}
+.branch .sf{background:linear-gradient(180deg,#1d2672,#4a52c9)}
+:root[data-theme='dark'] .ab .card,:root[data-theme='dark'] .ab .ab-story{background:linear-gradient(160deg,#1b2154,#232a6b);border-color:#313a86}
+/* product photos with white backgrounds blend into the tinted card instead of showing a white box */
+.pc .ph img,.gal-slide img{mix-blend-mode:multiply}
+.pc .ph,.gal{background-color:#e4e8ff}
+
+.ab-plate{display:inline-block;padding:6px;border-radius:16px;background:linear-gradient(145deg,#c9d0ff,#e6e9ff);line-height:0}
+.ab-plate .ab-logo{background:none;border:0;padding:0;border-radius:12px;mix-blend-mode:multiply;backdrop-filter:none}
