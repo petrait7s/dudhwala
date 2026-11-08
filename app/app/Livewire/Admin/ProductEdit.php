@@ -96,7 +96,7 @@ class ProductEdit extends Component
     {
         $v = ProductVariant::where('product_id', $this->product->id)->findOrFail($variantId);
         $raw = trim($this->stock["$variantId-$outletId"] ?? '');
-        if (! ctype_digit($raw)) { $this->error = __('admin.error', ['msg' => 'Stock must be a whole number']); return; }
+        if (! ctype_digit($raw)) { $this->error = __('admin.error', ['msg' => __('Stock must be a whole number from 0 to 1,000,000')]); return; }
         $this->attempt(fn () => $svc->setStock(Auth::user(), $outletId, $v, (int) $raw, $this->stockReason));
         $this->loadVariants();
     }

@@ -51,4 +51,5 @@ return [
     'bulk_done' => ':rows rows checked. :v sizes changed, :s stock values set, :p products published, :h hidden.',
     'bulk_photos_title' => 'Photos for many products at once', 'bulk_photos_help' => 'Name each file after the product code (product_slug in the spreadsheet): ds-01.jpg becomes the main photo, ds-01-2.jpg and ds-01-3.jpg become extra photos. JPEG, PNG or WebP, up to 8 MB each.',
     'bulk_photos_upload' => 'Upload photos', 'bulk_photos_done' => ':c main photos and :e extra photos saved.',
+    'page_of' => 'Page :p of :n',
 ];

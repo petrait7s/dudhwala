@@ -61,7 +61,7 @@ class ProductImageService
     /** Additional gallery photo (up to 5 besides the cover). */
     public function addExtra(Product $p, UploadedFile $file): ProductImage
     {
-        if ($p->gallery()->count() >= self::MAX_EXTRA) throw new ShopException('CONFLICT', 'A product can have at most '.self::MAX_EXTRA.' extra photos');
+        if ($p->gallery()->count() >= self::MAX_EXTRA) throw new ShopException('CONFLICT', __('A product can have at most :n extra photos', ['n' => self::MAX_EXTRA]));
         $bytes = $this->encode($file);
         $path = "products/{$p->id}-x".bin2hex(random_bytes(4)).'.webp';
         Storage::disk('public')->put($path, $bytes);

@@ -20,7 +20,7 @@ trait HandlesShopErrors
             $this->flash = __('admin.saved');
             return true;
         } catch (ShopException $e) {
-            $this->error = __('admin.error', ['msg' => $e->getMessage()]);
+            $this->error = __('admin.error', ['msg' => __($e->getMessage())]);
             $this->badFields = $e->context['fields'] ?? [];
             return false;
         }

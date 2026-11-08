@@ -120,7 +120,7 @@ class AdminUiTest extends TestCase
         $c = Livewire::test(Admin\OrderShow::class, ['order' => $o]);
         $c->call('advance', 'PREPARING')->assertSet('flash', __('admin.saved'));
         $this->assertSame('PREPARING', $o->fresh()->status);
-        $c->call('advance', 'DELIVERED')->assertSet('error', fn ($e) => str_contains($e, 'Cannot move'));
+        $c->call('advance', 'DELIVERED')->assertSet('error', fn ($e) => str_contains($e, 'cannot move'));
         $c->call('codCollected');
         $this->assertSame('PAID', Payment::first()->status);
         $c->set('cancelReason', '')->call('confirmCancel')->assertSet('error', fn ($e) => $e !== null);

@@ -13,6 +13,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+        $middleware->appendToGroup('web', \App\Http\Middleware\SetLocale::class);
         $middleware->prependToPriorityList(\Illuminate\Routing\Middleware\SubstituteBindings::class, \App\Http\Middleware\StaffAccess::class);
         $middleware->alias(['staff' => \App\Http\Middleware\StaffAccess::class]);
         $middleware->redirectGuestsTo(fn () => route('admin.login'));

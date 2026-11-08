@@ -73,7 +73,7 @@ class AdminBulkService
         if (! $head) throw new ShopException('VALIDATION_FAILED', 'The file is empty');
         $head = array_map(fn ($h) => trim((string) $h), $head);
         foreach (['product_slug', 'variant_id', 'price_taka'] as $need) {
-            if (! in_array($need, $head, true)) throw new ShopException('VALIDATION_FAILED', "Column \"$need\" is missing. Download the template first.");
+            if (! in_array($need, $head, true)) throw new ShopException('VALIDATION_FAILED', __('Column :c is missing. Download the template first.', ['c' => $need]));
         }
         $col = array_flip($head);
         $outlets = Outlet::all()->keyBy('code');
@@ -81,7 +81,7 @@ class AdminBulkService
         foreach ($head as $h) {
             if (str_starts_with($h, 'stock:')) {
                 $code = substr($h, 6);
-                if (! isset($outlets[$code])) throw new ShopException('VALIDATION_FAILED', "Unknown branch column \"$h\"");
+                if (! isset($outlets[$code])) throw new ShopException('VALIDATION_FAILED', __('Unknown branch column :c', ['c' => $h]));
                 $stockCols[$h] = $outlets[$code];
             }
         }
@@ -93,28 +93,28 @@ class AdminBulkService
             if (count(array_filter($r, fn ($c) => trim((string) $c) !== '')) === 0) continue;
             $get = fn ($k) => isset($col[$k]) ? ltrim(trim((string) ($r[$col[$k]] ?? '')), "'") : null;
             $v = $variants[(int) $get('variant_id')] ?? null;
-            if (! $v || $v->product->slug !== $get('product_slug')) { $errors[] = "Row $line: variant ".$get('variant_id').' does not belong to '.$get('product_slug'); continue; }
+            if (! $v || $v->product->slug !== $get('product_slug')) { $errors[] = __('Row :n: variant :v does not belong to :p', ['n' => $line, 'v' => $get('variant_id'), 'p' => $get('product_slug')]); continue; }
             $item = ['v' => $v, 'line' => $line];
             $price = $get('price_taka');
-            try { $item['price'] = $price === '' ? null : Money::parseTaka($price); } catch (\InvalidArgumentException) { $errors[] = "Row $line: price \"$price\" is not a number"; continue; }
-            if ($item['price'] !== null && $item['price'] <= 0) { $errors[] = "Row $line: price must be more than zero"; continue; }
+            try { $item['price'] = $price === '' ? null : Money::parseTaka($price); } catch (\InvalidArgumentException) { $errors[] = __('Row :n: price :v is not a number', ['n' => $line, 'v' => $price]); continue; }
+            if ($item['price'] !== null && $item['price'] <= 0) { $errors[] = __('Row :n: price must be more than zero', ['n' => $line]); continue; }
             $mq = $get('max_qty');
             $item['max_qty'] = ($mq === null || $mq === '') ? $v->max_qty : (ctype_digit($mq) && (int) $mq >= 1 && (int) $mq <= 1000 ? (int) $mq : null);
-            if ($item['max_qty'] === null) { $errors[] = "Row $line: max_qty must be 1 to 1000"; continue; }
+            if ($item['max_qty'] === null) { $errors[] = __('Row :n: max_qty must be 1 to 1000', ['n' => $line]); continue; }
             $item['label_bn'] = $get('variant_label_bn') ?? $v->label_bn;
             $item['label_en'] = $get('variant_label_en') ?? $v->label_en;
             $vis = $get('visible');
             $item['visible'] = $vis === null ? null : self::bool($vis);
-            if ($vis !== null && $item['visible'] === null) { $errors[] = "Row $line: visible must be yes or no"; continue; }
+            if ($vis !== null && $item['visible'] === null) { $errors[] = __('Row :n: visible must be yes or no', ['n' => $line]); continue; }
             $outer = $get('outer_sylhet');
-            if ($outer !== null && $outer !== '' && ! in_array($outer, self::OUTER, true)) { $errors[] = "Row $line: outer_sylhet must be one of ".implode(', ', self::OUTER); continue; }
+            if ($outer !== null && $outer !== '' && ! in_array($outer, self::OUTER, true)) { $errors[] = __('Row :n: outer_sylhet must be one of :list', ['n' => $line, 'list' => implode(', ', self::OUTER)]); continue; }
             $item['outer'] = ($outer === null || $outer === '') ? false : ($outer === 'default' ? null : $outer);
             $item['stock'] = [];
             foreach ($stockCols as $h => $o) {
                 $s = $get($h);
                 if ($s === '' || $s === null) continue;
-                if (! ctype_digit($s) || (int) $s > 1000000) { $errors[] = "Row $line: $h must be a whole number"; continue 2; }
-                if (! $v->track_stock) { $errors[] = "Row $line: stock is not counted for this item (leave $h empty)"; continue 2; }
+                if (! ctype_digit($s) || (int) $s > 1000000) { $errors[] = __('Row :n: :c must be a whole number', ['n' => $line, 'c' => $h]); continue 2; }
+                if (! $v->track_stock) { $errors[] = __('Row :n: stock is not counted for this item (leave :c empty)', ['n' => $line, 'c' => $h]); continue 2; }
                 $item['stock'][$o->id] = (int) $s;
             }
             $plan[] = $item;

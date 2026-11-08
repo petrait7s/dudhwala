@@ -188,7 +188,7 @@ class OrderService
         return DB::transaction(function () use ($order, $to, $by, $reason) {
             $o = Order::whereKey($order->id)->lockForUpdate()->first();
             if (! OrderingRules::canTransition($o->method, $o->status, $to)) {
-                throw new ShopException('CONFLICT', "Cannot move {$o->status} to {$to}", ['allowed' => OrderingRules::nextStatuses($o->method, $o->status)]);
+                throw new ShopException('CONFLICT', 'This order cannot move to that status', ['allowed' => OrderingRules::nextStatuses($o->method, $o->status)]);
             }
             if ($to === 'CANCELLED' && trim((string) $reason) === '') throw new ShopException('VALIDATION_FAILED', 'A cancel reason is required');
 

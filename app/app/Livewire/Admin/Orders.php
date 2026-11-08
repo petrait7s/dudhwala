@@ -15,6 +15,8 @@ class Orders extends Component
 {
     use WithPagination;
 
+    public string $paginationTheme = 'dw';
+
     #[Url] public string $status = '';
     #[Url] public string $q = '';
 

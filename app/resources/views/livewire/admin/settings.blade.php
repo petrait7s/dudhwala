@@ -2,7 +2,7 @@
   <h2>{{ __('admin.nav.settings') }}</h2>
   @if($flash)<div class="note ok">{{ $flash }}</div>@endif @if($error)<div class="note bad">{{ $error }}</div>@endif
   <div class="card"><h3>{{ __('admin.set_ordering_hours') }}</h3>
-    <div class="grid2"><label>{{ __('admin.open_at') }}<input type="time" wire:model="f.open"></label><label>{{ __('admin.close_at') }}<input type="time" wire:model="f.close"></label></div></div>
+    <div class="grid2"><label>{{ __('admin.open_at') }}<input type="text" inputmode="numeric" placeholder="10:00" wire:model="f.open"></label><label>{{ __('admin.close_at') }}<input type="text" inputmode="numeric" placeholder="22:00" wire:model="f.close"></label></div></div>
   <div class="card"><h3>{{ __('admin.bulk_rule') }} <span class="pill {{ $bulkApproved ? 'ok' : 'warn' }}">{{ $bulkApproved ? __('admin.bulk_state_ok') : __('admin.bulk_state_unapproved') }}</span></h3>
     <div class="grid2"><label>{{ __('admin.bulk_qty') }}<input type="number" wire:model="f.bulk_qty"></label><label>{{ __('admin.bulk_amount') }}<input wire:model="f.bulk_taka" inputmode="decimal"></label></div>
     <p class="muted">{{ __('admin.bulk_note') }}</p>

@@ -17,6 +17,8 @@ class Products extends Component
 {
     use HandlesShopErrors, WithPagination;
 
+    public string $paginationTheme = 'dw';
+
     #[Url] public string $q = '';
     #[Url] public string $category = '';
     #[Url] public string $vis = '';

@@ -13,6 +13,8 @@ class AuditLogView extends Component
 {
     use WithPagination;
 
+    public string $paginationTheme = 'dw';
+
     #[Url] public string $q = '';
 
     public function updating($n): void { $this->resetPage(); }

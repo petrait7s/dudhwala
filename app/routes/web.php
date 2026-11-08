@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/admin');
 
 Route::prefix('admin')->group(function () {
+    Route::post('/locale/{lang}', function (string $lang) {
+        abort_unless(in_array($lang, \App\Http\Middleware\SetLocale::LOCALES, true), 404);
+        session()->put('locale', $lang);
+        return redirect()->back(fallback: route('admin.orders'))->withCookie(cookie('dw_admin_locale', $lang, 60 * 24 * 365));
+    })->name('admin.locale');
+
     Route::get('/login', Admin\Login::class)->name('admin.login');
 
     Route::middleware(['auth', 'staff:pre'])->group(function () {
