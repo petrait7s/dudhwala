@@ -605,3 +605,57 @@ button,.btn,.pill,.seg,.tabs a,.zb-act,.zb-about{-webkit-user-select:none;user-s
   .tabs{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.96)}
   :root[data-theme='dark'] .tabs{background:rgba(24,30,84,.96)}
 }
+
+/* ───────── phones: shelves, compact list, swipe arrows ───────── */
+.sh-wrap{position:relative}
+.sh-nav{display:none}
+@media (max-width:859px){
+  .sh-wrap::before,.sh-wrap::after{content:'';position:absolute;top:0;bottom:0;width:34px;z-index:2;pointer-events:none;opacity:0;transition:opacity var(--dw-t2)}
+  .sh-wrap::before{left:0;background:linear-gradient(90deg,var(--dw-bg),transparent)}
+  .sh-wrap::after{right:0;background:linear-gradient(270deg,var(--dw-bg),transparent)}
+  .sh-wrap.can-l::before,.sh-wrap.can-r::after{opacity:1}
+  .sh-nav{display:grid;place-items:center;position:absolute;top:50%;z-index:3;width:30px;height:30px;margin-top:-15px;border:0;border-radius:50%;padding:0;background:rgba(255,255,255,.94);box-shadow:0 4px 14px rgba(18,23,80,.28);color:var(--dw-brand-700);opacity:0;pointer-events:none;transition:opacity var(--dw-t2),transform var(--dw-t1)}
+  .sh-nav svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+  .sh-nav.prev{left:2px}.sh-nav.next{right:2px}
+  .sh-wrap.can-l .sh-nav.prev,.sh-wrap.can-r .sh-nav.next{opacity:1;pointer-events:auto}
+  .sh-nav:active{transform:scale(.9)}
+  .sh-wrap.can-r .sh-nav.next{animation:dwnudge 1.8s var(--dw-ease) 2 .8s}
+  @keyframes dwnudge{0%,60%,100%{transform:none}25%{transform:translateX(5px)}45%{transform:translateX(-1px)}}
+  .cat-bar{scrollbar-width:none;padding-inline:.1rem}.cat-bar::-webkit-scrollbar{display:none}
+
+  #grid.is-shelved{display:none}
+  .shelf{margin:.2rem 0 1.1rem}
+  .shelf-h{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:0 0 .5rem}
+  .shelf-h h3{margin:0;font-size:1.08rem;color:var(--dw-ink)}
+  .shelf-more{display:inline-flex;align-items:center;gap:.15rem;border:0;background:none;color:var(--dw-brand-700);font:inherit;font-size:.82rem;font-weight:700;padding:.35rem 0 .35rem .6rem;cursor:pointer}
+  .shelf-more svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+  .shelf-row{display:flex;gap:.65rem;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:.2rem;padding:.15rem .15rem .9rem;margin-inline:-.15rem;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+  .shelf-row::-webkit-scrollbar{display:none}
+  .shelf-row .pc{flex:none;width:128px;scroll-snap-align:start;border-radius:16px;animation:none;opacity:1;transform:none}
+  .shelf-row .pc .ph{aspect-ratio:1/1;border-radius:0}
+  .shelf-row .pc .art{width:58%}
+  .shelf-row .pc .bd{padding:.5rem .55rem .6rem;gap:.1rem}
+  .shelf-row .pc .nm{font-size:.84rem;line-height:1.3}
+  .shelf-row .pc .en-name,.shelf-row .pc [data-labels]{display:none}
+  .shelf-row .pc .pr{font-size:.92rem;padding-top:.15rem}
+  .shelf-row .pc .pr.soon{font-size:.72rem}
+
+  /* round "+" instead of a wide button */
+  .pc .add{position:absolute;right:.4rem;top:calc(128px - 44px);margin:0;width:34px;height:36px;min-height:0;padding:0;border-radius:50%;font-size:0;display:grid;place-items:center;box-shadow:0 6px 14px rgba(43,47,158,.4);border-width:0}
+  .pc .add::after{content:'+';font-size:1.45rem;line-height:1;font-weight:500}
+  .pc .add.ticked::after{content:'✓';font-size:1.05rem}
+  .pc .add[hidden]{display:none}
+
+  /* compact vertical list: search, category or sort active */
+  #grid.is-list{grid-template-columns:1fr;gap:.55rem}
+  #grid.is-list .pc{flex-direction:row;align-items:center;border-radius:16px;min-height:88px}
+  #grid.is-list .pc .pcl{flex-direction:row!important;align-items:center;gap:.7rem}
+  #grid.is-list .pc .ph{width:84px;height:84px;aspect-ratio:auto;flex:none;margin:.5rem 0 .5rem .5rem;border-radius:12px;overflow:hidden}
+  #grid.is-list .pc [data-labels]{display:none}
+  #grid.is-list .pc .en-name{font-size:.72rem}
+  #grid.is-list .pc .art{width:62%}
+  #grid.is-list .pc .bd{padding:.5rem 3.2rem .5rem 0;gap:.1rem}
+  #grid.is-list .pc .nm{font-size:.95rem}
+  #grid.is-list .pc .add{top:50%;margin-top:-18px;right:.6rem}
+}
+@media (prefers-reduced-motion:reduce){.sh-wrap.can-r .sh-nav.next{animation:none}}

@@ -3,6 +3,7 @@ import { fillPrices } from './prices';
 import { getZone, onZone } from '../lib/zone';
 import { zoneEligible, type OuterStatus } from '../lib/rules';
 import { toBn } from './bn';
+import { withArrows } from './shelves';
 
 const grid = document.getElementById('grid')!;
 const cards = Array.from(grid.querySelectorAll<HTMLElement>('.pc'));
@@ -63,6 +64,8 @@ function apply() {
   else if (searching) [...cards].sort((a, b) => (rank.get(a) ?? 0) - (rank.get(b) ?? 0)).forEach((c) => grid.appendChild(c)); // best match first
   else cards.forEach((c) => grid.appendChild(c));
 
+  layoutShelves(searching, mode);
+
   // "did you mean": when nothing matched, offer the closest words
   if (none && shown === 0 && searching) {
     const sg = suggestCorrections(index, query, 3);
@@ -77,11 +80,43 @@ function apply() {
   } else document.getElementById('sugg')?.replaceChildren();
 }
 
+/* phones: with no search or filter the shop is a stack of swipeable category shelves; otherwise a compact list */
+const phone = matchMedia('(max-width:859px)');
+const shelves = document.createElement('div'); shelves.id = 'shelves'; grid.after(shelves);
+function layoutShelves(searching: boolean, mode: string) {
+  shelves.replaceChildren();
+  const shelved = phone.matches && !cat && !searching && mode === 'name';
+  grid.classList.toggle('is-list', phone.matches && !shelved);
+  grid.classList.toggle('is-shelved', shelved);
+  if (!shelved) return;
+  const slugs = [...new Set(cards.map((c) => c.dataset.cat!))];
+  for (const slug of slugs) {
+    const mine = cards.filter((c) => c.dataset.cat === slug);
+    if (mine.every((c) => c.hidden)) continue;
+    const chip = document.querySelector<HTMLElement>(`[data-chip="${slug}"]`);
+    const sec = document.createElement('section'); sec.className = 'shelf';
+    const head = document.createElement('div'); head.className = 'shelf-h';
+    const h = document.createElement('h3');
+    chip?.querySelectorAll(':scope > .bn, :scope > .en').forEach((n) => h.appendChild(n.cloneNode(true)));
+    const more = document.createElement('button'); more.type = 'button'; more.className = 'shelf-more';
+    more.innerHTML = '<span class="bn">সব দেখুন</span><span class="en">See all</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+    more.addEventListener('click', () => chip?.click());
+    head.append(h, more);
+    const row = document.createElement('div'); row.className = 'shelf-row';
+    mine.forEach((c) => row.appendChild(c));
+    sec.append(head, row);
+    shelves.appendChild(sec);
+    withArrows(row);
+  }
+}
+phone.addEventListener('change', () => apply());
+
 document.querySelectorAll<HTMLElement>('[data-chip]').forEach((b) => b.addEventListener('click', () => {
   cat = b.dataset.chip || '';
   const u = new URL(location.href); cat ? u.searchParams.set('c', cat) : u.searchParams.delete('c'); history.replaceState(null, '', u);
   apply();
 }));
+{ const bar = document.querySelector<HTMLElement>('.cat-bar'); if (bar) withArrows(bar); }
 q?.addEventListener('input', apply);
 sort?.addEventListener('change', apply);
 onZone(apply);
