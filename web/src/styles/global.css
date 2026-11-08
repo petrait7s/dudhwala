@@ -686,3 +686,13 @@ input[type=search]::-webkit-search-decoration{-webkit-appearance:none}
   .rel-list .pc .en-name,.rel-list .pc [data-labels]{display:none}
   .rel-list .pc .add{display:none}
 }
+
+/* footer bottom on phones: tidy centred stack */
+@media (max-width:640px){
+  .ft-bottom{grid-template-columns:1fr;justify-items:center;text-align:center;gap:.9rem;margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.14)}
+  .ft-bottom .petra{grid-column:1;justify-self:center;gap:.7rem;padding:.55rem 1rem .55rem .65rem;border-radius:18px;border:1px solid rgba(255,255,255,.2);background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04))}
+  .ft-bottom .petra img{width:40px;height:40px;border-radius:11px}
+  .ft-bottom .petra span{font-size:.82rem;text-align:left}
+  .ft-bottom .petra b{font-size:.7rem;letter-spacing:.16em}
+  .ft-bottom .copy{grid-column:1;justify-self:center;text-align:center;font-size:.78rem;opacity:.8;order:2}
+}
