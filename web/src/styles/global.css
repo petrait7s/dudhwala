@@ -659,3 +659,30 @@ button,.btn,.pill,.seg,.tabs a,.zb-act,.zb-about{-webkit-user-select:none;user-s
   #grid.is-list .pc .add{top:50%;margin-top:-18px;right:.6rem}
 }
 @media (prefers-reduced-motion:reduce){.sh-wrap.can-r .sh-nav.next{animation:none}}
+
+/* ───────── iPhone / Safari fixes ───────── */
+/* iOS before 16 ignores overflow-x:clip and lets a stray wide element zoom the whole page out */
+@supports not (overflow:clip){body{overflow-x:hidden}}
+body{min-height:100vh;min-height:100dvh}
+/* home-indicator phones: content and the sticky buy bar clear the taller tab bar */
+@media (max-width:859px){
+  body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+  .actbar{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  .has-buybar{padding-bottom:calc(168px + env(safe-area-inset-bottom,0px))}
+}
+/* notch in landscape */
+.wrap{padding-left:max(clamp(1rem,2.6vw,3.25rem),env(safe-area-inset-left,0px));padding-right:max(clamp(1rem,2.6vw,3.25rem),env(safe-area-inset-right,0px))}
+.tabs{left:max(10px,env(safe-area-inset-left,0px));right:max(10px,env(safe-area-inset-right,0px))}
+/* no grey tap flash, no iOS form styling, no double-tap zoom on controls */
+input,select,textarea,button{-webkit-appearance:none;appearance:none;touch-action:manipulation}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232b2f9e' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .8rem center;background-size:16px;padding-right:2.4rem}
+input[type=search]::-webkit-search-decoration{-webkit-appearance:none}
+/* related products row on a phone: same compact cards as the shelves */
+@media (max-width:859px){
+  .rel-list>li{flex:0 0 128px}
+  .rel-list .pc .ph{aspect-ratio:1/1}
+  .rel-list .pc .bd{padding:.5rem .55rem .6rem}
+  .rel-list .pc .nm{font-size:.84rem}
+  .rel-list .pc .en-name,.rel-list .pc [data-labels]{display:none}
+  .rel-list .pc .add{display:none}
+}
