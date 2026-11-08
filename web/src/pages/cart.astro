@@ -6,7 +6,7 @@ import Bi from '../components/Bi.astro';
   <div class="wrap" style="padding-top:1rem;padding-bottom:2rem">
     <h1><Bi bn="কার্ট" en="Cart" /></h1>
     <div id="empty" class="card" style="padding:2rem;text-align:center" hidden>
-      <p><Bi k="emptyCart" /></p><a class="btn primary" href="/shop"><Bi k="shop" /></a>
+      <svg class="empty-art" viewBox="0 0 120 110" aria-hidden="true"><ellipse cx="60" cy="100" rx="36" ry="6" fill="rgba(43,47,158,.14)"/><path d="M42 30h36v10l8 10v40a8 8 0 01-8 8H42a8 8 0 01-8-8V50l8-10z" fill="#dfe3ff" stroke="#2b2f9e" stroke-width="3" stroke-linejoin="round"/><rect x="40" y="20" width="40" height="12" rx="4" fill="#2b2f9e"/><path d="M44 62h32M44 74h22" stroke="#2b2f9e" stroke-width="3" stroke-linecap="round" opacity=".35"/><circle cx="92" cy="30" r="3" fill="#8fe3ff"/><circle cx="24" cy="44" r="2.5" fill="#8fe3ff"/></svg><p><Bi k="emptyCart" /></p><a class="btn primary" href="/shop"><Bi k="shop" /></a>
     </div>
     <div id="noapi" class="notice warn" hidden><Bi bn="অনলাইন অর্ডার এখনো চালু হয়নি। শীঘ্রই আসছে।" en="Online ordering is not open yet. Coming soon." /></div>
     <div id="closed" class="notice warn" hidden></div>

@@ -493,3 +493,72 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 .gal-dots button::before{content:'';position:absolute;inset:-14px -5px}
 footer.ft ul a{display:inline-block;padding:.5rem 0}
 footer.ft li{line-height:1.2}
+
+/* ───────── polish pass: motion tokens, colour grade, depth ───────── */
+:root{--dw-t1:150ms;--dw-t2:300ms;--dw-t3:520ms;--dw-spring:cubic-bezier(.34,1.56,.64,1)}
+
+/* header depth: darker top, lit corners */
+.top{background:radial-gradient(55% 150% at 88% -50%,rgba(122,142,255,.42),transparent 62%),radial-gradient(38% 130% at 6% 140%,rgba(143,227,255,.16),transparent 62%),linear-gradient(180deg,var(--dw-bar),var(--dw-bar-2))}
+.zonebar{background:linear-gradient(90deg,var(--dw-bar-2),#232a8f 55%,var(--dw-bar))}
+/* page ground drifts from lilac to a cooler tint down the page */
+body{background-image:linear-gradient(180deg,transparent 0,transparent 900px,rgba(143,227,255,.10) 2200px)}
+
+/* logo plates: white boxes become tinted plates, the logo's own white multiplies away */
+.top .brand{background:linear-gradient(145deg,#c9d0ff,#eef0ff)}
+.top .brand img{mix-blend-mode:multiply;background:none}
+@media (min-width:860px){.heroband .logocard{background:linear-gradient(145deg,#c5ccff,#eef0ff)}}
+.heroband .logocard img{mix-blend-mode:multiply}
+
+/* category-tinted card shadows */
+.pc{--sh:rgba(43,47,158,.30)}
+.pc[data-cat='dairy-sweets']{--sh:rgba(214,110,145,.34)}
+.pc[data-cat='bakery']{--sh:rgba(217,150,43,.34)}
+.pc[data-cat='doi-dairy']{--sh:rgba(80,92,214,.34)}
+.pc{box-shadow:0 12px 26px -16px var(--sh),0 1px 2px rgba(18,23,63,.06)}
+@media (hover:hover){.pc:hover{box-shadow:0 22px 40px -16px var(--sh),0 2px 4px rgba(18,23,63,.08)}}
+/* the price gets its own grade */
+.pc .pr{background:linear-gradient(90deg,var(--dw-brand-700),#4a52c9);-webkit-background-clip:text;background-clip:text;color:transparent}
+:root[data-theme='dark'] .pc .pr{background:none;color:var(--dw-accent-ink)}
+
+/* one timing system */
+.pc{transition-duration:var(--dw-t2)}
+.pc .art{transition-duration:var(--dw-t3)}
+.btn,.pill,.seg,.zb-act,.zb-about,.tabs a,.opt,.add{transition:transform var(--dw-t1) var(--dw-ease),background-color var(--dw-t1),border-color var(--dw-t1),box-shadow var(--dw-t1),color var(--dw-t1)}
+/* pressing feels physical */
+.btn:active,.pill:active,.seg:active,.zb-act:active,.zb-about:active,.tabs a:active,.opt:active,.add:active,.tool:active{transform:scale(.96)}
+.btn.primary:active{transform:translateY(2px) scale(.985);box-shadow:0 1px 0 var(--dw-brand-edge)}
+
+/* cards rise in, one after another */
+@keyframes dwrise{from{opacity:0;transform:translate3d(0,16px,0) scale(.985)}to{opacity:1;transform:none}}
+#grid .pc{animation:dwrise var(--dw-t3) var(--dw-ease) both}
+#grid .pc:nth-child(2){animation-delay:45ms}#grid .pc:nth-child(3){animation-delay:90ms}#grid .pc:nth-child(4){animation-delay:135ms}
+#grid .pc:nth-child(5){animation-delay:180ms}#grid .pc:nth-child(6){animation-delay:225ms}#grid .pc:nth-child(7){animation-delay:270ms}
+#grid .pc:nth-child(8){animation-delay:315ms}#grid .pc:nth-child(n+9){animation-delay:360ms}
+
+/* cart feedback */
+@keyframes dwbump{0%{transform:scale(1)}40%{transform:scale(1.45)}100%{transform:scale(1)}}
+@keyframes dwshake{0%,100%{transform:none}20%{transform:translateY(-4px) rotate(-8deg)}50%{transform:translateY(1px) rotate(6deg)}75%{transform:translateY(-2px) rotate(-3deg)}}
+[data-cartcount].bump{animation:dwbump var(--dw-t2) var(--dw-spring)}
+.tool.shake,.cartlink.shake,.tabs a.shake{animation:dwshake 480ms var(--dw-ease)}
+.ticked{background:var(--dw-ok,#13795b)!important;border-color:transparent!important;color:#fff!important}
+
+/* tab bar highlight glides */
+.tabs.has-ind a[aria-current=page]{background:none}
+.tabs .tab-ind{position:absolute;left:0;top:0;border-radius:16px;background:var(--dw-brand-100);z-index:0;pointer-events:none;transition:transform var(--dw-t2) var(--dw-ease),width var(--dw-t2) var(--dw-ease)}
+.tabs a{z-index:1}
+
+/* photos fade up from a soft blur */
+img.bl{opacity:0;filter:blur(14px);transform:scale(1.04);transition:opacity var(--dw-t3) var(--dw-ease),filter var(--dw-t3) var(--dw-ease),transform var(--dw-t3) var(--dw-ease)}
+img.bl.ld{opacity:1;filter:none;transform:none}
+
+/* empty states */
+.empty-art{width:120px;height:auto;display:block;margin:0 auto .6rem;animation:dwfloat 6s ease-in-out infinite}
+.none-box{display:grid;justify-items:center;text-align:center;gap:.3rem}
+.none-box[hidden]{display:none}
+
+/* focus ring in brand colours, selection, scrollbars */
+:focus-visible{outline:3px solid #8fe3ff;outline-offset:2px;border-radius:8px}
+::selection{background:#8fe3ff;color:#14183a}
+html{scrollbar-color:#5a62d8 transparent;scrollbar-width:thin}
+.zb{scrollbar-width:none}
+@media (prefers-reduced-motion:reduce){#grid .pc,.empty-art,[data-cartcount].bump,.shake{animation:none!important}img.bl{opacity:1;filter:none;transform:none;transition:none}.tabs .tab-ind{transition:none}}

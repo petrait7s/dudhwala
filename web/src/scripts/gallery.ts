@@ -42,7 +42,7 @@ export function initGallery(root: HTMLElement) {
     track.textContent = '';
     list.forEach((u, k) => {
       const f = document.createElement('figure'); f.className = 'gal-slide';
-      const im = new Image(); im.src = u; im.alt = ''; im.decoding = 'async'; im.loading = k === 0 ? 'eager' : 'lazy'; if (k === 0) im.fetchPriority = 'high';
+      const im = new Image(); im.classList.add('bl'); im.onload = () => im.classList.add('ld'); im.src = u; im.alt = ''; im.decoding = 'async'; im.loading = k === 0 ? 'eager' : 'lazy'; if (k === 0) im.fetchPriority = 'high';
       f.appendChild(im); track.appendChild(f);
     });
     track.scrollLeft = 0; build();

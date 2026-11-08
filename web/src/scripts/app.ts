@@ -23,9 +23,14 @@ function applyPlaceholders() {
 applyPlaceholders();
 
 /* cart badge */
+let prevCount = cartCount(readCart());
 function badge() {
   const n = cartCount(readCart());
-  document.querySelectorAll<HTMLElement>('[data-cartcount]').forEach((b) => { b.textContent = String(n); b.hidden = n === 0; });
+  document.querySelectorAll<HTMLElement>('[data-cartcount]').forEach((b) => {
+    b.textContent = String(n); b.hidden = n === 0;
+    if (n > prevCount) { b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); b.parentElement?.classList.remove('shake'); void b.offsetWidth; b.parentElement?.classList.add('shake'); }
+  });
+  prevCount = n;
 }
 badge();
 window.addEventListener('dw:cart', badge);
@@ -52,6 +57,11 @@ observeReveal();
 
 /* "pouch" flies from the button to the cart icon */
 (window as any).dwFly = (from: HTMLElement) => {
+  if (!from.dataset.tick) { // the button turns into a tick for a moment
+    from.dataset.tick = '1'; const html = from.innerHTML; const w = from.offsetWidth;
+    from.style.minWidth = w + 'px'; from.classList.add('ticked'); from.textContent = '✓';
+    setTimeout(() => { from.innerHTML = html; from.classList.remove('ticked'); from.style.minWidth = ''; delete from.dataset.tick; }, 1000);
+  }
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('animate' in Element.prototype)) return;
   const targets = Array.from(document.querySelectorAll<HTMLElement>('[data-cartcount]')).map((b) => b.parentElement!).filter((e) => e.getBoundingClientRect().width > 0);
   const to = targets[0]; if (!to) return;
@@ -83,3 +93,17 @@ getPages().then((pages) => {
     a.append(bn, en); li.appendChild(a); end.before(li);
   }
 });
+
+/* mobile tab bar: the highlight glides from the previous tab to the current one */
+(() => {
+  const nav = document.querySelector<HTMLElement>('nav.tabs'); if (!nav) return;
+  const links = Array.from(nav.querySelectorAll<HTMLElement>('a'));
+  const cur = links.findIndex((a) => a.getAttribute('aria-current') === 'page');
+  if (cur < 0) return;
+  const ind = document.createElement('i'); ind.className = 'tab-ind'; ind.setAttribute('aria-hidden', 'true'); nav.prepend(ind);
+  const put = (a: HTMLElement) => { ind.style.width = a.offsetWidth + 'px'; ind.style.height = a.offsetHeight + 'px'; ind.style.transform = `translate(${a.offsetLeft}px,${a.offsetTop}px)`; };
+  let prev = cur; try { const v = Number(sessionStorage.getItem('dw_tab')); if (Number.isInteger(v) && links[v]) prev = v; sessionStorage.setItem('dw_tab', String(cur)); } catch { /* storage blocked */ }
+  ind.style.transition = 'none'; put(links[prev]!); nav.classList.add('has-ind');
+  requestAnimationFrame(() => requestAnimationFrame(() => { ind.style.transition = ''; put(links[cur]!); }));
+  addEventListener('resize', () => { ind.style.transition = 'none'; put(links[cur]!); });
+})();

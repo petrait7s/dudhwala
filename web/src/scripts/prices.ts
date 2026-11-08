@@ -17,7 +17,7 @@ export async function fillPrices(scope: ParentNode = document) {
     const anyStock = p.variants.some((v) => v.in_stock);
     if (p.image_url) {
       const ph = card.querySelector<HTMLElement>('[data-ph]');
-      if (ph) { ph.innerHTML = ''; const im = new Image(); im.src = p.image_url; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; ph.appendChild(im); }
+      if (ph) { ph.innerHTML = ''; const im = new Image(); im.src = p.image_url; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.classList.add('bl'); im.onload = () => im.classList.add('ld'); ph.appendChild(im); }
     }
     if (!anyStock) {
       card.classList.add('out');
