@@ -56,8 +56,10 @@ class AdminScreensTest extends TestCase
         $c->set('variants.'.$v->id.'.price', '1')->call('saveVariant', $v->id);
         $this->assertNotSame('hacked', $v->product->fresh()->name_bn);
         $this->assertSame(5000, $v->fresh()->price_poisha);
-        Livewire::test(Admin\Products::class)->call('toggle', $v->product->id);
+        $res = Livewire::test(Admin\Products::class)->call('saveSheet', [['variant_id' => $v->id, 'active' => false, 'price' => '1']])->effects['returns'][0] ?? null;
+        $this->assertFalse($res['ok'] ?? true);
         $this->assertTrue($v->product->fresh()->active);
+        $this->assertSame(5000, $v->fresh()->price_poisha);
     }
 
     public function test_admin_creates_product_then_prices_and_stocks_it(): void
@@ -86,17 +88,49 @@ class AdminScreensTest extends TestCase
 
         // publish makes it appear in the public catalogue
         $this->getJson('/api/catalogue')->assertJsonMissing(['slug' => 'new-cake']);
-        Livewire::test(Admin\Products::class)->call('toggle', $p->id);
+        Livewire::test(Admin\Products::class)->call('saveSheet', [['variant_id' => $vid, 'active' => true]]);
         $this->getJson('/api/catalogue')->assertJsonFragment(['slug' => 'new-cake']);
     }
 
-    public function test_product_list_search_and_filters(): void
+    public function test_product_sheet_lists_every_product_with_sizes_and_branch_availability(): void
     {
         $this->as('ADMIN');
         $a = TestData::variant(1000, 'bakery'); $b = TestData::variant(1000, 'sweets', false);
         $a->product->update(['name_bn' => 'রুটি']); $b->product->update(['name_bn' => 'রসগোল্লা']);
-        Livewire::test(Admin\Products::class)->assertSee('রুটি')->assertSee('রসগোল্লা')
-            ->set('q', 'রসগোল্লা')->assertDontSee('রুটি')->set('q', '')->set('vis', '1')->assertSee('রুটি')->assertDontSee('রসগোল্লা');
+        Livewire::test(Admin\Products::class)->assertViewHas('data', function ($d) {
+            $names = collect($d['products'])->pluck('name_bn')->all();
+            return in_array('রুটি', $names, true) && in_array('রসগোল্লা', $names, true) && collect($d['products'])->every(fn ($p) => count($p['variants']) >= 1);
+        });
+    }
+
+    public function test_sheet_saves_price_size_stock_and_visibility_all_or_nothing_without_showing_counts(): void
+    {
+        $admin = $this->as('ADMIN');
+        $v = TestData::variant(5000);
+        $o = TestData::outlet('sheet-branch');
+        $res = Livewire::test(Admin\Products::class)->call('saveSheet', [[
+            'variant_id' => $v->id, 'label_bn' => '২ কেজি', 'label_en' => '2 kg', 'price' => '80', 'active' => false, 'stock' => [$o->id => false],
+        ]])->effects['returns'][0];
+        $this->assertTrue($res['ok']);
+        $v = $v->fresh();
+        $this->assertSame([8000, '২ কেজি', '2 kg'], [$v->price_poisha, $v->label_bn, $v->label_en]);
+        $this->assertFalse($v->product->fresh()->active);
+        $this->assertDatabaseHas('audit_logs', ['action' => 'variant.updated', 'actor_user_id' => $admin->id]);
+
+        // in stock writes a large buffer above what open orders hold; out of stock leaves only the reserved part
+        app(\App\Services\AdminCatalogueService::class)->setAvailability($admin, $o->id, $v, true);
+        $row = \DB::table('inventory')->where(['outlet_id' => $o->id, 'product_variant_id' => $v->id])->first();
+        $this->assertSame(\App\Services\AdminCatalogueService::IN_STOCK_QTY, $row->quantity_on_hand - $row->reserved_quantity);
+        app(\App\Services\AdminCatalogueService::class)->setAvailability($admin, $o->id, $v, false);
+        $row = \DB::table('inventory')->where(['outlet_id' => $o->id, 'product_variant_id' => $v->id])->first();
+        $this->assertSame(0, $row->quantity_on_hand - $row->reserved_quantity);
+
+        // one bad row rolls the whole save back
+        $bad = Livewire::test(Admin\Products::class)->call('saveSheet', [
+            ['variant_id' => $v->id, 'price' => '90'], ['variant_id' => $v->id, 'price' => 'abc'],
+        ])->effects['returns'][0];
+        $this->assertFalse($bad['ok']);
+        $this->assertSame(8000, $v->fresh()->price_poisha);
     }
 
     public function test_settings_screen_saves_and_approves_bulk_limit(): void

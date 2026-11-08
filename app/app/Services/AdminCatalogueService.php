@@ -144,6 +144,49 @@ class AdminCatalogueService
         $this->audit->log('stock.set', 'product_variant', $v->id, ['outlet_id' => $outletId, 'on_hand' => $before], ['outlet_id' => $outletId, 'on_hand' => $qty, 'reason' => $reason], $by);
     }
 
+    /** Largest quantity the sheet writes for "in stock". Customers never see counts; this only keeps the reservation ledger working. */
+    public const IN_STOCK_QTY = 100000;
+
+    /** In stock / out of stock for one branch. In: plenty on hand above what open orders hold. Out: only what open orders hold. */
+    public function setAvailability(User $by, int $outletId, ProductVariant $v, bool $in): void
+    {
+        $this->admin($by);
+        Outlet::findOrFail($outletId);
+        $cur = DB::table('inventory')->where(['outlet_id' => $outletId, 'product_variant_id' => $v->id])->first();
+        $reserved = (int) ($cur->reserved_quantity ?? 0);
+        $avail = $cur ? $cur->quantity_on_hand - $reserved : 0;
+        if (($avail > 0) === $in) return; // already in that state
+        $this->setStock($by, $outletId, $v, $in ? $reserved + self::IN_STOCK_QTY : $reserved, $in ? 'in stock' : 'out of stock');
+    }
+
+    /**
+     * Apply many sheet edits at once: label, price, shown on the site, and in/out of stock per branch.
+     * All or nothing. Each change is audited by the single-purpose methods it calls.
+     * @param array<int, array{variant_id:int, label_bn?:string, label_en?:string, price?:string, active?:bool, stock?:array<int,bool>}> $changes
+     */
+    public function saveSheet(User $by, array $changes): int
+    {
+        $this->admin($by);
+        $n = 0;
+        DB::transaction(function () use ($by, $changes, &$n) {
+            foreach ($changes as $c) {
+                $v = ProductVariant::with('product')->findOrFail((int) ($c['variant_id'] ?? 0));
+                if (array_key_exists('label_bn', $c) || array_key_exists('label_en', $c) || array_key_exists('price', $c)) {
+                    $fmt = fn ($p) => $p === null ? '' : rtrim(rtrim(number_format($p / 100, 2, '.', ''), '0'), '.');
+                    $this->saveVariant($by, $v->product, $v, [
+                        'label_bn' => $c['label_bn'] ?? $v->label_bn, 'label_en' => $c['label_en'] ?? $v->label_en,
+                        'price' => array_key_exists('price', $c) ? trim((string) $c['price']) : $fmt($v->price_poisha),
+                        'compare_at' => $fmt($v->compare_at_poisha), 'max_qty' => $v->max_qty, 'track_stock' => $v->track_stock, 'sort_order' => $v->sort_order,
+                    ]);
+                    $n++;
+                }
+                if (array_key_exists('active', $c) && (bool) $c['active'] !== (bool) $v->product->active) { $this->setActive($by, $v->product, (bool) $c['active']); $n++; }
+                foreach (($c['stock'] ?? []) as $outletId => $in) { $this->setAvailability($by, (int) $outletId, $v, (bool) $in); $n++; }
+            }
+        });
+        return $n;
+    }
+
     /* ───────── categories ───────── */
 
     public function saveCategory(User $by, ?Category $c, array $in): Category

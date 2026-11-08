@@ -60,4 +60,8 @@ return [
     'pay_match' => 'Money received', 'pay_nomatch' => 'Not matching',
     'pay_reasons' => ['TrxID not found in the app', 'Amount is less than the total', 'Sender number does not match', 'Duplicate or fake TrxID'],
     'search' => 'Order number, phone or TrxID',
+    'sheet_edit' => 'Edit', 'sheet_save' => 'Save all', 'sheet_cancel' => 'Cancel', 'sheet_changes' => ':n changes',
+    'sheet_in' => 'In stock', 'sheet_out' => 'Out', 'sheet_show' => 'Shown on site', 'sheet_size_bn' => 'Size (Bangla)', 'sheet_size_en' => 'Size (English)',
+    'sheet_no_sizes' => 'No sizes yet. Open the product to add one.',
+    'sheet_tip' => 'Press Edit to unlock every cell. Enter moves down a column, Tab moves across. Yellow cells are changed. Only in stock or out is shown, never a number.',
 ];
