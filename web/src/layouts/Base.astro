@@ -83,7 +83,10 @@ const url = new URL(path, Astro.site).toString();
         <li hidden data-pages-end></li>
       </ul>
     </div>
-    <div class="wrap" style="margin-top:1.2rem;font-size:.85rem">© {new Date().getFullYear()} {site.nameEn}</div>
+    <div class="wrap ft-bottom">
+      <span>© {new Date().getFullYear()} {site.nameEn}</span>
+      <span class="petra"><img src="/petra-logo.png" width="30" height="30" alt="PETRA" /><span><Bi bn="ডেভেলপ ও ডিজাইন: PETRA" en="Developed and designed by PETRA" /><b>Built On Trust</b></span></span>
+    </div>
     </div>
   </footer>
 

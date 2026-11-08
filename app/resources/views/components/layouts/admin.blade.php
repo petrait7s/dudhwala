@@ -50,6 +50,7 @@ code{background:#EEF1F6;padding:.05rem .4rem;border-radius:6px;font-size:.9em}
 .nav a:hover{background:rgba(255,255,255,.07);color:#fff}
 .nav a.on{background:var(--navy2);color:#fff}
 .nav a.on::before{content:"";position:absolute;left:-.8rem;top:.55rem;bottom:.55rem;width:4px;border-radius:0 4px 4px 0;background:var(--teal)}
+.petra{display:flex;align-items:center;gap:.6rem}.petra img{width:30px;height:30px;border-radius:8px}.petra span{display:grid;line-height:1.25;font-size:.75rem}.petra b{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#4cc3c6}
 .side .foot{margin-top:auto;padding:1rem 1.2rem;color:#8f99a8;font-size:.75rem}
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
 .top{display:flex;align-items:center;gap:.8rem;padding:.7rem 1.4rem;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
@@ -132,7 +133,7 @@ fieldset[disabled] input,fieldset[disabled] select,fieldset[disabled] textarea,i
         @endif
       @endforeach
     </nav>
-    <div class="foot">PETRA Software Solutions</div>
+    <div class="foot petra"><img src="/images/petra-logo.png" alt="PETRA"><span>Developed &amp; designed by PETRA<b>Built On Trust</b></span></div>
   </aside>
   <div class="scrim" x-show="open" x-cloak @click="open=false"></div>
   <div class="main">
@@ -156,6 +157,7 @@ fieldset[disabled] input,fieldset[disabled] select,fieldset[disabled] textarea,i
   <form method="post" class="lang">@csrf
     <span class="seg"><button type="submit" formaction="{{ route('admin.locale', 'bn') }}" class="{{ $loc === 'bn' ? 'on' : '' }}">বাংলা</button><button type="submit" formaction="{{ route('admin.locale', 'en') }}" class="{{ $loc === 'en' ? 'on' : '' }}">EN</button></span>
   </form>
+  <div class="petra" style="justify-content:center;margin-top:1rem"><img src="/images/petra-logo.png" alt="PETRA"><span>Developed &amp; designed by PETRA<b>Built On Trust</b></span></div>
   @auth<form method="post" action="{{ route('admin.logout') }}" style="text-align:center;margin-top:.8rem">@csrf<button class="btn alt" type="submit">{{ __('admin.logout') }}</button></form>@endauth
 </div></div>
 @endif

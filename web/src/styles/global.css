@@ -434,3 +434,14 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 .branch .sf{margin:-.8rem -1rem .5rem;border-radius:var(--dw-r-lg) var(--dw-r-lg) 0 0;overflow:hidden;line-height:0;aspect-ratio:320/132;background:#2b2f9e}
 .branch .sf svg,.branch .sf img{width:100%;height:100%;object-fit:cover;display:block}
 [data-brand] .branches{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}@media (min-width:760px){[data-brand] .branches{grid-template-columns:repeat(2,1fr)}}
+
+/* About-us button in the zone bar */
+.zb-about{padding:0 1rem;min-height:38px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+@media (hover:hover){.zb-about:hover{background:#fff;color:#1d2672;text-decoration:none}}
+@media (max-width:859px){.zb-about{min-height:34px;padding:0 .8rem}}
+/* footer credit */
+.ft-bottom{margin-top:1.2rem;font-size:.85rem;display:flex;flex-wrap:wrap;gap:.8rem 1.4rem;align-items:center;justify-content:space-between}
+.petra{display:inline-flex;align-items:center;gap:.6rem}
+.petra img{width:30px;height:30px;border-radius:8px;display:block}
+.petra span{display:grid;line-height:1.25}
+.petra b{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#9fe3e5}
