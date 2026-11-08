@@ -6,7 +6,16 @@ import about from '../data/about.json';
 import { categories, products } from '../lib/catalogue';
 const count = (slug: string) => products.filter((p) => p.category === slug).length;
 ---
-<Base titleBn="আমাদের সম্পর্কে" titleEn="About us" nav="info">
+<Base titleBn="আমাদের সম্পর্কে" titleEn="About us" nav="info" zonebar={false}>
+  <div slot="band" class="zonebar try-band">
+    <div class="wrap zb">
+      <span class="tb-t"><Bi bn="আমাদের পণ্য একবার চেখে দেখুন" en="Try our products" /></span>
+      <div class="zb-r">
+        <a class="zb-act" href="/shop"><Bi bn="এখনই অর্ডার করুন" en="Order now" /></a>
+        <a class="zb-about" href="/shop"><Bi bn="পণ্য দেখুন" en="Browse products" /></a>
+      </div>
+    </div>
+  </div>
   <section class="ab-hero">
     <div class="wrap">
       <span class="ab-plate"><img src="/logo.png" width="120" height="64" alt={site.nameEn} class="ab-logo" /></span>

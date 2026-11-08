@@ -477,3 +477,7 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
   .ft-bottom .copy{order:2;text-align:center;font-size:.8rem;opacity:.85}
 }
 @media (max-width:640px){.ft-bottom{justify-items:stretch}.ft-bottom .petra{justify-self:center}.ft-bottom .copy{text-align:right}}
+
+.try-band .tb-t{font-weight:700;font-size:1rem}
+@media (max-width:859px){.try-band .zb{flex-wrap:nowrap}.try-band .tb-t{font-size:.9rem;white-space:nowrap}}
+@media (max-width:859px){.try-band .zb-about{display:none}.try-band .zb{justify-content:space-between}}
