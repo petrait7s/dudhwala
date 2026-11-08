@@ -83,12 +83,17 @@ export function buildSearchIndex<T>(entries: SearchEntry<T>[]): SearchIndex<T> {
       }
     };
     const base: string[] = [];
-    for (const n of e.primary)
-      for (const t of tokenize(n)) {
+    for (const n of e.primary) {
+      const ts = tokenize(n);
+      ts.forEach((t, i) => {
         add(t, 1);
         base.push(t);
         vocab.add(t);
-      }
+        // "rosh malai" is also found as "roshmalai", "kheer mohan" as "kheermohan"
+        const nx = ts[i + 1];
+        if (nx && !BN.test(t) && !BN.test(nx)) add(t + nx, 0.97, false);
+      });
+    }
     for (const n of e.secondary)
       for (const t of tokenize(n)) {
         add(t, 0.85);
@@ -111,6 +116,9 @@ function wordScore(q: string, qKey: string, d: { t: string; key: string; both: b
   if (q.length >= 2 && t.startsWith(q)) return 92 - Math.min(10, t.length - q.length);
   if (q.length >= 3 && t.includes(q)) return 76;
   if (q.length >= 3 && qKey.length >= 3 && qKey === d.key) return 82;
+  // still typing, with a slip: "rasgo" -> "rasgulla", "kheerm" -> "kheermohan"
+  if (q.length >= 4 && t.length > q.length && editDistance(q, t.slice(0, q.length), 1) <= 1) return 66;
+  if (!BN.test(q) && qKey.length >= 3 && d.key.length > qKey.length && d.key.startsWith(qKey)) return 62;
   const allowed = q.length <= 3 ? 0 : q.length <= 5 ? 1 : 2;
   if (allowed > 0) {
     const dist = editDistance(q, t, allowed);
@@ -119,26 +127,40 @@ function wordScore(q: string, qKey: string, d: { t: string; key: string; both: b
   return 0;
 }
 
-/** Ranked hits: exact word matches first, then prefix, sound-alike and typo matches. All query words must match. */
+/** Best total for one reading of the query, or null when some word has no match. */
+function scoreWords<T>(e: SearchIndex<T>['entries'][number], words: string[], keys: string[], need: number): { total: number; hit: number } | null {
+  let total = 0;
+  let hit = 0;
+  for (let i = 0; i < words.length; i++) {
+    let best = 0;
+    for (const d of e.tokens) best = Math.max(best, wordScore(words[i] ?? '', keys[i] ?? '', d) * d.w);
+    if (best >= 45) { total += best; hit++; }
+  }
+  return hit >= need ? { total, hit } : null;
+}
+
+/** Ranked hits: exact word matches first, then prefix, sound-alike and typo matches. Every query word must match;
+ *  "kalo jam" also reads as "kalojam"; if nothing matches every word, entries matching most of the words come after. */
 export function searchIndex<T>(index: SearchIndex<T>, query: string, limit = 50): SearchHit<T>[] {
   const words = tokenize(query);
   if (words.length === 0) return [];
-  const keys = words.map(soundKey);
-  const hits: (SearchHit<T> & { len: number })[] = [];
-  for (const e of index.entries) {
-    let total = 0;
-    let all = true;
-    for (let i = 0; i < words.length; i++) {
-      let best = 0;
-      for (const d of e.tokens) best = Math.max(best, wordScore(words[i] ?? '', keys[i] ?? '', d) * d.w);
-      if (best < 45) {
-        all = false;
-        break;
+  // readings of the query: as typed, and with each neighbouring pair run together
+  const readings: string[][] = [words];
+  for (let i = 0; i + 1 < words.length; i++) if (!BN.test(words[i]!) && !BN.test(words[i + 1]!)) readings.push([...words.slice(0, i), words[i]! + words[i + 1]!, ...words.slice(i + 2)]);
+  const run = (need: (n: number) => number, scale: number) => {
+    const hits: (SearchHit<T> & { len: number })[] = [];
+    for (const e of index.entries) {
+      let best = -1;
+      for (const w of readings) {
+        const r = scoreWords(e, w, w.map(soundKey), need(w.length));
+        if (r) best = Math.max(best, (r.total / w.length) * (r.hit / w.length) * scale);
       }
-      total += best;
+      if (best >= 0) hits.push({ item: e.item, score: best, len: e.nameLen });
     }
-    if (all) hits.push({ item: e.item, score: total / words.length, len: e.nameLen });
-  }
+    return hits;
+  };
+  let hits = run((n) => n, 1);
+  if (hits.length === 0 && words.length >= 2) hits = run((n) => Math.max(1, Math.ceil(n / 2)), 0.8);
   hits.sort((a, b) => b.score - a.score || a.len - b.len);
   return hits.slice(0, limit).map(({ item, score }) => ({ item, score }));
 }

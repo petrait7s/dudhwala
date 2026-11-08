@@ -696,3 +696,14 @@ input[type=search]::-webkit-search-decoration{-webkit-appearance:none}
   .ft-bottom .petra b{font-size:.7rem;letter-spacing:.16em}
   .ft-bottom .copy{grid-column:1;justify-self:center;text-align:center;font-size:.78rem;opacity:.8;order:2}
 }
+
+/* dark mode: suggestion list and swipe arrows were light panels under light text */
+:root[data-theme='dark'] .sugg{background:linear-gradient(170deg,#1b2260,#141a4a);border-color:#3a4494;box-shadow:0 18px 40px rgba(0,0,0,.55);color:#eef0ff}
+:root[data-theme='dark'] .sugg li.on,:root[data-theme='dark'] .sugg li:hover{background:rgba(143,227,255,.14)}
+:root[data-theme='dark'] .sugg .sg-n{color:#fff}
+:root[data-theme='dark'] .sugg .sg-c,:root[data-theme='dark'] .sugg .sg-k{color:#aab3e6}
+:root[data-theme='dark'] .sugg mark{color:#8fe3ff}
+:root[data-theme='dark'] .sh-nav{background:rgba(27,34,96,.96);color:#8fe3ff;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+:root[data-theme='dark'] .gal,:root[data-theme='dark'] .pc .ph{background-color:#141a4a}
+:root[data-theme='dark'] .ab-hero .ab-plate{background:linear-gradient(145deg,#c9d0ff,#eef0ff)}
+:root[data-theme='dark'] .hsearch input::-webkit-search-cancel-button{filter:brightness(2)}
