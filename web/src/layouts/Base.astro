@@ -4,7 +4,9 @@ import Bi from '../components/Bi.astro';
 import Icons from '../components/Icons.astro';
 import ZoneBar from '../components/ZoneBar.astro';
 import site from '../data/site.json';
-interface Props { titleBn: string; titleEn: string; descBn?: string; descEn?: string; nav?: 'home' | 'shop' | 'info' | 'cart' | ''; buybar?: boolean }
+import { products, categories } from '../lib/catalogue';
+const suggest = JSON.stringify(products.map((p) => { const c = categories.find((x) => x.slug === p.category); return { id: p.id, bn: p.nameBn, en: p.nameEn, cbn: c?.nameBn ?? '', cen: c?.nameEn ?? '' }; })).replace(/</g, '\\u003c');
+interface Props { titleBn: string; titleEn: string; descBn?: string; descEn?: string; nav?: 'home' | 'shop' | 'info' | 'track' | 'cart' | ''; buybar?: boolean }
 const { titleBn, titleEn, descBn = 'দুধওয়ালা: সিলেটের দুগ্ধজাত মিষ্টি, দই ও বেকারি।', descEn = 'Dudhwala: dairy sweets, doi and bakery from Sylhet.', nav = '', buybar = false } = Astro.props;
 const path = Astro.url.pathname;
 const cur = (n: string) => (nav === n ? 'page' : undefined);
@@ -92,6 +94,7 @@ const url = new URL(path, Astro.site).toString();
     <a href="/track" aria-current={cur('track')}><Icons name="track" /><Bi k="track" /></a>
     <a href="/cart" aria-current={cur('cart')}><Icons name="cart" /><Bi k="cart" /><span class="badge" data-cartcount hidden>0</span></a>
   </nav>
-  <script>import '../scripts/app';</script>
+  <script type="application/json" id="dw-suggest" set:html={suggest} />
+  <script>import '../scripts/app';import '../scripts/suggest';</script>
 </body>
 </html>

@@ -388,3 +388,14 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 [data-select] .branch.on{border-color:var(--dw-brand-600);background:var(--dw-brand-50)}
 [data-select] .branch.on .tick{display:grid}
 @media (hover:hover){[data-select] .branch:hover{border-color:var(--dw-brand-500)}}
+
+.sugg{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:60;margin:0;padding:6px;list-style:none;background:var(--dw-surface);color:var(--dw-ink);border:1px solid var(--dw-line-strong);border-radius:16px;box-shadow:0 14px 34px rgba(20,24,80,.22);max-height:340px;overflow:auto}
+.sugg[hidden]{display:none}
+.sugg li{display:flex;flex-direction:column;gap:1px;padding:8px 12px;border-radius:10px;cursor:pointer;text-align:left}
+.sugg li.on,.sugg li:hover{background:var(--dw-brand-100)}
+.sugg .sg-n{font-weight:700}
+.sugg .sg-c,.sugg .sg-k{font-size:.8rem;color:var(--dw-muted)}
+.sugg mark{background:transparent;color:var(--dw-brand-700);text-decoration:underline}
+.tools2{position:relative}
+.tools2 #q{position:relative}
+.sugg .sg-none{cursor:default}.sugg .sg-none:hover{background:transparent}
