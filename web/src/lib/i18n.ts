@@ -2,7 +2,7 @@
 export const D = {
   home: { bn: 'হোম', en: 'Home' },
   shop: { bn: 'শপ', en: 'Shop' },
-  info: { bn: 'পরিচিতি', en: 'About' },
+  info: { bn: 'আমাদের কথা', en: 'About us' },
   cart: { bn: 'কার্ট', en: 'Cart' },
   track: { bn: 'অর্ডার ট্র্যাক', en: 'Track order' },
   showroom: { bn: 'শোরুম থেকে অর্ডার', en: 'Order From Showroom' },

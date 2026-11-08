@@ -94,11 +94,11 @@ const url = new URL(path, Astro.site).toString();
   </footer>
 
   <nav class={`tabs${buybar ? ' hide' : ''}`} aria-label="Tabs">
-    <a href="/" aria-current={cur('home')}><Icons name="home" /><Bi k="home" /></a>
     <a href="/shop" aria-current={cur('shop')}><Icons name="shop" /><Bi k="shop" /></a>
-    <a href="/about" aria-current={cur('info')}><Icons name="info" /><Bi k="info" /></a>
     <a href="/track" aria-current={cur('track')}><Icons name="track" /><Bi k="track" /></a>
+    <a href="/" aria-current={cur('home')}><Icons name="home" /><Bi k="home" /></a>
     <a href="/cart" aria-current={cur('cart')}><Icons name="cart" /><Bi k="cart" /><span class="badge" data-cartcount hidden>0</span></a>
+    <a href="/about" aria-current={cur('info')}><Icons name="info" /><Bi k="info" /></a>
   </nav>
   <script type="application/json" id="dw-suggest" set:html={suggest} />
   <script>import '../scripts/app';import '../scripts/suggest';</script>
