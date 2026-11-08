@@ -160,31 +160,44 @@ class AdminCatalogueService
     }
 
     /**
-     * Apply many sheet edits at once: label, price, shown on the site, and in/out of stock per branch.
-     * All or nothing. Each change is audited by the single-purpose methods it calls.
-     * @param array<int, array{variant_id:int, label_bn?:string, label_en?:string, price?:string, active?:bool, stock?:array<int,bool>}> $changes
+     * Apply many sheet edits at once: label, price, shown on the site, in/out of stock per branch, and brand-new sizes
+     * (variant_id 0 plus product_id). All or nothing. Each change is audited by the single-purpose methods it calls.
+     * @param array<int, array{variant_id:int, product_id?:int, key?:string, label_bn?:string, label_en?:string, price?:string, active?:bool, stock?:array<int,bool>}> $changes
+     * @return array{n:int, created:array<string,int>} number of changes and the ids given to new sizes, by the row key the caller sent
      */
-    public function saveSheet(User $by, array $changes): int
+    public function saveSheet(User $by, array $changes): array
     {
         $this->admin($by);
-        $n = 0;
-        DB::transaction(function () use ($by, $changes, &$n) {
+        $n = 0; $created = [];
+        $fmt = fn ($p) => $p === null ? '' : rtrim(rtrim(number_format($p / 100, 2, '.', ''), '0'), '.');
+        DB::transaction(function () use ($by, $changes, &$n, &$created, $fmt) {
             foreach ($changes as $c) {
-                $v = ProductVariant::with('product')->findOrFail((int) ($c['variant_id'] ?? 0));
-                if (array_key_exists('label_bn', $c) || array_key_exists('label_en', $c) || array_key_exists('price', $c)) {
-                    $fmt = fn ($p) => $p === null ? '' : rtrim(rtrim(number_format($p / 100, 2, '.', ''), '0'), '.');
-                    $this->saveVariant($by, $v->product, $v, [
-                        'label_bn' => $c['label_bn'] ?? $v->label_bn, 'label_en' => $c['label_en'] ?? $v->label_en,
-                        'price' => array_key_exists('price', $c) ? trim((string) $c['price']) : $fmt($v->price_poisha),
-                        'compare_at' => $fmt($v->compare_at_poisha), 'max_qty' => $v->max_qty, 'track_stock' => $v->track_stock, 'sort_order' => $v->sort_order,
+                $id = (int) ($c['variant_id'] ?? 0);
+                if ($id === 0) {
+                    $p = Product::findOrFail((int) ($c['product_id'] ?? 0));
+                    $v = $this->saveVariant($by, $p, null, [
+                        'label_bn' => $c['label_bn'] ?? '', 'label_en' => $c['label_en'] ?? '', 'price' => trim((string) ($c['price'] ?? '')), 'compare_at' => '',
+                        'max_qty' => 20, 'track_stock' => true, 'sort_order' => (int) $p->variants()->max('sort_order') + 1,
                     ]);
+                    if (isset($c['key'])) $created[(string) $c['key']] = $v->id;
                     $n++;
+                } else {
+                    $v = ProductVariant::with('product')->findOrFail($id);
+                    $p = $v->product;
+                    if (array_key_exists('label_bn', $c) || array_key_exists('label_en', $c) || array_key_exists('price', $c)) {
+                        $this->saveVariant($by, $p, $v, [
+                            'label_bn' => $c['label_bn'] ?? $v->label_bn, 'label_en' => $c['label_en'] ?? $v->label_en,
+                            'price' => array_key_exists('price', $c) ? trim((string) $c['price']) : $fmt($v->price_poisha),
+                            'compare_at' => $fmt($v->compare_at_poisha), 'max_qty' => $v->max_qty, 'track_stock' => $v->track_stock, 'sort_order' => $v->sort_order,
+                        ]);
+                        $n++;
+                    }
                 }
-                if (array_key_exists('active', $c) && (bool) $c['active'] !== (bool) $v->product->active) { $this->setActive($by, $v->product, (bool) $c['active']); $n++; }
+                if (array_key_exists('active', $c) && (bool) $c['active'] !== (bool) $p->active) { $this->setActive($by, $p, (bool) $c['active']); $n++; }
                 foreach (($c['stock'] ?? []) as $outletId => $in) { $this->setAvailability($by, (int) $outletId, $v, (bool) $in); $n++; }
             }
         });
-        return $n;
+        return ['n' => $n, 'created' => $created];
     }
 
     /* ───────── categories ───────── */

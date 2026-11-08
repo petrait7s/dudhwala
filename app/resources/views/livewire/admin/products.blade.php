@@ -23,6 +23,11 @@
 .sw.on .t{background:var(--ok)}.sw.on .t::after{transform:translateX(16px)}
 .sw .l{font-size:.72rem;font-weight:700;min-width:2.5em;text-align:left}.sw.on .l{color:var(--ok)}.sw:not(.on) .l{color:var(--bad)}
 .editing .sw{cursor:pointer}.sw.dirty .t{outline:3px solid #f0c93a}.sw:disabled{opacity:.6}
+.qa{display:none;gap:.3rem;flex-wrap:wrap;margin-top:.35rem}
+.editing .qa{display:flex}
+.chip{font:inherit;font-size:.72rem;font-weight:700;border:1px solid var(--line);background:linear-gradient(180deg,#eef0ff,#dfe3ff);color:var(--teal);border-radius:99px;padding:.12rem .6rem;cursor:pointer;transition:transform .12s,background .15s}
+.chip:hover{background:#d3d9ff}.chip:active{transform:scale(.95)}.chip.bad{color:var(--bad);background:#fbe0dd;border-color:#f0b8b3}
+.sheet tr.fresh td{background:#e3f6ee}
 .sheet-note{margin-top:.8rem;color:var(--muted);font-size:.8rem}
 .toastmsg{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;padding:.6rem 1.2rem;border-radius:99px;font-weight:700;color:#fff;background:#0f1442;box-shadow:0 10px 30px rgba(0,0,0,.3)}
 .toastmsg.bad{background:#b3261e}
@@ -59,11 +64,15 @@
         </tr></thead>
         <tbody>
           <template x-for="r in visibleRows()" :key="r.key">
-            <tr :class="{ more: r.i > 0 }">
-              <td class="nm"><a :href="r.p.url"><b x-text="r.p.name_bn"></b></a><small x-text="r.p.name_en"></small></td>
+            <tr :class="{ more: r.i > 0, fresh: r.new }" :data-key="r.key">
+              <td class="nm"><a :href="r.p.url"><b x-text="r.p.name_bn"></b></a><small x-text="r.p.name_en"></small>
+                <div class="qa" x-show="editing && r.i === 0 && !r.new || editing && r.new">
+                  <template x-if="!r.new"><span style="display:contents"><button type="button" class="chip" @click="addSize(r.p, 'pc')">+ {{ __('admin.sheet_pc') }}</button><button type="button" class="chip" @click="addSize(r.p, 'kg')">+ {{ __('admin.sheet_kg') }}</button><button type="button" class="chip" @click="addSize(r.p, '')">+ {{ __('admin.sheet_size') }}</button></span></template>
+                  <template x-if="r.new"><button type="button" class="chip bad" @click="removeRow(r)">✕ {{ __('admin.sheet_remove') }}</button></template>
+                </div></td>
               <td x-text="r.p.category"></td>
               <template x-if="r.v">
-                <td><span class="val" x-text="r.v.label_bn || '—'"></span><input class="cell" data-col="lb" :class="{ dirty: r.v.label_bn !== r.o.label_bn }" x-model="r.v.label_bn" @keydown.enter.prevent="down($event)"></td>
+                <td><span class="val" x-text="r.v.label_bn || '—'"></span><input class="cell" data-col="lb" :class="{ dirty: r.v.label_bn !== r.o.label_bn }" x-model="r.v.label_bn" list="dw-presets" @input="preset(r)" @keydown.enter.prevent="down($event)"></td>
               </template>
               <template x-if="r.v">
                 <td><span class="val" x-text="r.v.label_en || '—'"></span><input class="cell" data-col="le" :class="{ dirty: r.v.label_en !== r.o.label_en }" x-model="r.v.label_en" @keydown.enter.prevent="down($event)"></td>
@@ -89,6 +98,7 @@
         </tbody>
       </table>
     </div>
+    <datalist id="dw-presets"><template x-for="p in presets" :key="p.bn"><option :value="p.bn" x-text="p.en"></option></template></datalist>
     <p class="sheet-note">{{ __('admin.sheet_tip') }}</p>
   </div>
 
@@ -99,13 +109,14 @@
 document.addEventListener('alpine:init', () => {
   Alpine.data('dwSheet', (d, canManage, t) => ({
     d, t, canManage, q: '', cat: '', vis: '', editing: false, busy: false, toast: { msg: '', bad: false },
-    rows: [],
+    rows: [], seq: 0,
+    presets: [{ bn: '১ পিস', en: '1 pc', k: 'pc' }, { bn: '১ কেজি', en: '1 kg', k: 'kg' }, { bn: 'আধা কেজি', en: '½ kg' }, { bn: '২৫০ গ্রাম', en: '250 g' }, { bn: '৫০০ গ্রাম', en: '500 g' }, { bn: '১ ডজন', en: '1 dozen' }, { bn: '১ প্যাকেট', en: '1 packet' }, { bn: '১ বক্স', en: '1 box' }],
     init() {
       this.d.products.forEach((p) => { p.o_active = p.active; });
       this.rows = [];
       this.d.products.forEach((p) => {
-        if (!p.variants.length) { this.rows.push({ key: 'p' + p.id, p, v: null, o: null, i: 0 }); return; }
-        p.variants.forEach((v, i) => this.rows.push({ key: 'v' + v.id, p, v, o: JSON.parse(JSON.stringify(v)), i }));
+        if (!p.variants.length) { this.rows.push({ key: 'p' + p.id, p, v: null, o: null, i: 0, new: false }); return; }
+        p.variants.forEach((v, i) => this.rows.push({ key: 'v' + v.id, p, v, o: JSON.parse(JSON.stringify(v)), i, new: false }));
       });
     },
     visibleRows() {
@@ -117,6 +128,10 @@ document.addEventListener('alpine:init', () => {
     togglePublish(p) { if (this.editing) p.active = !p.active; },
     rowChange(r) {
       const c = {};
+      if (r.new) {
+        if (r.v.label_bn.trim() === '' && String(r.v.price).trim() === '') return null;
+        return { variant_id: 0, product_id: r.p.id, key: r.key, label_bn: r.v.label_bn, label_en: r.v.label_en, price: r.v.price, stock: Object.assign({}, r.v.stock), ...(r.i === 0 && r.p.active !== r.p.o_active ? { active: r.p.active } : {}) };
+      }
       if (r.v) {
         if (r.v.label_bn !== r.o.label_bn) c.label_bn = r.v.label_bn;
         if (r.v.label_en !== r.o.label_en) c.label_en = r.v.label_en;
@@ -128,13 +143,19 @@ document.addEventListener('alpine:init', () => {
       if (r.i === 0 && r.p.active !== r.p.o_active) c.active = r.p.active;
       return Object.keys(c).length ? Object.assign({ variant_id: r.v ? r.v.id : (r.p.variants[0] ? r.p.variants[0].id : 0) }, c) : null;
     },
-    changes() { return this.rows.map((r) => this.rowChange(r)).filter((c) => c && c.variant_id); },
+    changes() { return this.rows.map((r) => this.rowChange(r)).filter((c) => c); },
     dirtyCount() {
       let n = 0;
-      this.rows.forEach((r) => { const c = this.rowChange(r); if (c) { n += Object.keys(c).length - 1; if (c.stock) n += Object.keys(c.stock).length - 1; } });
+      this.rows.forEach((r) => {
+        const c = this.rowChange(r); if (!c) return;
+        if (r.new) { n += 1; return; }
+        ['label_bn', 'label_en', 'price', 'active'].forEach((k) => { if (k in c) n++; });
+        if (c.stock) n += Object.keys(c.stock).length;
+      });
       return n;
     },
     cancel() {
+      this.rows.filter((r) => r.new).forEach((r) => this.removeRow(r, true));
       this.rows.forEach((r) => { if (r.v) { r.v.label_bn = r.o.label_bn; r.v.label_en = r.o.label_en; r.v.price = r.o.price; r.v.stock = JSON.parse(JSON.stringify(r.o.stock)); } r.p.active = r.p.o_active; });
       this.editing = false;
     },
@@ -144,11 +165,39 @@ document.addEventListener('alpine:init', () => {
       try {
         const res = await this.$wire.saveSheet(ch);
         if (res.ok) {
+          this.rows.forEach((r) => { if (r.new && res.created && res.created[r.key]) { r.v.id = res.created[r.key]; r.new = false; } });
           this.rows.forEach((r) => { if (r.v) r.o = JSON.parse(JSON.stringify(r.v)); r.p.o_active = r.p.active; });
           this.editing = false; this.say(this.t.saved, false);
         } else this.say(res.msg, true);
       } catch (e) { this.say('Error', true); }
       this.busy = false;
+    },
+    addSize(p, kind) {
+      const pre = kind ? this.presets.find((x) => x.k === kind) : null;
+      const mine = this.rows.filter((r) => r.p === p);
+      if (pre) { const have = mine.find((r) => r.v && r.v.label_bn === pre.bn); if (have) { this.focusPrice(have.key); return; } }
+      const first = mine.find((r) => r.v);
+      const stock = {}; this.d.outlets.forEach((o) => { stock[o.id] = first ? !!first.v.stock[o.id] : true; });
+      const blank = {}; this.d.outlets.forEach((o) => { blank[o.id] = false; });
+      const key = 'n' + (++this.seq);
+      const row = { key, p, v: { id: 0, label_bn: pre ? pre.bn : '', label_en: pre ? pre.en : '', price: '', untracked: false, stock }, o: { label_bn: '', label_en: '', price: '', stock: blank }, i: first ? mine.length : 0, new: true };
+      const ph = mine.find((r) => !r.v);
+      const at = ph ? this.rows.indexOf(ph) : this.rows.indexOf(mine[mine.length - 1]) + 1;
+      this.rows.splice(at, ph ? 1 : 0, row);
+      this.focusPrice(key, !pre);
+    },
+    removeRow(r, quiet) {
+      const at = this.rows.indexOf(r); if (at < 0) return;
+      this.rows.splice(at, 1);
+      if (!this.rows.some((x) => x.p === r.p)) this.rows.splice(at, 0, { key: 'p' + r.p.id, p: r.p, v: null, o: null, i: 0, new: false });
+      else this.rows.filter((x) => x.p === r.p).forEach((x, i) => { x.i = i; });
+    },
+    preset(r) {
+      const m = this.presets.find((x) => x.bn === r.v.label_bn);
+      if (m && (r.v.label_en === '' || this.presets.some((x) => x.en === r.v.label_en))) r.v.label_en = m.en;
+    },
+    focusPrice(key, label) {
+      setTimeout(() => { const el = this.$root.querySelector('tr[data-key="' + key + '"] input[data-col="' + (label ? 'lb' : 'pr') + '"]'); if (el) { el.focus(); el.select(); } }, 60);
     },
     say(m, bad) { this.toast = { msg: m, bad }; setTimeout(() => { this.toast.msg = ''; }, 3200); },
     down(e) {

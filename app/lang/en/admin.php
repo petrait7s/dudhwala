@@ -64,4 +64,5 @@ return [
     'sheet_in' => 'In stock', 'sheet_out' => 'Out', 'sheet_show' => 'Shown on site', 'sheet_size_bn' => 'Size (Bangla)', 'sheet_size_en' => 'Size (English)',
     'sheet_no_sizes' => 'No sizes yet. Open the product to add one.',
     'sheet_tip' => 'Press Edit to unlock every cell. Enter moves down a column, Tab moves across. Yellow cells are changed. Only in stock or out is shown, never a number.',
+    'sheet_pc' => 'Per pc', 'sheet_kg' => 'Per kg', 'sheet_size' => 'Size', 'sheet_remove' => 'Remove',
 ];

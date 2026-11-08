@@ -125,6 +125,15 @@ class AdminScreensTest extends TestCase
         $row = \DB::table('inventory')->where(['outlet_id' => $o->id, 'product_variant_id' => $v->id])->first();
         $this->assertSame(0, $row->quantity_on_hand - $row->reserved_quantity);
 
+        // a brand-new size (per kg next to per pc) is created with its price and in-stock branches
+        $new = Livewire::test(Admin\Products::class)->call('saveSheet', [[
+            'variant_id' => 0, 'product_id' => $v->product_id, 'key' => 'n1', 'label_bn' => '১ কেজি', 'label_en' => '1 kg', 'price' => '600', 'stock' => [$o->id => true],
+        ]])->effects['returns'][0];
+        $this->assertTrue($new['ok']);
+        $kg = \App\Models\ProductVariant::findOrFail($new['created']['n1']);
+        $this->assertSame([60000, '১ কেজি', $v->product_id], [$kg->price_poisha, $kg->label_bn, $kg->product_id]);
+        $this->assertGreaterThan(0, (int) \DB::table('inventory')->where(['outlet_id' => $o->id, 'product_variant_id' => $kg->id])->value('quantity_on_hand'));
+
         // one bad row rolls the whole save back
         $bad = Livewire::test(Admin\Products::class)->call('saveSheet', [
             ['variant_id' => $v->id, 'price' => '90'], ['variant_id' => $v->id, 'price' => 'abc'],

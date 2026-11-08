@@ -20,7 +20,7 @@ class Products extends Component
     public function saveSheet(array $changes, AdminCatalogueService $svc): array
     {
         try {
-            return ['ok' => true, 'n' => $svc->saveSheet(Auth::user(), $changes)];
+            return ['ok' => true] + $svc->saveSheet(Auth::user(), $changes);
         } catch (ShopException $e) {
             return ['ok' => false, 'msg' => __('admin.error', ['msg' => __($e->getMessage())])];
         }
