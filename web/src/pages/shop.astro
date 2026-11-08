@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import Bi from '../components/Bi.astro';
 import CatalogBrowser from '../components/CatalogBrowser.astro';
 ---
 <Base titleBn="শপ" titleEn="Shop" nav="shop">
-  <div class="wrap" style="padding-top:1rem"><CatalogBrowser /></div>
+  <div class="wrap" style="padding-top:1rem"><h1 class="sr"><Bi bn="সব পণ্য" en="All products" /></h1><CatalogBrowser /></div>
 </Base>

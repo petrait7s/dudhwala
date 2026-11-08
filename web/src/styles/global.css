@@ -488,3 +488,8 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 .hsearch button{color:#fff}
 .hsearch input::-webkit-search-cancel-button{filter:invert(1) brightness(2);opacity:.85}
 .sugg{background:linear-gradient(170deg,#f0f2ff,#dde2ff);border-color:#b9c1fb}
+/* audit fixes: bigger touch targets */
+.gal-dots button{position:relative}
+.gal-dots button::before{content:'';position:absolute;inset:-14px -5px}
+footer.ft ul a{display:inline-block;padding:.5rem 0}
+footer.ft li{line-height:1.2}
