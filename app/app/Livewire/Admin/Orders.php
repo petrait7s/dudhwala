@@ -29,7 +29,10 @@ class Orders extends Component
             ->when($this->status !== '', fn ($x) => $x->where('status', $this->status))
             ->when($q !== '', function ($x) use ($q) {
                 $phone = Phone::normalize($q);
-                $x->where(fn ($w) => $w->where('order_number', 'like', '%'.addcslashes(strtoupper($q), '%_\\').'%')->when($phone, fn ($w2) => $w2->orWhere('contact_phone', $phone)));
+                $trx = \App\Services\PaymentService::normalizeTrx($q);
+                $x->where(fn ($w) => $w->where('order_number', 'like', '%'.addcslashes(strtoupper($q), '%_\\').'%')
+                    ->when($phone, fn ($w2) => $w2->orWhere('contact_phone', $phone)->orWhereHas('payments', fn ($p) => $p->where('sender_number', $phone)))
+                    ->orWhereHas('payments', fn ($p) => $p->where('trx_id', $trx)));
             })
             ->orderByDesc('id')->paginate(25);
         $summary = $orders->getCollection()->mapWithKeys(fn ($o) => [$o->id => $payments->summary($o)]);

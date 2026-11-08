@@ -65,9 +65,9 @@ import Bi from '../components/Bi.astro';
           <label class="opt" data-p="NAGAD"><input type="radio" name="pay" value="NAGAD" /><span><strong>Nagad</strong><br /><span class="hint" data-pn="NAGAD"></span></span></label>
         </div>
         <div id="mobbox" hidden style="margin-top:.8rem">
-          <p class="notice" id="payhow"></p>
+          <div id="payhow"></div>
           <div class="field"><label for="sender"><Bi bn="যে নম্বর থেকে পাঠিয়েছেন" en="Number you sent from" /></label><input id="sender" inputmode="tel" placeholder="01XXXXXXXXX" /></div>
-          <div class="field"><label for="trx">TrxID</label><input id="trx" maxlength="40" autocapitalize="characters" /></div>
+          <div class="field"><label for="trx">TrxID</label><input id="trx" maxlength="40" autocapitalize="characters" autocomplete="off" placeholder="8N7A6D5EDF" /></div>
         </div>
 
         <input class="hp" type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" />

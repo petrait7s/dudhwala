@@ -151,4 +151,28 @@ class AdminOpsTest extends TestCase
         $o = $this->order(); Payment::where('order_id', $o->id)->update(['method' => 'BKASH', 'status' => 'PENDING_VERIFICATION', 'trx_id' => 'T1']);
         Livewire::test(Admin\Orders::class)->assertViewHas('stats', fn ($s) => $s === ['today' => 4, 'new' => 3, 'verify' => 1, 'cod_due' => 2]);
     }
+
+    /* ───── payment queue and TrxID search ───── */
+
+    public function test_payments_queue_lists_pending_and_admin_can_verify_but_manager_cannot(): void
+    {
+        $o = $this->order(); Payment::where('order_id', $o->id)->update(['method' => 'BKASH', 'status' => 'PENDING_VERIFICATION', 'trx_id' => 'ABC123', 'sender_number' => '01711111111']);
+        $this->login($this->user('MANAGER', 'm@x.test'));
+        $this->get('/admin/payments')->assertOk()->assertSee('ABC123');
+        Livewire::test(Admin\Payments::class)->call('verify', Payment::where('order_id', $o->id)->value('id'))->assertSee(__('admin.error', ['msg' => __('Only an admin can change payments')]));
+        $this->assertSame('PENDING_VERIFICATION', Payment::where('order_id', $o->id)->value('status'));
+        $this->login($this->user('ADMIN', 'a@x.test'));
+        Livewire::test(Admin\Payments::class)->call('verify', Payment::where('order_id', $o->id)->value('id'));
+        $this->assertSame('PAID', Payment::where('order_id', $o->id)->value('status'));
+    }
+
+    public function test_orders_search_finds_an_order_by_trxid_and_sender_number(): void
+    {
+        $this->login($this->user());
+        $o = $this->order(); $this->order();
+        Payment::where('order_id', $o->id)->update(['method' => 'NAGAD', 'status' => 'PENDING_VERIFICATION', 'trx_id' => 'TRX9Z', 'sender_number' => '01722222222']);
+        foreach (['trx9z', '01722222222'] as $q) {
+            Livewire::test(Admin\Orders::class)->set('q', $q)->assertViewHas('orders', fn ($p) => $p->count() === 1 && $p->first()->id === $o->id);
+        }
+    }
 }

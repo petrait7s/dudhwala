@@ -4,7 +4,7 @@
   <div class="stats">
     <div class="stat"><div class="l">{{ __('admin.stat_today') }}</div><div class="n">{{ $stats['today'] }}</div></div>
     <div class="stat {{ $stats['new'] ? 'hot' : '' }}"><div class="l">{{ __('admin.stat_new') }}</div><div class="n">{{ $stats['new'] }}</div></div>
-    <div class="stat {{ $stats['verify'] ? 'hot' : '' }}"><div class="l">{{ __('admin.stat_verify') }}</div><div class="n">{{ $stats['verify'] }}</div></div>
+    <a class="stat {{ $stats['verify'] ? 'hot' : '' }}" href="{{ route('admin.payments') }}" style="text-decoration:none;color:inherit"><div class="l">{{ __('admin.stat_verify') }}</div><div class="n">{{ $stats['verify'] }}</div></a>
     <div class="stat"><div class="l">{{ __('admin.stat_cod') }}</div><div class="n">{{ $stats['cod_due'] }}</div></div>
   </div>
   <div class="card row">

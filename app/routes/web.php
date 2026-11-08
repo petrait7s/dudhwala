@@ -28,6 +28,7 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['auth', 'staff'])->group(function () {
         Route::get('/', Admin\Orders::class)->name('admin.orders');
+        Route::get('/payments', Admin\Payments::class)->name('admin.payments');
         Route::get('/orders/{order}', Admin\OrderShow::class)->name('admin.order');
         Route::get('/account', Admin\Account::class)->name('admin.account');
         Route::get('/products', Admin\Products::class)->name('admin.products');

@@ -4,6 +4,7 @@
     $loc = app()->getLocale();
     $icons = [
         'orders' => '<path d="M6 4h12l1 4H5zM5 8v11a1 1 0 001 1h12a1 1 0 001-1V8M9 12h6"/>',
+        'payments' => '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h3"/>',
         'products' => '<path d="M21 8l-9-5-9 5 9 5zM3 8v8l9 5 9-5V8M12 13v8"/>',
         'bulk' => '<path d="M4 6h16M4 12h16M4 18h10M17 17l3 3 3-3M20 14v6" transform="translate(-2 -1)"/>',
         'categories' => '<path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/>',
@@ -14,7 +15,7 @@
         'audit' => '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4"/>',
     ];
     $groups = [
-        [['admin.orders', 'orders'], ['admin.products', 'products']],
+        [['admin.orders', 'orders'], ['admin.payments', 'payments'], ['admin.products', 'products']],
         [['admin.bulk', 'bulk', true], ['admin.categories', 'categories', true], ['admin.outlets', 'outlets', true], ['admin.settings', 'settings', true], ['admin.pages', 'pages', true]],
         [['admin.staff', 'staff', true], ['admin.audit', 'audit', true]],
     ];
@@ -89,6 +90,7 @@ fieldset[disabled] input,fieldset[disabled] select,fieldset[disabled] textarea,i
 .err{color:var(--bad);font-size:.82rem}
 .row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}.grow{flex:1}.muted{color:var(--muted)}
 .grid2{display:grid;gap:.85rem;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.nav .cnt{margin-left:auto;background:#e0245e;color:#fff;border-radius:99px;font-size:.72rem;font-weight:700;padding:1px 8px}
 .stats{display:grid;gap:.9rem;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-bottom:1.1rem}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:.95rem 1.1rem;box-shadow:var(--shadow);border-left:5px solid var(--teal)}
 .stat .l{color:var(--muted);font-size:.78rem;font-weight:600}.stat .n{font-size:1.9rem;font-weight:700;line-height:1.2;color:var(--navy)}
@@ -125,7 +127,7 @@ fieldset[disabled] input,fieldset[disabled] select,fieldset[disabled] textarea,i
         @if($visible)
           @if($gi > 0)<hr>@endif
           @foreach($visible as [$route, $key])
-            <a href="{{ route($route) }}" class="{{ request()->routeIs($route.'*') || ($key === 'orders' && request()->routeIs('admin.order')) || ($key === 'products' && request()->routeIs('admin.product*')) ? 'on' : '' }}"><svg viewBox="0 0 24 24" aria-hidden="true">{!! $icons[$key] !!}</svg>{{ __('admin.nav.'.$key) }}</a>
+            <a href="{{ route($route) }}" class="{{ request()->routeIs($route.'*') || ($key === 'orders' && request()->routeIs('admin.order')) || ($key === 'products' && request()->routeIs('admin.product*')) ? 'on' : '' }}"><svg viewBox="0 0 24 24" aria-hidden="true">{!! $icons[$key] !!}</svg>{{ __('admin.nav.'.$key) }}@if($key === 'payments' && ($pendingPay = \App\Models\Payment::where('status', 'PENDING_VERIFICATION')->whereHas('order', fn ($o) => $o->where('status', '!=', 'CANCELLED'))->count()))<span class="cnt">{{ $pendingPay }}</span>@endif</a>
           @endforeach
         @endif
       @endforeach

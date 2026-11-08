@@ -399,3 +399,12 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 .tools2{position:relative}
 .tools2 #q{position:relative}
 .sugg .sg-none{cursor:default}.sugg .sg-none:hover{background:transparent}
+
+.paybox{border-radius:var(--dw-r-md);padding:1rem;border:1px solid var(--dw-line-strong);background:var(--dw-surface);border-left:6px solid var(--pb)}
+.paybox.bkash{--pb:#e2136e}.paybox.nagad{--pb:#f6921e}
+.paybox .pb-h{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem}
+.paybox .pb-h b{color:var(--pb);font-size:1.15rem}.paybox .pb-amt{font-weight:800;font-size:1.3rem}
+.paybox .pb-num{display:flex;align-items:center;gap:.6rem;margin:.6rem 0;flex-wrap:wrap}
+.paybox .pb-num code{font-size:1.35rem;font-weight:800;letter-spacing:.04em}
+.paybox .pb-steps{margin:.2rem 0 .4rem;padding-left:1.2rem;display:grid;gap:.3rem}
+.paybox .pb-n{margin:.4rem 0 0;font-size:.85rem;color:var(--dw-muted)}

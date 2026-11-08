@@ -37,7 +37,9 @@
       <div class="row" style="padding:.4rem 0;border-bottom:1px solid var(--line)">
         <div class="grow"><strong>{{ $p->method }}</strong> {{ $tk($p->amount_poisha) }}
           @if($p->trx_id) · {{ __('admin.trx') }}: <code>{{ $p->trx_id }}</code>@endif
-          @if($p->sender_number) · {{ __('admin.sender') }}: {{ $p->sender_number }}@endif
+          @if($p->sender_number) · {{ __('admin.sender') }}: {{ $p->sender_number }}
+            @if($p->status === 'PENDING_VERIFICATION')<span class="pill {{ \App\Services\Phone::normalize($p->sender_number) === $o->contact_phone ? 'ok' : 'warn' }}">{{ \App\Services\Phone::normalize($p->sender_number) === $o->contact_phone ? __('admin.pay_same_phone') : __('admin.pay_other_phone') }}</span>@endif
+          @endif
           <span class="pill {{ $p->status === 'PAID' ? 'ok' : ($p->status === 'PENDING_VERIFICATION' ? 'warn' : ($p->status === 'VOID' ? 'bad' : '')) }}">{{ __('admin.p.'.$p->status) }}</span>
           @if($p->void_reason)<span class="muted">({{ $p->void_reason }})</span>@endif
         </div>
@@ -48,9 +50,10 @@
         @endif
       </div>
       @if($voidingPayment === $p->id)
-        <form wire:submit="confirmVoid" class="row" style="margin-top:.5rem"><div class="grow"><input wire:model="voidReason" placeholder="{{ __('admin.void_reason') }}"></div><button class="btn bad">{{ __('admin.void_payment') }}</button></form>
+        <form wire:submit="confirmVoid" class="row" style="margin-top:.5rem"><div class="grow"><input wire:model="voidReason" list="reasons" placeholder="{{ __('admin.void_reason') }}"></div><button class="btn bad">{{ __('admin.void_payment') }}</button></form>
       @endif
     @endforeach
+    <datalist id="reasons">@foreach(__('admin.pay_reasons') as $r)<option value="{{ $r }}">@endforeach</datalist>
   </div>
 
   @if($o->method === 'HOME_DELIVERY')

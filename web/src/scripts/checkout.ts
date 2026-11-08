@@ -29,7 +29,7 @@ const MSG: Record<string, [string, string]> = {
   pickup_invalid: ['পিকআপের সময় বাছুন।', 'Choose a pickup time.'],
   pickup_too_soon: ['পিকআপ কমপক্ষে ১ ঘণ্টা পরে হতে হবে।', 'Pickup must be at least 1 hour ahead.'],
   pickup_outside_hours: ['এই সময়ে আউটলেট খোলা নেই।', 'The outlet is closed at that time.'],
-  payment_trx_required: ['TrxID দিন।', 'Enter the TrxID.'],
+  payment_trx_required: ['সঠিক TrxID দিন (৬-২০টি অক্ষর বা সংখ্যা, যেমন 8N7A6D5EDF)।', 'Enter a valid TrxID (6 to 20 letters or digits, e.g. 8N7A6D5EDF).'],
   payment_sender_invalid: ['যে নম্বর থেকে পাঠিয়েছেন সেটি দিন।', 'Enter the number you sent from.'],
   bulk_prepayment_required: ['শোরুম অর্ডারে আগে পেমেন্ট দিতে হবে (বিকাশ/নগদ)।', 'Showroom orders must be paid in advance (bKash/Nagad).'],
   payment_method_invalid: ['পেমেন্ট পদ্ধতি বাছুন।', 'Choose a payment method.'],
@@ -123,10 +123,19 @@ function render() {
   $('mobbox').hidden = pm === 'COD';
   if (pm !== 'COD') {
     const num = pm === 'BKASH' ? cfg.payment_numbers.bkash : cfg.payment_numbers.nagad;
-    $('payhow').innerHTML = both((l) => l === 'bn'
-      ? `এই নম্বরে টাকা পাঠান: <b>${esc(num ?? '')}</b> · <b>${formatTaka(sub + fee, 'bn')}</b>। তারপর নিচে আপনার নম্বর ও TrxID দিন। আমাদের স্টাফ যাচাই করবেন।`
-      : `Send the money to <b>${esc(num ?? '')}</b> · <b>${formatTaka(sub + fee, 'en')}</b>. Then enter your number and the TrxID below. Our staff will verify it.`)
-      + ` <button type="button" class="btn sm" data-copy="${esc(num ?? '')}">${both((l) => (l === 'bn' ? 'নম্বর কপি' : 'Copy number'))}</button>`;
+    const total = sub + fee;
+    const brand = pm === 'BKASH' ? 'bkash' : 'nagad';
+    const name = pm === 'BKASH' ? 'bKash' : 'Nagad';
+    $('payhow').className = `paybox ${brand}`;
+    $('payhow').innerHTML = `
+      <div class="pb-h"><b>${name}</b><span class="pb-amt">${both((l) => formatTaka(total, l as 'bn' | 'en'))}</span></div>
+      <div class="pb-num"><code>${esc(num ?? '')}</code><button type="button" class="btn sm" data-copy="${esc(num ?? '')}">${both((l) => (l === 'bn' ? 'কপি' : 'Copy'))}</button></div>
+      <ol class="pb-steps">
+        <li>${both((l) => (l === 'bn' ? `${name} অ্যাপ খুলে <b>Send Money</b> বা <b>Payment</b> চাপুন` : `Open the ${name} app and choose <b>Send Money</b> or <b>Payment</b>`))}</li>
+        <li>${both((l) => (l === 'bn' ? `উপরের নম্বরে ঠিক <b>${formatTaka(total, 'bn')}</b> পাঠান` : `Send exactly <b>${formatTaka(total, 'en')}</b> to the number above`))}</li>
+        <li>${both((l) => (l === 'bn' ? `মেসেজে বা অ্যাপের হিস্ট্রিতে <b>TrxID</b> পাবেন। নিচে সেটি আর আপনার নম্বর লিখুন` : `Find the <b>TrxID</b> in the confirmation SMS or app history. Enter it and your number below`))}</li>
+      </ol>
+      <p class="pb-n">${both((l) => (l === 'bn' ? 'আমাদের স্টাফ TrxID ও নম্বর মিলিয়ে যাচাই করবেন, তারপর অর্ডার নিশ্চিত হবে।' : 'Our staff will match the TrxID and number, then confirm your order.'))}</p>`;
   }
 }
 
@@ -181,7 +190,7 @@ function localIssues(): string[] {
   if ((m === 'EXPRESS_PICKUP' || m === 'BULK_ORDER') && !val('outlet')) out.push('outlet_required');
   if (m === 'EXPRESS_PICKUP' && !val('slot')) out.push('pickup_invalid');
   const p = pay();
-  if (p !== 'COD') { if (!val('trx')) out.push('payment_trx_required'); if (!normalizePhone(val('sender'))) out.push('payment_sender_invalid'); }
+  if (p !== 'COD') { if (!/^[A-Za-z0-9]{6,20}$/.test(val('trx').replace(/\s+/g, ''))) out.push('payment_trx_required'); if (!normalizePhone(val('sender'))) out.push('payment_sender_invalid'); }
   if (m === 'BULK_ORDER' && cfg.bulk_prepaid && p === 'COD') out.push('bulk_prepayment_required');
   return out;
 }
