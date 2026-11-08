@@ -19,6 +19,13 @@ import CatalogBrowser from '../components/CatalogBrowser.astro';
       </div>
     </section>
 
+    <section class="s below" style="padding-top:0">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        <a class="card" href="/about" style="display:block;padding:1.1rem;color:inherit"><h2 style="font-size:1.05rem;margin:0"><Bi bn="দুধওয়ালা সম্পর্কে" en="About Dudhwala" /></h2><p class="muted" style="margin:0;font-size:.9rem"><Bi bn="আমাদের পরিচিতি →" en="Who we are →" /></p></a>
+        <a class="card" href="/track" style="display:block;padding:1.1rem;color:inherit"><h2 style="font-size:1.05rem;margin:0"><Bi k="track" /></h2><p class="muted" style="margin:0;font-size:.9rem"><Bi bn="অর্ডার নম্বর ও ফোন দিয়ে →" en="With order number and phone →" /></p></a>
+      </div>
+    </section>
+
   </div>
   <script>
     import { getConfig } from '../lib/api';
