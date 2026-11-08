@@ -562,3 +562,34 @@ img.bl.ld{opacity:1;filter:none;transform:none}
 html{scrollbar-color:#5a62d8 transparent;scrollbar-width:thin}
 .zb{scrollbar-width:none}
 @media (prefers-reduced-motion:reduce){#grid .pc,.empty-art,[data-cartcount].bump,.shake{animation:none!important}img.bl{opacity:1;filter:none;transform:none;transition:none}.tabs .tab-ind{transition:none}}
+
+/* ───────── phone app feel ───────── */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:dwfadeout 140ms ease both}
+::view-transition-new(root){animation:dwfadein 220ms var(--dw-ease) both}
+@keyframes dwfadeout{to{opacity:0}}@keyframes dwfadein{from{opacity:0;transform:translateY(6px)}}
+@media (prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+a,button,label,.pc,.opt{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button,.btn,.pill,.seg,.tabs a,.zb-act,.zb-about{-webkit-user-select:none;user-select:none}
+@media (max-width:859px){
+  html{overscroll-behavior-y:none}
+  input,select,textarea{font-size:16px}
+  /* zone bar: fits the phone, never scrolls sideways */
+  .zb{overflow:visible;flex-wrap:nowrap;gap:.5rem;padding-block:.45rem}
+  .zb-about{display:none}
+  .zb-r{flex:1;min-width:0;display:flex;gap:.5rem;margin:0}
+  .zb-r .seg-group{flex:1;display:flex}
+  .zb-r .seg{flex:1;min-width:0;padding:0 .4rem;white-space:nowrap}
+  .zb-act .long{display:none}
+  .zb-act{padding:0 .9rem;min-height:36px}
+  .try-band .zb{justify-content:flex-end}
+  /* tab bar: native-style bar with frosted glass, big icons, pill behind the active icon */
+  .tabs{left:10px;right:10px;border-radius:26px;padding:6px 4px;background:rgba(255,255,255,.80);-webkit-backdrop-filter:blur(20px) saturate(1.7);backdrop-filter:blur(20px) saturate(1.7);border:1px solid rgba(255,255,255,.65);box-shadow:0 12px 34px rgba(18,23,80,.28),0 1px 0 rgba(255,255,255,.7) inset}
+  :root[data-theme='dark'] .tabs{background:rgba(24,30,84,.78);border-color:rgba(255,255,255,.14)}
+  .tabs a{gap:3px;padding:7px 2px 5px;font-size:.68rem;font-weight:600;letter-spacing:.01em;background:none!important}
+  .tabs a svg{width:25px;height:25px;stroke-width:1.9;transition:transform var(--dw-t2) var(--dw-spring),fill-opacity var(--dw-t1)}
+  .tabs a[aria-current=page]{color:var(--dw-brand-700);font-weight:700}
+  .tabs a[aria-current=page] svg{fill:currentColor;fill-opacity:.22;stroke-width:2.1;transform:translateY(-1px) scale(1.06)}
+  .tabs .tab-ind{background:var(--dw-brand-100);border-radius:999px}
+  .tabs .badge{top:2px;right:calc(50% - 24px)}
+}

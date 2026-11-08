@@ -101,9 +101,15 @@ getPages().then((pages) => {
   const cur = links.findIndex((a) => a.getAttribute('aria-current') === 'page');
   if (cur < 0) return;
   const ind = document.createElement('i'); ind.className = 'tab-ind'; ind.setAttribute('aria-hidden', 'true'); nav.prepend(ind);
-  const put = (a: HTMLElement) => { ind.style.width = a.offsetWidth + 'px'; ind.style.height = a.offsetHeight + 'px'; ind.style.transform = `translate(${a.offsetLeft}px,${a.offsetTop}px)`; };
+  const put = (a: HTMLElement) => { const w = Math.min(60, a.offsetWidth - 6); ind.style.width = w + 'px'; ind.style.height = '32px'; ind.style.transform = `translate(${a.offsetLeft + (a.offsetWidth - w) / 2}px,${a.offsetTop + 5}px)`; };
   let prev = cur; try { const v = Number(sessionStorage.getItem('dw_tab')); if (Number.isInteger(v) && links[v]) prev = v; sessionStorage.setItem('dw_tab', String(cur)); } catch { /* storage blocked */ }
   ind.style.transition = 'none'; put(links[prev]!); nav.classList.add('has-ind');
   requestAnimationFrame(() => requestAnimationFrame(() => { ind.style.transition = ''; put(links[cur]!); }));
   addEventListener('resize', () => { ind.style.transition = 'none'; put(links[cur]!); });
 })();
+
+/* a light tap on the phone for tabs and add-to-cart */
+document.addEventListener('click', (e) => {
+  const t = e.target as HTMLElement;
+  if (t.closest('nav.tabs a,[data-add],.add,.seg')) try { navigator.vibrate?.(8); } catch { /* not supported */ }
+}, { passive: true });
