@@ -481,3 +481,10 @@ footer.ft .fbody{background:var(--dw-bar-2);padding:1.4rem 0 1.8rem;color:var(--
 .try-band .tb-t{font-weight:700;font-size:1rem}
 @media (max-width:859px){.try-band .zb{flex-wrap:nowrap}.try-band .tb-t{font-size:.9rem;white-space:nowrap}}
 @media (max-width:859px){.try-band .zb-about{display:none}.try-band .zb{justify-content:space-between}}
+/* header search: frosted glass on the brand blue instead of a white pill */
+.hsearch input{background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.34);color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 6px 18px rgba(8,12,60,.28);transition:background .2s,border-color .2s,box-shadow .2s}
+.hsearch input::placeholder{color:rgba(255,255,255,.72)}
+.hsearch input:focus{outline:0;background:linear-gradient(135deg,rgba(255,255,255,.30),rgba(255,255,255,.14));border-color:#8fe3ff;box-shadow:0 0 0 3px rgba(143,227,255,.28),0 8px 22px rgba(8,12,60,.34)}
+.hsearch button{color:#fff}
+.hsearch input::-webkit-search-cancel-button{filter:invert(1) brightness(2);opacity:.85}
+.sugg{background:linear-gradient(170deg,#f0f2ff,#dde2ff);border-color:#b9c1fb}
