@@ -10,19 +10,19 @@ import CatalogBrowser from '../components/CatalogBrowser.astro';
     <div class="below"><CatalogBrowser /></div>
 
     <section class="s below">
-      <div class="card promo">
-        <div style="flex:1;min-width:240px">
+      <div class="card promo glow">
+        <div class="promo-t" style="flex:1;min-width:240px">
           <h2 style="font-size:1.2rem;margin-bottom:.3rem"><Bi k="showroom" /></h2>
           <p class="muted" style="margin:0" data-bulkpromo><Bi bn="অনুষ্ঠান বা বড় চাহিদার জন্য একসাথে অনেক পণ্য অর্ডার করুন। আপনার পছন্দের শাখা থেকে সংগ্রহ করুন।" en="Ordering a lot for an event or a big need? Collect from the branch you choose." /></p>
         </div>
-        <a class="btn primary" href="/showroom"><Bi bn="শোরুম থেকে অর্ডার করুন" en="Order from showroom" /></a>
+        <a class="btn primary pulse" href="/showroom"><Bi bn="শোরুম থেকে অর্ডার করুন" en="Order from showroom" /><svg class="btn-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </section>
 
     <section class="s below" style="padding-top:0">
-      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
-        <a class="card" href="/about" style="display:block;padding:1.1rem;color:inherit"><h2 style="font-size:1.05rem;margin:0"><Bi bn="দুধওয়ালা সম্পর্কে" en="About Dudhwala" /></h2><p class="muted" style="margin:0;font-size:.9rem"><Bi bn="আমাদের পরিচিতি →" en="Who we are →" /></p></a>
-        <a class="card" href="/track" style="display:block;padding:1.1rem;color:inherit"><h2 style="font-size:1.05rem;margin:0"><Bi k="track" /></h2><p class="muted" style="margin:0;font-size:.9rem"><Bi bn="অর্ডার নম্বর ও ফোন দিয়ে →" en="With order number and phone →" /></p></a>
+      <div class="tiles">
+        <a class="tile t-about" href="/about"><span class="tile-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4.6 3h14.8a1 1 0 0 1 .96.73L22 9.3V10a3 3 0 0 1-5.33 1.9A3.99 3.99 0 0 1 12 13a3.99 3.99 0 0 1-4.67-1.1A3 3 0 0 1 2 10v-.7l1.64-5.57A1 1 0 0 1 4.6 3zM5 14.6V20a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-5.4a5 5 0 0 1-.33.02A5.5 5.5 0 0 1 12 15.2a5.5 5.5 0 0 1-6.67-.58A5 5 0 0 1 5 14.6z"/></svg></span><span class="tile-t"><b><Bi bn="দুধওয়ালা সম্পর্কে" en="About Dudhwala" /></b><small><Bi bn="আমাদের পরিচিতি" en="Who we are" /></small></span><span class="tile-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></span></a>
+        <a class="tile t-track" href="/track"><span class="tile-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></span><span class="tile-t"><b><Bi k="track" /></b><small><Bi bn="অর্ডার নম্বর ও ফোন দিয়ে" en="With order number and phone" /></small></span><span class="tile-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></span></a>
       </div>
     </section>
 

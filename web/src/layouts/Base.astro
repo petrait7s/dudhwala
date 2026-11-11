@@ -66,7 +66,11 @@ const url = new URL(path, Astro.site).toString();
   <main id="main"><slot /></main>
 
   <footer class="ft">
-    <svg class="wave flip" viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 0h1440v10c-120 12-240 18-360 12S840 4 720 6 480 24 360 24 120 14 0 10Z" /></svg>
+    <div class="fwave" aria-hidden="true">
+      <svg class="w1" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 44 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 V90 H0 Z"/></svg>
+      <svg class="w2" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 50 q 180 50 360 0 t 360 0 q 180 50 360 0 t 360 0 q 180 50 360 0 t 360 0 q 180 50 360 0 t 360 0 V90 H0 Z"/></svg>
+      <svg class="w3" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 44 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 V90 H0 Z"/></svg>
+    </div>
     <div class="fbody">
     <div class="wrap cols">
       <div>
