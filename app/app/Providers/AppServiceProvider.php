@@ -26,7 +26,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // public API rate limits (per IP; track also per order number)
-        RateLimiter::for('orders', fn (Request $r) => [Limit::perMinute(6)->by('o:'.$r->ip()), Limit::perHour(30)->by('oh:'.$r->ip())]);
+        // generous per IP (many customers share one mobile-network IP), strict per phone number
+        RateLimiter::for('orders', function (Request $r) {
+            $limits = [Limit::perMinute(15)->by('o:'.$r->ip()), Limit::perHour(150)->by('oh:'.$r->ip())];
+            $phone = \App\Services\Phone::normalize((string) data_get($r->input(), 'contact.phone'));
+            if ($phone) $limits[] = Limit::perHour(8)->by('op:'.$phone);
+            return $limits;
+        });
         RateLimiter::for('track', fn (Request $r) => [Limit::perMinute(15)->by('t:'.$r->ip()), Limit::perHour(10)->by('tn:'.$r->ip().':'.strtoupper((string) $r->input('order_number')))]);
 
         // ADMIN: everything. MANAGER: view only.

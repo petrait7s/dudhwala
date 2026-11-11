@@ -341,7 +341,7 @@ class OrderApiTest extends TestCase
     public function test_order_endpoint_is_rate_limited(): void
     {
         $codes = [];
-        for ($i = 0; $i < 8; $i++) $codes[] = $this->postJson('/api/orders', ['website' => 'x'])->status();
+        for ($i = 0; $i < 18; $i++) $codes[] = $this->postJson('/api/orders', ['website' => 'x'])->status();
         $this->assertSame(429, end($codes));
         $this->assertSame(422, $codes[0]);
     }

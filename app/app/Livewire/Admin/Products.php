@@ -19,10 +19,13 @@ class Products extends Component
     /** @param array<int, array<string, mixed>> $changes only the rows the person changed */
     public function saveSheet(array $changes, AdminCatalogueService $svc): array
     {
+        if (count($changes) > 500) return ['ok' => false, 'msg' => __('admin.error', ['msg' => 'Too many rows at once'])];
         try {
             return ['ok' => true] + $svc->saveSheet(Auth::user(), $changes);
         } catch (ShopException $e) {
             return ['ok' => false, 'msg' => __('admin.error', ['msg' => __($e->getMessage())])];
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return ['ok' => false, 'msg' => __('admin.error', ['msg' => 'A product, size or branch no longer exists. Reload the page.'])];
         }
     }
 

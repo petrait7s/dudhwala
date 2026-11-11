@@ -176,6 +176,9 @@ document.addEventListener('alpine:init', () => {
       const pre = kind ? this.presets.find((x) => x.k === kind) : null;
       const mine = this.rows.filter((r) => r.p === p);
       if (pre) { const have = mine.find((r) => r.v && r.v.label_bn === pre.bn); if (have) { this.focusPrice(have.key); return; } }
+      // imported products carry one empty size: fill it instead of leaving it behind next to the new one
+      const blank = mine.find((r) => r.v && !r.new && r.v.label_bn === '' && r.v.price === '' && mine.filter((x) => x.v).length === 1);
+      if (blank) { if (pre) { blank.v.label_bn = pre.bn; blank.v.label_en = pre.en; } this.focusPrice(blank.key, !pre); return; }
       const first = mine.find((r) => r.v);
       const stock = {}; this.d.outlets.forEach((o) => { stock[o.id] = first ? !!first.v.stock[o.id] : true; });
       const blank = {}; this.d.outlets.forEach((o) => { blank[o.id] = false; });
