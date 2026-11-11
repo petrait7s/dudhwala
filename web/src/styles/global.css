@@ -766,3 +766,40 @@ footer.ft .fbody{padding-top:.6rem}
 .zb-act .short{display:none}
 @media (max-width:859px){.zb-act .long{display:none}.zb-act .short{display:inline}}
 :root[data-theme='dark'] .tile::after{background:radial-gradient(circle,rgba(143,227,255,.22),transparent 70%)}
+
+/* ───────── hero polish ───────── */
+.heroband{background:radial-gradient(46rem 26rem at 88% -8%,rgba(0,190,255,.38),transparent 62%),radial-gradient(34rem 22rem at 4% 108%,rgba(122,110,255,.34),transparent 60%),radial-gradient(22rem 14rem at 52% 40%,rgba(143,227,255,.10),transparent 70%),linear-gradient(160deg,var(--dw-bar),var(--dw-bar-2))}
+.heroband::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1.4px);background-size:26px 26px;mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 80%);-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 80%);pointer-events:none}
+.heroband .wrap{position:relative}
+.heroband .eyebrow{display:inline-flex;align-items:center;gap:.55rem;padding:.28rem .85rem;border-radius:99px;background:rgba(143,227,255,.12);border:1px solid rgba(143,227,255,.3);animation:dwrise var(--dw-t3) var(--dw-ease) both}
+.heroband .eyebrow i{width:7px;height:7px;border-radius:50%;background:#8fe3ff;box-shadow:0 0 0 0 rgba(143,227,255,.7);animation:dwping 2.4s ease-out infinite}
+@keyframes dwping{0%{box-shadow:0 0 0 0 rgba(143,227,255,.7)}80%,100%{box-shadow:0 0 0 9px rgba(143,227,255,0)}}
+.heroband h1{margin-top:.8rem;text-wrap:balance;animation:dwrise var(--dw-t3) var(--dw-ease) 80ms both}
+.heroband h1 em{background:linear-gradient(90deg,#5fe0ff,#a9b4ff 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.heroband p.lead{animation:dwrise var(--dw-t3) var(--dw-ease) 160ms both}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.5rem;animation:dwrise var(--dw-t3) var(--dw-ease) 240ms both}
+.hbtn{gap:.55rem}.hbtn.light{box-shadow:0 10px 24px -10px rgba(0,0,0,.55)}
+.hbtn.ghostw{background:rgba(255,255,255,.08);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+@media (hover:hover){.hbtn.light:hover .btn-arrow{transform:translateX(5px)}.hbtn.ghostw:hover{background:rgba(255,255,255,.18);border-color:#fff}}
+.hero-trust{list-style:none;margin:1.5rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;color:var(--dw-bar-ink);font-size:.88rem;animation:dwrise var(--dw-t3) var(--dw-ease) 320ms both}
+.hero-trust li{display:inline-flex;align-items:center;gap:.4rem}
+.hero-trust svg{width:16px;height:16px;fill:none;stroke:#7fe6b8;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* right side stage: logo plate with floating product bubbles */
+.hstage{display:none}
+@media (min-width:860px){
+  .hstage{display:grid;place-items:center;position:relative;min-height:19rem;animation:dwrise var(--dw-t3) var(--dw-ease) 160ms both}
+  .heroband .logocard{display:block;position:relative;z-index:2;justify-self:center;background:linear-gradient(145deg,#cfd5ff,#eef0ff);padding:1.2rem;border-radius:26px;border:1px solid rgba(255,255,255,.55);box-shadow:0 34px 70px -12px rgba(6,10,50,.7),0 0 0 10px rgba(255,255,255,.06),0 0 80px rgba(95,224,255,.25)}
+  .heroband .logocard img{mix-blend-mode:multiply}
+  .orb{position:absolute;z-index:3;display:grid;place-items:center;width:92px;height:92px;border-radius:50%;background:linear-gradient(145deg,rgba(255,255,255,.28),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 18px 34px -12px rgba(0,0,0,.5);animation:dworb 6.5s ease-in-out infinite}
+  .orb .art{width:78%;overflow:visible}.orb .art .shadow{display:none}
+  .orb.o1{left:2%;top:4%}.orb.o2{right:0;top:-2%;animation-delay:-2.2s;width:78px;height:78px}.orb.o3{right:6%;bottom:2%;animation-delay:-4.1s;width:86px;height:86px}
+}
+@keyframes dworb{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(0,-14px,0) rotate(4deg)}}
+/* layered wave into the page */
+.hwave{position:relative;height:62px;margin-top:-61px;overflow:hidden;line-height:0;pointer-events:none}
+.hwave svg{position:absolute;left:0;bottom:0;width:200%;height:100%}
+.hwave path{fill:var(--dw-bg-a)}
+.hwave .w1{animation:dwwave 26s linear infinite}.hwave .w2{animation:dwwave 34s linear infinite reverse;bottom:-5px}.hwave .w3{animation:dwwave 19s linear infinite;bottom:-10px}
+.hwave .w1 path{opacity:.3}.hwave .w2 path{opacity:.55}.hwave .w3 path{opacity:1}
+@media (max-width:640px){.hwave{height:40px;margin-top:-39px}}
+@media (prefers-reduced-motion:reduce){.heroband .eyebrow,.heroband h1,.heroband p.lead,.hero-cta,.hero-trust,.hstage,.orb,.heroband .eyebrow i,.hwave svg{animation:none!important}}

@@ -1,5 +1,6 @@
 ---
 import Bi from './Bi.astro';
+import Art from './Art.astro';
 import hero from '../data/hero.json';
 interface Slide { src: string; fx?: number; fy?: number; altBn?: string; altEn?: string }
 const slides = hero as Slide[];
@@ -19,17 +20,31 @@ const slides = hero as Slide[];
   <div class="wrap" style="width:100%">
     <div class="in" data-copy>
       <div>
-        <p class="eyebrow">Serving Purity</p>
+        <p class="eyebrow"><i aria-hidden="true"></i>Serving Purity</p>
         <h1><Bi bn="সিলেটের নিজস্ব দুগ্ধজাত পণ্য," en="Sylhet's own dairy products," /><br /><em><Bi bn="আপনার দোরগোড়ায়" en="at your doorstep" /></em></h1>
         <p class="lead"><Bi bn="গরুর খাঁটি কাঁচা দুধ, দই, মিষ্টি, ঘি এবং বেকারি পণ্য — অনলাইনে অর্ডার করুন, পছন্দের সময়ে ডেলিভারি নিন।" en="Pure cow's milk, doi, sweets, ghee and bakery products. Order online and get delivery at your chosen time." /></p>
-        <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.4rem">
-          <a class="btn light" href="#products"><Bi bn="পণ্য দেখুন" en="Browse products" /></a>
-          <a class="btn ghostw" href="/showroom"><Bi k="showroom" /></a>
+        <div class="hero-cta">
+          <a class="btn light hbtn" href="#products"><Bi bn="পণ্য দেখুন" en="Browse products" /><svg class="btn-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn ghostw hbtn" href="/showroom"><Bi k="showroom" /></a>
         </div>
+        <ul class="hero-trust">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><Bi bn="খাঁটি দুধ থেকে তৈরি" en="Made from pure milk" /></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><Bi bn="২৪ ঘণ্টার মধ্যে ডেলিভারি" en="Delivery within 24 hours" /></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><Bi bn="যেকোনো শাখা থেকে পিকআপ" en="Pickup at any branch" /></li>
+        </ul>
       </div>
-      <div class="logocard" aria-hidden="true"><img src="/logo.png" alt="" width="450" height="240" /></div>
+      <div class="hstage" aria-hidden="true">
+        <div class="logocard"><img src="/logo.png" alt="" width="450" height="240" /></div>
+        <span class="orb o1" style="--a1:#f2b8c6;--a2:#fde4ea;--a3:#c9788f;--hi:#fff"><Art kind="sweet" /></span>
+        <span class="orb o2" style="--a1:#8fe3ff;--a2:#e4f7ff;--a3:#2b9fc9;--hi:#fff"><Art kind="cup" /></span>
+        <span class="orb o3" style="--a1:#d9962b;--a2:#f3c97a;--a3:#a8661a;--hi:#fff"><Art kind="cookie" /></span>
+      </div>
     </div>
   </div>
 </section>
-<svg class="wave" viewBox="0 0 1440 28" preserveAspectRatio="none" aria-hidden="true" style="color:var(--dw-bar-2);transform:scaleY(-1);margin-top:-1px;background:transparent"><path fill="currentColor" d="M0 28V12c120 10 240 16 360 10S600 0 720 2s240 20 360 20 240-10 360-14v20Z" /></svg>
+<div class="hwave" aria-hidden="true">
+  <svg class="w1" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 40 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 V90 H0 Z"/></svg>
+  <svg class="w2" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 48 q 180 44 360 0 t 360 0 q 180 44 360 0 t 360 0 q 180 44 360 0 t 360 0 q 180 44 360 0 t 360 0 V90 H0 Z"/></svg>
+  <svg class="w3" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 40 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 V90 H0 Z"/></svg>
+</div>
 <script>import '../scripts/hero';</script>
