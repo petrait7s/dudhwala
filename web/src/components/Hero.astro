@@ -2,6 +2,10 @@
 import Bi from './Bi.astro';
 import Art from './Art.astro';
 import MilkSplash from './MilkSplash.astro';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+// a real milk-wave clip dropped into public/milk/ (wave.webp or wave.gif) replaces the drawn splash; see scripts/milk-convert.sh
+const clip = ['wave.webp', 'wave.gif'].find((f) => existsSync(join(process.cwd(), 'public', 'milk', f)));
 import hero from '../data/hero.json';
 interface Slide { src: string; fx?: number; fy?: number; altBn?: string; altEn?: string }
 const slides = hero as Slide[];
@@ -43,5 +47,5 @@ const slides = hero as Slide[];
     </div>
   </div>
 </section>
-<div class="msplash up"><MilkSplash kind="rise" /></div>
+<div class={`msplash up${clip ? ' has-clip' : ''}`} data-milk-host><MilkSplash kind="rise" />{clip && <img class="milkclip" src={`/milk/${clip}`} alt="" aria-hidden="true" decoding="async" />}</div>
 <script>import '../scripts/hero';</script>
