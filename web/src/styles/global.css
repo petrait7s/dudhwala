@@ -922,3 +922,8 @@ footer.ft .fbody{padding-top:.6rem}
 .msplash.up .milkrow{justify-content:center}
 .msplash.up .milkrow img{margin-inline:-2px;clip-path:inset(0 3px 0 3px)}
 .msplash.up .milkrow img{margin-inline:-5px;clip-path:none}
+/* sharper, interpolated 1097px clip: show it larger and without the extra softening blur */
+.msplash.up.has-clip{--mh:clamp(210px,25vw,400px)}
+.heroband.hasclip{padding-bottom:calc(clamp(210px,25vw,400px) * .86)}
+@media (min-width:860px){.heroband.hasclip{padding-bottom:calc(clamp(210px,25vw,400px) * .9)}}
+.msplash.up .milkrow img{filter:brightness(1.06) contrast(1.02)}
