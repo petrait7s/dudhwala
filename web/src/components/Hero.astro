@@ -10,7 +10,7 @@ import hero from '../data/hero.json';
 interface Slide { src: string; fx?: number; fy?: number; altBn?: string; altEn?: string }
 const slides = hero as Slide[];
 ---
-<section class={`heroband${slides.length ? ' hasphotos' : ''}`} data-hero style={slides.length ? 'min-height:min(78vh,620px);display:flex;align-items:flex-end' : ''}>
+<section class={`heroband${slides.length ? ' hasphotos' : ''}${clip ? ' hasclip' : ''}`} data-hero style={slides.length ? 'min-height:min(78vh,620px);display:flex;align-items:flex-end' : ''}>
   {slides.length > 0 && (
     <div class="slides" data-slides>
       {slides.map((s, i) => (
