@@ -829,7 +829,7 @@ footer.ft .fbody{padding-top:.6rem}
 .msplash .wv2{filter:drop-shadow(0 -4px 6px rgba(8,14,80,.20))}
 .ms-drip .wv3{filter:drop-shadow(0 -5px 8px rgba(8,14,80,.18))}
 /* a svg never paints outside its own box (it covered the heading below in dark mode) */
-.ms-sea,.ms-seafront{position:absolute;inset:0;width:100%;height:100%;overflow:hidden!important}
+.ms-drip,.ms-sea,.ms-seafront{position:absolute;inset:0;width:100%;height:100%;overflow:hidden!important}
 .ms-sea{z-index:0}.ms-seafront{z-index:3}
 /* no clip file: the drawn splash with curling tendrils */
 .ms-rise .mk-main{filter:drop-shadow(0 -6px 10px rgba(8,14,80,.32));animation:dwmilk 8s ease-in-out infinite}
@@ -857,3 +857,4 @@ footer.ft .fbody{padding-top:.6rem}
 @media (max-width:859px){.msplash.up .milkrow{width:104%;right:-2%}.mdrops{display:none}}
 @media (prefers-reduced-motion:reduce){.ms .wv,.ms-rise .mk-main,.ms-rise .mk-back,.ms-rise .tn,.ms-rise .dr,.msplash.up .milkrow,.mdrops i{animation:none!important}}
 .ms .mx1,.ms .mx2,.ms .mx3{filter:none!important}
+.msplash.down .ms-drip{position:absolute;inset:0;overflow:hidden!important}.msplash.down{overflow:hidden}
