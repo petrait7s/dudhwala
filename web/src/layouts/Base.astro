@@ -38,7 +38,7 @@ const url = new URL(path, Astro.site).toString();
       try {
         var l = localStorage.getItem('dw_lang'); document.documentElement.lang = l === 'en' ? 'en' : 'bn';
         var t = localStorage.getItem('dw_theme');
-        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        if (t !== 'dark') t = 'light';
         document.documentElement.dataset.theme = t;
       } catch (e) {}
     })();
