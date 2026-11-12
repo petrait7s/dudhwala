@@ -951,3 +951,10 @@ footer.ft .fbody{padding-top:.6rem}
 /* keep the milk below the text and logo: ~300px tall at most */
 .msplash.up .milkrow{width:min(100%,620px,calc(14vw + 330px))}
 @media (max-width:859px){.msplash.up .milkrow{width:104%;right:-2%}}
+
+/* real clip: smooth layered milk waves (like the footer) carry the whole width; the splash sits on top at the right */
+.msplash.up.has-clip::before{display:none}
+.msplash.up.has-clip .ms-sea{position:absolute;inset:0;width:100%;height:100%}
+.msplash.up.has-clip .wv3{filter:drop-shadow(0 -5px 8px rgba(8,14,80,.30))}
+.msplash.up.has-clip .wv2{filter:drop-shadow(0 -4px 6px rgba(8,14,80,.20))}
+.msplash.up .milkrow{z-index:2}
