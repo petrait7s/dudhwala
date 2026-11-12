@@ -958,3 +958,6 @@ footer.ft .fbody{padding-top:.6rem}
 .msplash.up.has-clip .wv3{filter:drop-shadow(0 -5px 8px rgba(8,14,80,.30))}
 .msplash.up.has-clip .wv2{filter:drop-shadow(0 -4px 6px rgba(8,14,80,.20))}
 .msplash.up .milkrow{z-index:2}
+/* waves must never paint outside their own box (in dark mode they hid the heading below) */
+.msplash .ms-sea{overflow:hidden!important}
+.msplash.up{pointer-events:none}
