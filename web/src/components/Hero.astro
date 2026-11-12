@@ -47,5 +47,5 @@ const slides = hero as Slide[];
     </div>
   </div>
 </section>
-<div class={`msplash up${clip ? ' has-clip' : ''}`} data-milk-host><MilkSplash kind={clip ? 'sea' : 'rise'} />{clip && <div class="milkrow" aria-hidden="true"><img src={`/milk/${clip}`} alt="" decoding="async" width="1097" height="545" /></div>}</div>
+<div class={`msplash up${clip ? ' has-clip' : ''}`} data-milk-host><MilkSplash kind={clip ? 'sea' : 'rise'} />{clip && <div class="milkrow" aria-hidden="true"><img src={`/milk/${clip}`} alt="" decoding="async" width="1097" height="545" /></div>}{clip && <MilkSplash kind="seafront" />}{clip && <div class="mdrops" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>}</div>
 <script>import '../scripts/hero';</script>

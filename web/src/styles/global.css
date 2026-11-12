@@ -961,3 +961,21 @@ footer.ft .fbody{padding-top:.6rem}
 /* waves must never paint outside their own box (in dark mode they hid the heading below) */
 .msplash .ms-sea{overflow:hidden!important}
 .msplash.up{pointer-events:none}
+
+/* splash rises from behind the front wave, bobs with it, and sheds a few drops in the same milk white */
+.msplash.up.has-clip .ms-sea{z-index:0}
+.msplash.up.has-clip .ms-seafront{position:absolute;inset:0;width:100%;height:100%;z-index:3;overflow:hidden!important}
+.msplash.up .milkrow{z-index:1;animation:dwbob 7s ease-in-out infinite;transform-origin:70% 100%}
+.msplash.up .milkrow img{filter:drop-shadow(0 6px 10px rgba(8,14,80,.28))}
+@keyframes dwbob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-9px) rotate(.5deg)}}
+.mdrops{position:absolute;right:0;bottom:0;width:min(100%,620px,calc(14vw + 330px));aspect-ratio:2/1;z-index:2;pointer-events:none}
+.mdrops i{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#eef2ff 60%,#c9d4f7);box-shadow:0 4px 8px rgba(8,14,80,.28);animation:dwdrift 6s ease-in-out infinite}
+.mdrops i:nth-child(1){left:8%;top:22%;width:14px;height:14px}
+.mdrops i:nth-child(2){left:20%;top:8%;width:9px;height:9px;animation-delay:-1.8s;animation-duration:7s}
+.mdrops i:nth-child(3){left:45%;top:-8%;width:11px;height:11px;animation-delay:-3.4s}
+.mdrops i:nth-child(4){left:93%;top:6%;width:8px;height:8px;animation-delay:-2.4s;animation-duration:5.4s}
+.mdrops i:nth-child(5){left:3%;top:48%;width:7px;height:7px;animation-delay:-4.6s}
+@keyframes dwdrift{0%,100%{transform:translate(0,0)}50%{transform:translate(4px,-12px)}}
+@media (max-width:859px){.mdrops{width:104%;right:-2%}}
+@media (prefers-reduced-motion:reduce){.msplash.up .milkrow,.mdrops i{animation:none!important}}
+@media (max-width:859px){.mdrops{display:none}}
