@@ -927,3 +927,27 @@ footer.ft .fbody{padding-top:.6rem}
 .heroband.hasclip{padding-bottom:calc(clamp(210px,25vw,400px) * .86)}
 @media (min-width:860px){.heroband.hasclip{padding-bottom:calc(clamp(210px,25vw,400px) * .9)}}
 .msplash.up .milkrow img{filter:brightness(1.06) contrast(1.02)}
+
+/* single milk wave, right side only, at its native 1097px so it stays sharp */
+.msplash.up.has-clip{height:max(150px,15.97vw);margin-top:calc(-1 * max(150px,15.97vw) + 1px);overflow:visible}
+.msplash.up.has-clip .ms-rise{opacity:1}
+.msplash.up.has-clip::after{display:none}
+.msplash.up .milkrow{position:absolute;right:0;bottom:0;left:auto;width:min(100%,1097px);height:auto;display:block;overflow:visible;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16%);mask-image:linear-gradient(90deg,transparent 0,#000 16%)}
+.msplash.up .milkrow img{display:block;width:100%;height:auto;margin:0;transform:none!important;filter:none}
+.msplash.up .milkrow img:nth-child(even){transform:none}
+.heroband.hasclip{padding-bottom:calc(max(150px,15.97vw) + 1.4rem)}
+@media (min-width:860px){.heroband.hasclip{padding-bottom:calc(max(150px,15.97vw) + 1.6rem)}}
+@media (max-width:859px){.msplash.up .milkrow{width:150%;right:-12%}}
+/* real clip only: no drawn splash, a soft milk base carries the left side */
+.msplash.up.has-clip .ms-rise{display:none}
+.msplash.up.has-clip::before{content:'';position:absolute;left:-5%;right:-5%;bottom:0;height:clamp(46px,6vw,84px);border-radius:50% 50% 0 0 / 100% 100% 0 0;background:linear-gradient(180deg,#e9ecf4,color-mix(in srgb,var(--dw-bg-a) 88%,var(--dw-bg)));box-shadow:0 -6px 14px rgba(8,14,80,.22)}
+.msplash.up .milkrow{z-index:1}
+.msplash.up .milkrow{width:min(100%,1060px)}
+@media (max-width:859px){.msplash.up .milkrow{width:140%;right:-8%}}
+/* keep the milk below the text and logo: ~300px tall at most */
+.msplash.up .milkrow{width:min(100%,620px,calc(14vw + 330px))}
+@media (max-width:859px){.msplash.up .milkrow{width:104%;right:-2%}}
+/* keep the milk below the text and logo: ~300px tall at most */
+.msplash.up .milkrow{width:min(100%,620px,calc(14vw + 330px))}
+@media (max-width:859px){.msplash.up .milkrow{width:104%;right:-2%}}
