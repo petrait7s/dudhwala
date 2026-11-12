@@ -1,0 +1,15 @@
+{
+  "_notice": "Dudhwala's Kitchen details as printed on the sweet box. Edit here to change the About page card.",
+  "nameBn": "দুধওয়ালা'স কিচেন",
+  "nameEn": "Dudhwala's Kitchen",
+  "taglineBn": "চিরায়ত বাঙলার স্বাদ",
+  "taglineEn": "The timeless taste of Bengal",
+  "textBn": "ঘরোয়া পরিবেশে, মানসম্মত উপকরণে তৈরি, তৃপ্তিদায়ক বাঙলা খাবারের ব্যতিক্রমী পসরা নিয়ে দুধওয়ালা পরিবারের নতুন সংযোজন।",
+  "textEn": "A new addition to the Dudhwala family: a distinctive spread of satisfying Bengali food, made in a homely setting from quality ingredients.",
+  "addressBn": "হুমায়ুন রশিদ চত্বর (পুলিশ বক্স সংলগ্ন), সিলেট",
+  "addressEn": "Humayun Rashid Chattar (next to the police box), Sylhet",
+  "phones": [
+    { "number": "01734323467", "labelBn": "রেস্টুরেন্ট", "labelEn": "Restaurant" },
+    { "number": "01724723467", "labelBn": "সুইটস্", "labelEn": "Sweets" }
+  ]
+}

@@ -803,3 +803,69 @@ footer.ft .fbody{padding-top:.6rem}
 .hwave .w1 path{opacity:.3}.hwave .w2 path{opacity:.55}.hwave .w3 path{opacity:1}
 @media (max-width:640px){.hwave{height:40px;margin-top:-39px}}
 @media (prefers-reduced-motion:reduce){.heroband .eyebrow,.heroband h1,.heroband p.lead,.hero-cta,.hero-trust,.hstage,.orb,.heroband .eyebrow i,.hwave svg{animation:none!important}}
+
+/* ───────── 3D milk splash (from the Dudhwala box) ───────── */
+.msplash{position:relative;line-height:0;pointer-events:none}
+.msplash .ms{display:block;width:100%;height:100%;overflow:visible}
+.msplash.up{height:clamp(96px,15vw,210px);margin-top:calc(-1 * clamp(95px,15vw,209px));z-index:2}
+.msplash.down{height:clamp(84px,11vw,150px);background:linear-gradient(180deg,transparent 0,transparent 34.5%,var(--dw-bar-2) 34.5%);margin-bottom:-1px}
+.ms .ms-main{filter:drop-shadow(0 -7px 12px rgba(6,10,70,.38))}
+.ms-drip .ms-main{filter:drop-shadow(0 9px 10px rgba(2,4,30,.55))}
+.ms .ms-back{transform-box:fill-box;transform-origin:50% 100%}
+.ms-rise .ms-main{animation:dwmilk 7s ease-in-out infinite}
+.ms-rise .ms-back{animation:dwmilk 9s ease-in-out -3s infinite reverse}
+.ms-drip .ms-main{animation:dwdrip 8s ease-in-out infinite}
+.ms .d{animation:dwdrop 5.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.ms .d1{animation-delay:-1.4s}.ms .d2{animation-delay:-2.8s;animation-duration:6.5s}.ms .d3{animation-delay:-4.1s;animation-duration:4.8s}
+@keyframes dwmilk{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes dwdrip{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@keyframes dwdrop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.06)}}
+.ms-drip .d{animation-name:dwdropfall}
+@keyframes dwdropfall{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.ms .ms-main,.ms .ms-back,.ms .d{animation:none!important}}
+
+/* reserve room under the hero text for the splash, and hide the seam */
+.heroband{padding-bottom:clamp(6.5rem,13vw,11.5rem)}
+@media (min-width:860px){.heroband{padding-bottom:clamp(8rem,14vw,12.5rem)}}
+.msplash.up{margin-top:calc(-1 * clamp(94px,15vw,208px))}
+
+/* splash keeps its true proportions: wide screens show it whole, phones show the middle of it */
+.msplash.up{height:max(150px,15.97vw);margin-top:calc(-1 * max(150px,15.97vw) + 1px)}
+.msplash.down{height:max(100px,10.42vw)}
+.heroband{padding-bottom:calc(max(150px,15.97vw) - 1.5rem)}
+@media (min-width:860px){.heroband{padding-bottom:calc(max(150px,15.97vw) - 1rem)}}
+
+.ms-drip .ms-main{filter:none}
+.ms-drip .ms-shade{animation:dwdrip 8s ease-in-out infinite;transform-box:fill-box}
+@media (prefers-reduced-motion:reduce){.ms-drip .ms-shade{animation:none!important}}
+
+.ms-drip .ms-shade{transform:translateY(9px);animation:dwshade 8s ease-in-out infinite}
+@keyframes dwshade{0%,100%{transform:translateY(9px)}50%{transform:translateY(13px)}}
+
+/* ───────── Dudhwala's Kitchen + storage note ───────── */
+.kitchen{display:grid;grid-template-columns:auto 1fr;gap:1.2rem;padding:1.4rem 1.5rem;border-radius:24px;color:#fff;border:1px solid rgba(255,255,255,.18);background:radial-gradient(30rem 16rem at 100% 0,rgba(0,190,255,.32),transparent 60%),linear-gradient(135deg,#1d2672,#2b2f9e 60%,#3a40b0);box-shadow:0 26px 50px -26px rgba(29,38,114,.9);position:relative;overflow:hidden}
+.kitchen::after{content:'';position:absolute;right:-60px;bottom:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%)}
+.kt-mark{width:68px;height:68px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(145deg,#c9d0ff,#eef0ff);color:#1d2672;box-shadow:0 12px 24px -12px rgba(0,0,0,.6)}
+.kt-mark svg{width:38px;height:38px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.kt-body{min-width:0;position:relative;z-index:1}
+.kt-eyebrow{margin:0;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:#8fe3ff}
+.kitchen h2{color:#fff;font-size:1.6rem;margin:.2rem 0 .1rem}
+.kt-tag{margin:0 0 .6rem;color:#b9c4ff;font-weight:600}
+.kt-text{margin:0 0 .9rem;line-height:1.75;max-width:56ch;color:#e4e8ff}
+.kt-addr{display:flex;gap:.5rem;align-items:flex-start;margin:0 0 .9rem;color:#fff;font-weight:600}
+.kt-addr svg{width:18px;height:18px;fill:#8fe3ff;flex:none;margin-top:.2rem}
+.kt-phones{display:flex;flex-wrap:wrap;gap:.7rem}
+.kt-call{display:inline-flex;align-items:center;gap:.65rem;padding:.55rem 1rem .55rem .7rem;border-radius:16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);color:#fff;text-decoration:none;transition:transform var(--dw-t1),background var(--dw-t2)}
+.kt-call svg{width:22px;height:22px;fill:#8fe3ff;flex:none}
+.kt-call span{display:grid;line-height:1.25}.kt-call b{font-family:var(--dw-font-latin);letter-spacing:.03em}.kt-call small{color:#b9c4ff}
+@media (hover:hover){.kt-call:hover{background:rgba(255,255,255,.22);transform:translateY(-2px)}}
+.kt-call:active{transform:scale(.97)}
+@media (max-width:560px){.kitchen{grid-template-columns:1fr;padding:1.2rem}.kt-mark{width:56px;height:56px}.kitchen h2{font-size:1.35rem}}
+.carebox{display:flex;gap:1rem;align-items:center;padding:1rem 1.2rem;border-radius:20px;border:1.5px solid #8fb4f5;background:linear-gradient(135deg,#e8f4ff,#d5e5ff);color:#14183a;box-shadow:0 14px 30px -22px rgba(43,100,200,.7)}
+.carebox h2{margin:0 0 .15rem;font-size:1.05rem;color:#1d4fa8}.carebox p{margin:0;line-height:1.7}
+.carebox b{color:#1d4fa8}
+.care-ic{flex:none;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,#2b62d9,#4a86f0);color:#fff;box-shadow:0 10px 20px -10px rgba(43,98,217,.9)}
+.care-ic svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.carebox.slim{margin-top:1rem;padding:.8rem 1rem}.carebox.slim .care-ic{width:42px;height:42px;border-radius:13px}.carebox.slim .care-ic svg{width:24px;height:24px}.carebox.slim p{font-size:.88rem;line-height:1.55}
+:root[data-theme='dark'] .carebox{background:linear-gradient(135deg,#14274f,#1a2f66);border-color:#2f5aa8;color:#e8ebff}
+:root[data-theme='dark'] .carebox h2,:root[data-theme='dark'] .carebox b{color:#8fe3ff}

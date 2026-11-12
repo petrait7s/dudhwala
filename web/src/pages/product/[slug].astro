@@ -1,4 +1,5 @@
 ---
+import care from '../../data/care.json';
 import Base from '../../layouts/Base.astro';
 import Bi from '../../components/Bi.astro';
 import Art from '../../components/Art.astro';
@@ -48,6 +49,10 @@ const outer = zoneReason(p.category, (p.outerCity ? p.outerCity.toUpperCase() : 
           <li><b><Bi bn="ইন সিলেট:" en="In Sylhet:" /></b> <Bi bn={DELIVERY_ESTIMATE.IN_CITY.bn} en={DELIVERY_ESTIMATE.IN_CITY.en} /></li>
           <li class={outer.eligible ? '' : 'no'}><b><Bi bn="আউটার সিলেট:" en="Outer Sylhet:" /></b> {outer.eligible ? <Bi bn={DELIVERY_ESTIMATE.OUTER_CITY.bn} en={DELIVERY_ESTIMATE.OUTER_CITY.en} /> : <Bi bn={REASON_TEXT[outer.reason].bn} en={REASON_TEXT[outer.reason].en} />}</li>
         </ul>
+        {p.category === 'dairy-sweets' && <aside class="carebox slim" aria-label={care.titleEn}>
+          <div class="care-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2v20M4.2 7l15.6 10M4.2 17L19.8 7M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5"/></svg></div>
+          <div><b><Bi bn={care.titleBn} en={care.titleEn} /></b><p><Bi bn={care.textBn} en={care.textEn} /></p></div>
+        </aside>}
         <p class="notice warn" data-na hidden><Bi k="unavailable" /></p>
         <div class="stat" style="margin-top:1rem">
           <button class="btn primary" type="button" data-add disabled><Bi k="addToCart" /></button>

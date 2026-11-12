@@ -1,6 +1,7 @@
 ---
 import Bi from './Bi.astro';
 import Art from './Art.astro';
+import MilkSplash from './MilkSplash.astro';
 import hero from '../data/hero.json';
 interface Slide { src: string; fx?: number; fy?: number; altBn?: string; altEn?: string }
 const slides = hero as Slide[];
@@ -42,9 +43,5 @@ const slides = hero as Slide[];
     </div>
   </div>
 </section>
-<div class="hwave" aria-hidden="true">
-  <svg class="w1" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 40 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 V90 H0 Z"/></svg>
-  <svg class="w2" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 48 q 180 44 360 0 t 360 0 q 180 44 360 0 t 360 0 q 180 44 360 0 t 360 0 q 180 44 360 0 t 360 0 V90 H0 Z"/></svg>
-  <svg class="w3" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 40 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 q 180 -50 360 0 t 360 0 V90 H0 Z"/></svg>
-</div>
+<div class="msplash up"><MilkSplash kind="rise" /></div>
 <script>import '../scripts/hero';</script>

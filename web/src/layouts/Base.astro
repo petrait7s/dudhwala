@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Bi from '../components/Bi.astro';
 import Icons from '../components/Icons.astro';
 import ZoneBar from '../components/ZoneBar.astro';
+import MilkSplash from '../components/MilkSplash.astro';
 import site from '../data/site.json';
 import { products, categories } from '../lib/catalogue';
 const suggest = JSON.stringify(products.map((p) => { const c = categories.find((x) => x.slug === p.category); return { id: p.id, bn: p.nameBn, en: p.nameEn, cbn: c?.nameBn ?? '', cen: c?.nameEn ?? '' }; })).replace(/</g, '\\u003c');
@@ -66,11 +67,7 @@ const url = new URL(path, Astro.site).toString();
   <main id="main"><slot /></main>
 
   <footer class="ft">
-    <div class="fwave" aria-hidden="true">
-      <svg class="w1" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 44 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 V90 H0 Z"/></svg>
-      <svg class="w2" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 50 q 180 50 360 0 t 360 0 q 180 50 360 0 t 360 0 q 180 50 360 0 t 360 0 q 180 50 360 0 t 360 0 V90 H0 Z"/></svg>
-      <svg class="w3" viewBox="0 0 2880 90" preserveAspectRatio="none"><path d="M0 44 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 q 180 -60 360 0 t 360 0 V90 H0 Z"/></svg>
-    </div>
+    <div class="msplash down"><MilkSplash kind="drip" /></div>
     <div class="fbody">
     <div class="wrap cols">
       <div>
