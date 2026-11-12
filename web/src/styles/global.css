@@ -909,3 +909,16 @@ footer.ft .fbody{padding-top:.6rem}
 .msplash.up.has-clip{height:clamp(230px,27vw,420px);margin-top:calc(-1 * clamp(230px,27vw,420px) + 1px)}
 .heroband.hasclip{padding-bottom:calc(clamp(230px,27vw,420px) * .62)}
 @media (min-width:860px){.heroband.hasclip{padding-bottom:calc(clamp(230px,27vw,420px) * .66)}}
+
+/* real milk clip: low-res source, so it is shown at a modest size and tiled (alternate copies mirrored) instead of stretched */
+.msplash.up.has-clip{--mh:clamp(190px,22vw,330px);height:var(--mh);margin-top:calc(-1 * var(--mh) + 1px);overflow:hidden}
+.heroband.hasclip{padding-bottom:calc(clamp(190px,22vw,330px) * .86)}
+@media (min-width:860px){.heroband.hasclip{padding-bottom:calc(clamp(190px,22vw,330px) * .9)}}
+.msplash.up .milkrow{position:absolute;left:0;right:0;bottom:0;height:100%;display:flex;align-items:flex-end;overflow:hidden}
+.msplash.up .milkrow img{flex:none;height:100%;width:auto;display:block;filter:blur(.55px) brightness(1.07) contrast(1.03)}
+.msplash.up .milkrow img:nth-child(even){transform:scaleX(-1)}
+.msplash.up.has-clip::after{content:'';position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--dw-bg-a) 88%,var(--dw-bg)));pointer-events:none}
+.msplash.up .milkclip{display:none}
+.msplash.up .milkrow{justify-content:center}
+.msplash.up .milkrow img{margin-inline:-2px;clip-path:inset(0 3px 0 3px)}
+.msplash.up .milkrow img{margin-inline:-5px;clip-path:none}
