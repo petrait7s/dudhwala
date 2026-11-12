@@ -869,3 +869,28 @@ footer.ft .fbody{padding-top:.6rem}
 .carebox.slim{margin-top:1rem;padding:.8rem 1rem}.carebox.slim .care-ic{width:42px;height:42px;border-radius:13px}.carebox.slim .care-ic svg{width:24px;height:24px}.carebox.slim p{font-size:.88rem;line-height:1.55}
 :root[data-theme='dark'] .carebox{background:linear-gradient(135deg,#14274f,#1a2f66);border-color:#2f5aa8;color:#e8ebff}
 :root[data-theme='dark'] .carebox h2,:root[data-theme='dark'] .carebox b{color:#8fe3ff}
+
+/* ───────── ocean waves (replace the splash spikes) ───────── */
+.msplash.down{background:none}
+.ms .ms-main,.ms .ms-back,.ms .ms-shade,.ms .d{animation:none!important}
+.ms .wv{will-change:transform}
+.ms .wv1{animation:dwsea 34s linear infinite}
+.ms .wv2{animation:dwsea 26s linear infinite reverse}
+.ms .wv3{animation:dwsea 19s linear infinite}
+@keyframes dwsea{to{transform:translateX(-1440px)}}
+.ms-rise .wv3{filter:drop-shadow(0 -5px 8px rgba(8,14,80,.35))}
+.ms-rise .wv2{filter:drop-shadow(0 -4px 6px rgba(8,14,80,.22))}
+.ms-drip .wv3{filter:drop-shadow(0 -5px 8px rgba(8,14,80,.18))}
+@media (prefers-reduced-motion:reduce){.ms .wv{animation:none!important}}
+
+/* hero milk splash from the box: smooth swell, tendrils sway */
+.ms-rise .mk-main{filter:drop-shadow(0 -6px 10px rgba(8,14,80,.32));animation:dwmilk 8s ease-in-out infinite}
+.ms-rise .mk-back{animation:dwmilkb 10s ease-in-out -2s infinite}
+.ms-rise .tn{animation:dwsway 6s ease-in-out infinite;transform-box:view-box}
+.ms-rise .dr{animation:dwdrop 5.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes dwsway{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}
+@keyframes dwmilkb{0%,100%{transform:translate(10px,7px)}50%{transform:translate(10px,3px)}}
+@media (prefers-reduced-motion:reduce){.ms-rise .mk-main,.ms-rise .mk-back,.ms-rise .tn,.ms-rise .dr{animation:none!important}}
+/* hero text always ends above the tallest splash tendril */
+.heroband{padding-bottom:calc(max(150px,15.97vw) + 1.2rem)}
+@media (min-width:860px){.heroband{padding-bottom:calc(max(150px,15.97vw) + 1.6rem)}}
