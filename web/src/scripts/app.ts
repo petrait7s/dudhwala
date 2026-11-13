@@ -1,5 +1,5 @@
 import { cartCount, readCart } from '../lib/cart';
-import { getPages } from '../lib/api';
+import { getPages, getCatalogue, API, dbg } from '../lib/api';
 
 const root = document.documentElement;
 const safe = (f: () => void) => { try { f(); } catch { /* storage blocked */ } };
@@ -113,3 +113,13 @@ document.addEventListener('click', (e) => {
   const t = e.target as HTMLElement;
   if (t.closest('nav.tabs a,[data-add],.add,.seg')) try { navigator.vibrate?.(8); } catch { /* not supported */ }
 }, { passive: true });
+
+/* /?debug=1 : shows which API the site calls and what came back */
+if (new URLSearchParams(location.search).has('debug')) {
+  getCatalogue().then(() => {
+    const d = document.createElement('pre');
+    d.style.cssText = 'position:fixed;left:8px;right:8px;top:8px;z-index:99999;background:#111;color:#8f8;padding:10px;border-radius:8px;font:12px/1.4 monospace;white-space:pre-wrap;max-height:60vh;overflow:auto';
+    d.textContent = `API: ${API || '(empty)'}\nproducts: ${dbg.n ?? '-'}\nerror: ${dbg.err ?? 'none'}\ncards: ${document.querySelectorAll('.pc').length}, priced: ${document.querySelectorAll('.pc[data-live]').length}`;
+    document.body.appendChild(d);
+  });
+}

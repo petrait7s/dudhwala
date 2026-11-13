@@ -2,6 +2,8 @@ import { DEFAULT_CONFIG, type Config } from './rules';
 
 export const API = (import.meta.env.PUBLIC_API_URL as string | undefined)?.replace(/\/$/, '') || '';
 export const hasApi = () => API !== '';
+/** Shown by /?debug=1 so a blocked or failing API call is visible without developer tools. */
+export const dbg: { n?: number; err?: string } = {};
 
 export interface ApiVariant { id: number; label_bn: string; label_en: string | null; price_poisha: number | null; max_qty: number; in_stock: boolean }
 export interface ApiProduct { slug: string; image_url: string | null; images?: string[]; variants: ApiVariant[] }
@@ -17,7 +19,9 @@ let catalogue: Promise<Record<string, ApiProduct>> | null = null;
 /** Live prices, variant ids and stock. Resolves {} when no API is configured or it is unreachable. */
 export function getCatalogue(): Promise<Record<string, ApiProduct>> {
   if (!hasApi()) return Promise.resolve({});
-  catalogue ??= j<{ products: ApiProduct[] }>('/catalogue').then((r) => Object.fromEntries(r.products.map((p) => [p.slug, p]))).catch(() => ({}));
+  catalogue ??= j<{ products: ApiProduct[] }>('/catalogue')
+    .then((r) => { dbg.n = r.products.length; return Object.fromEntries(r.products.map((p) => [p.slug, p])); })
+    .catch((e) => { dbg.err = `${e?.name ?? 'Error'}: ${e?.message ?? e}${e?.status ? ' (HTTP ' + e.status + ')' : ''}`; return {}; });
   return catalogue;
 }
 export async function getConfig(): Promise<Config> {
