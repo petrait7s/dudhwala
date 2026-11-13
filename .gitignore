@@ -21,3 +21,7 @@ apps/*/AGENTS.md
 demo/mock-api/runtime/
 
 .vercel/
+
+# build output of scripts/package-app.sh
+/dudhwala-app.zip
+/dudhwala-public_html.zip
