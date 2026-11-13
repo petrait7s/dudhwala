@@ -181,9 +181,9 @@ document.addEventListener('alpine:init', () => {
       if (blank) { if (pre) { blank.v.label_bn = pre.bn; blank.v.label_en = pre.en; } this.focusPrice(blank.key, !pre); return; }
       const first = mine.find((r) => r.v);
       const stock = {}; this.d.outlets.forEach((o) => { stock[o.id] = first ? !!first.v.stock[o.id] : true; });
-      const blank = {}; this.d.outlets.forEach((o) => { blank[o.id] = false; });
+      const none = {}; this.d.outlets.forEach((o) => { none[o.id] = false; });
       const key = 'n' + (++this.seq);
-      const row = { key, p, v: { id: 0, label_bn: pre ? pre.bn : '', label_en: pre ? pre.en : '', price: '', untracked: false, stock }, o: { label_bn: '', label_en: '', price: '', stock: blank }, i: first ? mine.length : 0, new: true };
+      const row = { key, p, v: { id: 0, label_bn: pre ? pre.bn : '', label_en: pre ? pre.en : '', price: '', untracked: false, stock }, o: { label_bn: '', label_en: '', price: '', stock: none }, i: first ? mine.length : 0, new: true };
       const ph = mine.find((r) => !r.v);
       const at = ph ? this.rows.indexOf(ph) : this.rows.indexOf(mine[mine.length - 1]) + 1;
       this.rows.splice(at, ph ? 1 : 0, row);
