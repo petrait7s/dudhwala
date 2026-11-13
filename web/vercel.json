@@ -56,5 +56,11 @@
       "destination": "/showroom",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://admin.dudhwalaltd.online/api/:path*"
+    }
   ]
 }

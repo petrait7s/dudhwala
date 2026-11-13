@@ -611,4 +611,13 @@ class OrderApiTest extends TestCase
         $this->assertSame(1, AuditLog::where('action', 'payment.refund_required')->count());
         $this->assertSame($o->total_poisha, $svc->due($o->fresh()));
     }
+
+    public function test_rate_limit_sees_the_real_client_ip_behind_the_storefront_proxy(): void
+    {
+        $codes = [];
+        for ($i = 0; $i < 18; $i++) $codes[] = $this->withHeaders(['X-Forwarded-For' => '203.0.113.7'])->postJson('/api/orders', ['website' => 'x'])->status();
+        $this->assertSame(429, end($codes));
+        // a different customer behind the same proxy is not limited
+        $this->assertNotSame(429, $this->withHeaders(['X-Forwarded-For' => '203.0.113.99'])->postJson('/api/orders', ['website' => 'x'])->status());
+    }
 }
