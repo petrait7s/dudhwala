@@ -14,7 +14,7 @@ trap 'rm -rf "$TMP"' EXIT
 
 rsync -a \
   --exclude '.env' --exclude '.env.*' --exclude '!.env.production.example' \
-  --exclude 'vendor' --exclude 'node_modules' --exclude '.git' --exclude 'tests' \
+  --exclude '/vendor' --exclude 'node_modules' --exclude '.git' --exclude 'tests' \
   --exclude '.phpunit.cache' --exclude '.phpunit.result.cache' --exclude 'database/*.sqlite' \
   --exclude 'bootstrap/cache/*.php' --exclude 'storage/logs/*' --exclude 'storage/framework/cache/data/*' --exclude 'storage/framework/sessions/*' --exclude 'storage/framework/views/*' --exclude 'storage/app/backups/*' --exclude 'storage/app/public/*' \
   "$ROOT/app/" "$TMP/app/"
