@@ -30,7 +30,8 @@ class Preflight extends Command
     {
         $this->info('Server');
         PHP_VERSION_ID >= 80200 ? $this->row('ok', 'PHP '.PHP_VERSION) : $this->row('fail', 'PHP 8.2+ required', PHP_VERSION);
-        foreach (['pdo_mysql', 'mbstring', 'openssl', 'gd', 'sodium', 'fileinfo', 'ctype', 'xml'] as $ext) extension_loaded($ext) ? null : $this->row('fail', "PHP extension $ext missing");
+        if (! extension_loaded('sodium')) $this->row('warn', 'PHP extension sodium missing (optional: a slower built-in fallback is used)');
+        foreach (['pdo_mysql', 'mbstring', 'openssl', 'gd', 'fileinfo', 'ctype', 'xml'] as $ext) extension_loaded($ext) ? null : $this->row('fail', "PHP extension $ext missing");
         extension_loaded('gd') && function_exists('imagewebp') ? $this->row('ok', 'GD with WebP (photo upload)') : $this->row('fail', 'GD lacks WebP support (photo upload will fail)');
         config('app.key') ? $this->row('ok', 'APP_KEY set') : $this->row('fail', 'APP_KEY missing: php artisan key:generate --force');
         config('app.debug') ? $this->row('fail', 'APP_DEBUG is true', 'set APP_DEBUG=false in production') : $this->row('ok', 'APP_DEBUG is false');
