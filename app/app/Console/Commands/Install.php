@@ -60,7 +60,7 @@ class Install extends Command
 
         $this->info('5/7 Catalogue');
         if ($this->option('skip-catalogue')) $this->line('skipped');
-        else { Artisan::call('dudhwala:import-catalogue'); $this->line(trim(Artisan::output())); }
+        else { Artisan::call('dudhwala:import-catalogue'); $this->line(trim(Artisan::output())); Artisan::call('dudhwala:import-prices'); $this->line(trim(Artisan::output())); }
 
         $this->info('6/7 First admin');
         $this->admin($audit);

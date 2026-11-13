@@ -19,22 +19,22 @@ class CatalogueTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_import_creates_59_hidden_unpriced_products_and_is_idempotent(): void
+    public function test_import_creates_72_hidden_unpriced_products_and_is_idempotent(): void
     {
         $this->artisan('dudhwala:import-catalogue')->assertSuccessful();
-        $this->assertSame(59, Product::count());
+        $this->assertSame(72, Product::count());
         $this->assertSame(3, Category::count());
         $this->assertSame(0, Product::where('active', true)->count());
-        $this->assertSame(59, ProductVariant::whereNull('price_poisha')->count());
-        $this->assertSame(59, ProductVariant::count());
+        $this->assertSame(72, ProductVariant::whereNull('price_poisha')->count());
+        $this->assertSame(72, ProductVariant::count());
 
         $first = Product::first();
         $first->update(['name_bn' => 'owner edit']);
         ProductVariant::where('product_id', $first->id)->update(['price_poisha' => 5000]);
 
         $this->artisan('dudhwala:import-catalogue')->assertSuccessful();
-        $this->assertSame(59, Product::count());
-        $this->assertSame(59, ProductVariant::count());
+        $this->assertSame(72, Product::count());
+        $this->assertSame(72, ProductVariant::count());
         $this->assertSame('owner edit', $first->fresh()->name_bn, 'admin edits survive a re-run');
         $this->assertSame(5000, $first->variants()->first()->price_poisha);
         $this->assertDatabaseHas('audit_logs', ['action' => 'catalogue.imported']);
@@ -43,7 +43,7 @@ class CatalogueTest extends TestCase
     public function test_import_activate_flag_and_outer_city_marks(): void
     {
         $this->artisan('dudhwala:import-catalogue', ['--activate' => true])->assertSuccessful();
-        $this->assertSame(59, Product::where('active', true)->count());
+        $this->assertSame(72, Product::where('active', true)->count());
         $statuses = Product::pluck('outer_city_status')->filter()->unique()->all();
         foreach ($statuses as $s) $this->assertContains($s, ['APPROVED', 'DISABLED', 'PENDING_VERIFICATION', 'PENDING_CONFIRMATION']);
     }
@@ -207,5 +207,21 @@ class CatalogueTest extends TestCase
         try { $svc->addGalleryImage($mgr, $p, UploadedFile::fake()->image('a.jpg')); $this->fail(); } catch (ShopException $e) { $this->assertSame('FORBIDDEN', $e->errorCode); }
         try { $svc->addGalleryImage($admin, $p, UploadedFile::fake()->createWithContent('x.png', '<?php echo 1;')); $this->fail(); } catch (ShopException $e) { $this->assertSame('VALIDATION_FAILED', $e->errorCode); }
         $this->assertSame(0, $p->gallery()->count());
+    }
+
+    public function test_price_list_import_creates_prices_publishes_stocks_and_is_repeatable(): void
+    {
+        \Tests\Support\TestData::outlet('pl-a');
+        $this->artisan('dudhwala:import-catalogue')->assertSuccessful();
+        $this->artisan('dudhwala:import-prices')->assertSuccessful();
+        $p = \App\Models\Product::where('slug', 'ds-05')->firstOrFail(); // রসমালাই: 1 kg 550 and 1/2 kg 275
+        $this->assertTrue((bool) $p->active);
+        $this->assertSame([27500, 55000], $p->variants()->orderBy('price_poisha')->pluck('price_poisha')->all());
+        $this->assertSame(3, \App\Models\ProductVariant::whereIn('product_id', \App\Models\Product::where('slug', 'ds-24')->pluck('id'))->count()); // ঘি: three sizes
+        $this->assertFalse((bool) \App\Models\Product::where('slug', 'bk-charcoal')->value('active')); // not on the list
+        $before = [\App\Models\ProductVariant::count(), \DB::table('inventory')->count()];
+        $this->artisan('dudhwala:import-prices')->assertSuccessful();
+        $this->assertSame($before, [\App\Models\ProductVariant::count(), \DB::table('inventory')->count()]);
+        $this->getJson('/api/catalogue')->assertJsonFragment(['slug' => 'ds-05']);
     }
 }

@@ -376,7 +376,8 @@
    "kind": "cookie",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
   },
   {
    "id": "bk-coconut-biscuit",
@@ -396,7 +397,8 @@
    "kind": "cookie",
    "nameVerified": false,
    "outerCity": "pending_verification",
-   "source": "Bakery list (name to verify)"
+   "source": "Bakery list (name to verify)",
+   "listed": false
   },
   {
    "id": "bk-salt-biscuit",
@@ -426,7 +428,8 @@
    "kind": "loaf",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
   },
   {
    "id": "bk-charcoal",
@@ -436,7 +439,8 @@
    "kind": "loaf",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
   },
   {
    "id": "bk-sweet-cake",
@@ -446,7 +450,8 @@
    "kind": "loaf",
    "nameVerified": false,
    "outerCity": "pending_verification",
-   "source": "Bakery list (name to verify)"
+   "source": "Bakery list (name to verify)",
+   "listed": false
   },
   {
    "id": "bk-fruit-cake",
@@ -456,7 +461,8 @@
    "kind": "loaf",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
   },
   {
    "id": "bk-butter-toast",
@@ -486,7 +492,8 @@
    "kind": "loaf",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
   },
   {
    "id": "bk-baby-toast",
@@ -496,7 +503,8 @@
    "kind": "loaf",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
   },
   {
    "id": "bk-badam-cake",
@@ -506,7 +514,8 @@
    "kind": "loaf",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
   },
   {
    "id": "bk-toast-cake",
@@ -516,7 +525,8 @@
    "kind": "loaf",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
   },
   {
    "id": "bk-bos-cake",
@@ -526,7 +536,8 @@
    "kind": "loaf",
    "nameVerified": false,
    "outerCity": "pending_verification",
-   "source": "Bakery list (name to verify)"
+   "source": "Bakery list (name to verify)",
+   "listed": false
   },
   {
    "id": "bk-babarkhani",
@@ -546,7 +557,8 @@
    "kind": "loaf",
    "nameVerified": false,
    "outerCity": "pending_verification",
-   "source": "Bakery list (name to verify)"
+   "source": "Bakery list (name to verify)",
+   "listed": false
   },
   {
    "id": "bk-boro-bread",
@@ -596,7 +608,8 @@
    "kind": "pouch",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
   },
   {
    "id": "bk-semai-250",
@@ -606,7 +619,138 @@
    "kind": "pouch",
    "nameVerified": true,
    "outerCity": null,
-   "source": "Bakery list (readable name)"
+   "source": "Bakery list (readable name)",
+   "listed": false
+  },
+  {
+   "id": "bk-chocolate-biscuit",
+   "category": "bakery",
+   "nameBn": "চকলেট বিস্কুট",
+   "nameEn": "Chocolate Biscuit",
+   "kind": "cookie",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-butter-cookies",
+   "category": "bakery",
+   "nameBn": "বাটার কুকিজ",
+   "nameEn": "Butter Cookies",
+   "kind": "cookie",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-round-cookies",
+   "category": "bakery",
+   "nameBn": "রাউন্ড কুকিজ",
+   "nameEn": "Round Cookies",
+   "kind": "cookie",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-top-cake",
+   "category": "bakery",
+   "nameBn": "টপ কেক",
+   "nameEn": "Top Cake",
+   "kind": "loaf",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-muri-toast",
+   "category": "bakery",
+   "nameBn": "মুড়ি টোস্ট",
+   "nameEn": "Muri Toast",
+   "kind": "loaf",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-family-toast",
+   "category": "bakery",
+   "nameBn": "ফ্যামিলি টোস্ট",
+   "nameEn": "Family Toast",
+   "kind": "loaf",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-tasty-toast",
+   "category": "bakery",
+   "nameBn": "টেস্টি টোস্ট",
+   "nameEn": "Tasty Toast",
+   "kind": "loaf",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-bombay-toast",
+   "category": "bakery",
+   "nameBn": "বোম্বে টোস্ট",
+   "nameEn": "Bombay Toast",
+   "kind": "loaf",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-slice-toast",
+   "category": "bakery",
+   "nameBn": "স্লাইস টোস্ট",
+   "nameEn": "Slice Toast",
+   "kind": "loaf",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-semai-ghee",
+   "category": "bakery",
+   "nameBn": "ঘি ভাজা সেমাই",
+   "nameEn": "Ghee Fried Semai",
+   "kind": "pouch",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-semai-dalda",
+   "category": "bakery",
+   "nameBn": "ডালডা ভাজা সেমাই",
+   "nameEn": "Dalda Fried Semai",
+   "kind": "pouch",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-chira-bhaja",
+   "category": "bakery",
+   "nameBn": "চিড়া ভাজা",
+   "nameEn": "Chira Bhaja",
+   "kind": "pouch",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
+  },
+  {
+   "id": "bk-chanachur",
+   "category": "bakery",
+   "nameBn": "চানাচুর",
+   "nameEn": "Chanachur",
+   "kind": "pouch",
+   "nameVerified": false,
+   "outerCity": null,
+   "source": "Showroom price list"
   }
  ]
 }

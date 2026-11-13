@@ -46,7 +46,7 @@ class AdminBulkTest extends TestCase
         $rows = $this->rows(app(AdminBulkService::class)->exportCsv());
         $head = $rows[0];
         $this->assertSame(array_merge(AdminBulkService::FIXED, ['stock:MODINA-MARKET', 'stock:SUPPLY-ROAD', 'stock:MIRJAJANGAL', 'stock:UPOSHOHOR']), $head);
-        $this->assertCount(1 + 59, $rows);
+        $this->assertCount(1 + 72, $rows);
         $this->assertSame(['', 'no', 'default'], [$rows[1][7], $rows[1][9], $rows[1][10] === 'default' ? 'default' : $rows[1][10]]);
     }
 
@@ -59,7 +59,7 @@ class AdminBulkTest extends TestCase
         $rows[2][$h['price_taka']] = '৳১,২৫০.৫০'; $rows[2][$h['visible']] = 'হ্যাঁ'; $rows[2][$h['outer_sylhet']] = 'APPROVED'; $rows[2][$h['max_qty']] = '50';
         $res = $svc->importCsv($this->admin, $this->toCsv($rows));
         $this->assertSame([], $res['errors']);
-        $this->assertSame([59, 2, 2, 2], [$res['rows'], $res['changed_variants'], $res['published'], $res['stock_set']]);
+        $this->assertSame([72, 2, 2, 2], [$res['rows'], $res['changed_variants'], $res['published'], $res['stock_set']]);
         $v1 = ProductVariant::find($rows[1][$h['variant_id']]); $v2 = ProductVariant::find($rows[2][$h['variant_id']]);
         $this->assertSame([25000, true], [$v1->price_poisha, $v1->product->active]);
         $this->assertSame([125050, 50, 'APPROVED', true], [$v2->price_poisha, $v2->max_qty, $v2->product->outer_city_status, $v2->product->active]);

@@ -1,0 +1,1026 @@
+{
+ "_notice": "Showroom price list (Showroom_Price_List1.xlsx). Prices in taka. Applied by: php artisan dudhwala:import-prices",
+ "products": [
+  {
+   "id": "ds-01",
+   "nameBn": "সাদা রসগোল্লা",
+   "nameEn": "White Rasgulla",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 30
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 370
+    }
+   ]
+  },
+  {
+   "id": "ds-02",
+   "nameBn": "কালোজাম",
+   "nameEn": "Kalojam",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 30
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 370
+    }
+   ]
+  },
+  {
+   "id": "ds-03",
+   "nameBn": "গোলাপজাম",
+   "nameEn": "Golapjam",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 30
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 370
+    }
+   ]
+  },
+  {
+   "id": "ds-04",
+   "nameBn": "মতি লাড্ডু",
+   "nameEn": "Moti Laddu",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 30
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 370
+    }
+   ]
+  },
+  {
+   "id": "ds-05",
+   "nameBn": "রসমালাই",
+   "nameEn": "Rosh Malai",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 550
+    },
+    {
+     "label_bn": "½ কেজি",
+     "label_en": "1/2 kg",
+     "price": 275
+    }
+   ]
+  },
+  {
+   "id": "ds-06",
+   "nameBn": "দুধরাজ",
+   "nameEn": "Dudhraj",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 45
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 580
+    }
+   ]
+  },
+  {
+   "id": "ds-07",
+   "nameBn": "ক্ষীরমোহন",
+   "nameEn": "Kheer Mohan",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 50
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 680
+    }
+   ]
+  },
+  {
+   "id": "ds-08",
+   "nameBn": "জাফরান ভোগ",
+   "nameEn": "Zafran Bhog",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 70
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 700
+    }
+   ]
+  },
+  {
+   "id": "ds-09",
+   "nameBn": "মালাইচপ",
+   "nameEn": "Malai Chop",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 70
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 740
+    }
+   ]
+  },
+  {
+   "id": "ds-10",
+   "nameBn": "কাঁচা সন্দেশ",
+   "nameEn": "Kacha Sandesh",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 50
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 650
+    }
+   ]
+  },
+  {
+   "id": "ds-11",
+   "nameBn": "সরপোড়া সন্দেশ",
+   "nameEn": "Sarpora Sandesh",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 50
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 680
+    }
+   ]
+  },
+  {
+   "id": "ds-12",
+   "nameBn": "দধিয়া সন্দেশ",
+   "nameEn": "Dadhiya Sandesh",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 50
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 780
+    }
+   ]
+  },
+  {
+   "id": "ds-13",
+   "nameBn": "গুড়ের সন্দেশ",
+   "nameEn": "Gurer Sandesh",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 50
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 700
+    }
+   ]
+  },
+  {
+   "id": "ds-14",
+   "nameBn": "বোন্দে সন্দেশ",
+   "nameEn": "Bonde Sandesh",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 70
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 700
+    }
+   ]
+  },
+  {
+   "id": "ds-15",
+   "nameBn": "অরেঞ্জ সন্দেশ",
+   "nameEn": "Orange Sandesh",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 50
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 700
+    }
+   ]
+  },
+  {
+   "id": "ds-16",
+   "nameBn": "সাদা চমচম",
+   "nameEn": "White Chomchom",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 40
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 500
+    }
+   ]
+  },
+  {
+   "id": "ds-17",
+   "nameBn": "বাদামী চমচম",
+   "nameEn": "Brown Chomchom",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 40
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 500
+    }
+   ]
+  },
+  {
+   "id": "ds-18",
+   "nameBn": "পাতা চমচম",
+   "nameEn": "Pata Chomchom",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 40
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 480
+    }
+   ]
+  },
+  {
+   "id": "ds-19",
+   "nameBn": "কাশ্মীরী ভোগ",
+   "nameEn": "Kashmiri Bhog",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 50
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 600
+    }
+   ]
+  },
+  {
+   "id": "ds-20",
+   "nameBn": "সরভোল",
+   "nameEn": "Sarbhol",
+   "category": "dairy-sweets",
+   "kind": "sweet",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 50
+    }
+   ]
+  },
+  {
+   "id": "ds-23",
+   "nameBn": "দুধ",
+   "nameEn": "Milk",
+   "category": "dairy-sweets",
+   "kind": "bottle",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ লিটার",
+     "label_en": "1 litre",
+     "price": 130
+    }
+   ]
+  },
+  {
+   "id": "ds-24",
+   "nameBn": "ঘি",
+   "nameEn": "Ghee",
+   "category": "dairy-sweets",
+   "kind": "jar",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "২৫০ গ্রাম",
+     "label_en": "250 g",
+     "price": 450
+    },
+    {
+     "label_bn": "½ কেজি",
+     "label_en": "1/2 kg",
+     "price": 900
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 1800
+    }
+   ]
+  },
+  {
+   "id": "doi-01",
+   "nameBn": "প্রিমিয়াম দই সরা",
+   "nameEn": "Premium Doi Shara",
+   "category": "doi-dairy",
+   "kind": "cup",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": null
+    }
+   ]
+  },
+  {
+   "id": "doi-02",
+   "nameBn": "পাতিল দই",
+   "nameEn": "Patil Doi",
+   "category": "doi-dairy",
+   "kind": "cup",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 320
+    }
+   ]
+  },
+  {
+   "id": "doi-03",
+   "nameBn": "বাটি দই",
+   "nameEn": "Bati Doi",
+   "category": "doi-dairy",
+   "kind": "cup",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 220
+    }
+   ]
+  },
+  {
+   "id": "doi-04",
+   "nameBn": "প্রিমিয়াম দই",
+   "nameEn": "Premium Doi",
+   "category": "doi-dairy",
+   "kind": "cup",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 280
+    }
+   ]
+  },
+  {
+   "id": "doi-05",
+   "nameBn": "টক দই",
+   "nameEn": "Tok Doi (Sour Curd)",
+   "category": "doi-dairy",
+   "kind": "cup",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 240
+    }
+   ]
+  },
+  {
+   "id": "doi-06",
+   "nameBn": "প্রিমিয়াম কাপ দই",
+   "nameEn": "Premium Cup Doi",
+   "category": "doi-dairy",
+   "kind": "cup",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 60
+    }
+   ]
+  },
+  {
+   "id": "doi-07",
+   "nameBn": "কাপ দই",
+   "nameEn": "Cup Doi",
+   "category": "doi-dairy",
+   "kind": "cup",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 45
+    }
+   ]
+  },
+  {
+   "id": "doi-08",
+   "nameBn": "মাঠা ৫০০ গ্রাম",
+   "nameEn": "Matha 500 g",
+   "category": "doi-dairy",
+   "kind": "bottle",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 60
+    }
+   ]
+  },
+  {
+   "id": "doi-09",
+   "nameBn": "মাঠা ২৫০ গ্রাম",
+   "nameEn": "Matha 250 g",
+   "category": "doi-dairy",
+   "kind": "bottle",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 35
+    }
+   ]
+  },
+  {
+   "id": "doi-10",
+   "nameBn": "ঘোল ৫০০ গ্রাম",
+   "nameEn": "Ghol 500 g",
+   "category": "doi-dairy",
+   "kind": "bottle",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 70
+    }
+   ]
+  },
+  {
+   "id": "doi-11",
+   "nameBn": "ঘোল ২৫০ গ্রাম",
+   "nameEn": "Ghol 250 g",
+   "category": "doi-dairy",
+   "kind": "bottle",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 40
+    }
+   ]
+  },
+  {
+   "id": "bk-badam-biscuit",
+   "nameBn": "বাদাম বিস্কুট",
+   "nameEn": "Badam Biscuit",
+   "category": "bakery",
+   "kind": "cookie",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 120
+    }
+   ]
+  },
+  {
+   "id": "bk-coconut-biscuit",
+   "nameBn": "কোকোনাট বিস্কুট",
+   "nameEn": "Coconut Biscuit",
+   "category": "bakery",
+   "kind": "cookie",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 120
+    }
+   ]
+  },
+  {
+   "id": "bk-salt-biscuit",
+   "nameBn": "সল্ট বিস্কুট",
+   "nameEn": "Salt Biscuit",
+   "category": "bakery",
+   "kind": "cookie",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 100
+    }
+   ]
+  },
+  {
+   "id": "bk-chocolate-biscuit",
+   "nameBn": "চকলেট বিস্কুট",
+   "nameEn": "Chocolate Biscuit",
+   "category": "bakery",
+   "kind": "cookie",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 120
+    }
+   ]
+  },
+  {
+   "id": "bk-butter-cookies",
+   "nameBn": "বাটার কুকিজ",
+   "nameEn": "Butter Cookies",
+   "category": "bakery",
+   "kind": "cookie",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 20
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 600
+    }
+   ]
+  },
+  {
+   "id": "bk-round-cookies",
+   "nameBn": "রাউন্ড কুকিজ",
+   "nameEn": "Round Cookies",
+   "category": "bakery",
+   "kind": "cookie",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 15
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 550
+    }
+   ]
+  },
+  {
+   "id": "bk-dry-cake",
+   "nameBn": "ড্রাই কেক",
+   "nameEn": "Dry Cake",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 10
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 540
+    }
+   ]
+  },
+  {
+   "id": "bk-top-cake",
+   "nameBn": "টপ কেক",
+   "nameEn": "Top Cake",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 20
+    }
+   ]
+  },
+  {
+   "id": "bk-muri-toast",
+   "nameBn": "মুড়ি টোস্ট",
+   "nameEn": "Muri Toast",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 100
+    }
+   ]
+  },
+  {
+   "id": "bk-family-toast",
+   "nameBn": "ফ্যামিলি টোস্ট",
+   "nameEn": "Family Toast",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 100
+    }
+   ]
+  },
+  {
+   "id": "bk-butter-toast",
+   "nameBn": "বাটার টোস্ট",
+   "nameEn": "Butter Toast",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 110
+    }
+   ]
+  },
+  {
+   "id": "bk-badam-toast",
+   "nameBn": "বাদাম টোস্ট",
+   "nameEn": "Badam Toast",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 100
+    }
+   ]
+  },
+  {
+   "id": "bk-tasty-toast",
+   "nameBn": "টেস্টি টোস্ট",
+   "nameEn": "Tasty Toast",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 220
+    }
+   ]
+  },
+  {
+   "id": "bk-bombay-toast",
+   "nameBn": "বোম্বে টোস্ট",
+   "nameEn": "Bombay Toast",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 80
+    }
+   ]
+  },
+  {
+   "id": "bk-slice-toast",
+   "nameBn": "স্লাইস টোস্ট",
+   "nameEn": "Slice Toast",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ প্যাকেট",
+     "label_en": "1 packet",
+     "price": 200
+    }
+   ]
+  },
+  {
+   "id": "bk-babarkhani",
+   "nameBn": "বাবরখানি",
+   "nameEn": "Babarkhani",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 20
+    }
+   ]
+  },
+  {
+   "id": "bk-boro-bread",
+   "nameBn": "বড় ব্রেড",
+   "nameEn": "Large Bread",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 90
+    }
+   ]
+  },
+  {
+   "id": "bk-choto-bread",
+   "nameBn": "ছোট ব্রেড",
+   "nameEn": "Small Bread",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 60
+    }
+   ]
+  },
+  {
+   "id": "bk-bun",
+   "nameBn": "বন",
+   "nameEn": "Bun",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 30
+    }
+   ]
+  },
+  {
+   "id": "bk-nagra",
+   "nameBn": "নাগরা",
+   "nameEn": "Nagra",
+   "category": "bakery",
+   "kind": "loaf",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 40
+    }
+   ]
+  },
+  {
+   "id": "bk-semai-ghee",
+   "nameBn": "ঘি ভাজা সেমাই",
+   "nameEn": "Ghee Fried Semai",
+   "category": "bakery",
+   "kind": "pouch",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "৫০০ গ্রাম",
+     "label_en": "500 g",
+     "price": 600
+    },
+    {
+     "label_bn": "২০০ গ্রাম",
+     "label_en": "200 g",
+     "price": 240
+    }
+   ]
+  },
+  {
+   "id": "bk-semai-dalda",
+   "nameBn": "ডালডা ভাজা সেমাই",
+   "nameEn": "Dalda Fried Semai",
+   "category": "bakery",
+   "kind": "pouch",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "৫০০ গ্রাম",
+     "label_en": "500 g",
+     "price": 300
+    },
+    {
+     "label_bn": "২০০ গ্রাম",
+     "label_en": "200 g",
+     "price": 130
+    }
+   ]
+  },
+  {
+   "id": "bk-chira-bhaja",
+   "nameBn": "চিড়া ভাজা",
+   "nameEn": "Chira Bhaja",
+   "category": "bakery",
+   "kind": "pouch",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ বক্স",
+     "label_en": "1 box",
+     "price": 100
+    }
+   ]
+  },
+  {
+   "id": "bk-chanachur",
+   "nameBn": "চানাচুর",
+   "nameEn": "Chanachur",
+   "category": "bakery",
+   "kind": "pouch",
+   "new": true,
+   "variants": [
+    {
+     "label_bn": "১ বক্স",
+     "label_en": "1 box",
+     "price": 150
+    }
+   ]
+  },
+  {
+   "id": "ds-25",
+   "nameBn": "নিমকি",
+   "nameEn": "Nimki",
+   "category": "dairy-sweets",
+   "kind": "pouch",
+   "new": false,
+   "variants": [
+    {
+     "label_bn": "১ পিস",
+     "label_en": "1 pc",
+     "price": 35
+    },
+    {
+     "label_bn": "১ কেজি",
+     "label_en": "1 kg",
+     "price": 280
+    }
+   ]
+  }
+ ],
+ "hide": [
+  "bk-kaju-badam-biscuit",
+  "bk-vanilla-biscuit",
+  "bk-cha-toast",
+  "bk-charcoal",
+  "bk-sweet-cake",
+  "bk-fruit-cake",
+  "bk-bread-toast",
+  "bk-baby-toast",
+  "bk-badam-cake",
+  "bk-toast-cake",
+  "bk-bos-cake",
+  "bk-honey-toast",
+  "bk-semai-500",
+  "bk-semai-250"
+ ]
+}

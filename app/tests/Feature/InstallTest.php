@@ -19,13 +19,13 @@ class InstallTest extends TestCase
         $this->artisan('dudhwala:install', $this->flags + ['--admin-email' => 'Owner@Example.com', '--admin-password' => 'a-long-owner-pass'])
             ->expectsOutputToContain('created ADMIN owner@example.com')->assertSuccessful();
         $this->assertSame(4, Outlet::count());
-        $this->assertSame(59, Product::count());
+        $this->assertSame(72, Product::count());
         $a = User::where('role', 'ADMIN')->first();
         $this->assertSame('owner@example.com', $a->email);
         $this->assertFalse($a->mfa_enabled, 'two-factor is enrolled at first sign-in');
 
         $this->artisan('dudhwala:install', $this->flags + ['--admin-email' => 'other@example.com'])->expectsOutputToContain('an admin already exists')->assertSuccessful();
-        $this->assertSame([4, 59, 1], [Outlet::count(), Product::count(), User::count()]);
+        $this->assertSame([4, 72, 1], [Outlet::count(), Product::count(), User::count()]);
     }
 
     public function test_generated_password_is_shown_once_and_weak_ones_are_refused(): void
