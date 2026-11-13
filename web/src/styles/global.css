@@ -858,3 +858,23 @@ footer.ft .fbody{padding-top:.6rem}
 @media (prefers-reduced-motion:reduce){.ms .wv,.ms-rise .mk-main,.ms-rise .mk-back,.ms-rise .tn,.ms-rise .dr,.msplash.up .milkrow,.mdrops i{animation:none!important}}
 .ms .mx1,.ms .mx2,.ms .mx3{filter:none!important}
 .msplash.down .ms-drip{position:absolute;inset:0;overflow:hidden!important}.msplash.down{overflow:hidden}
+
+/* size picker on a card (per piece / per kg) */
+.pc{position:relative}
+.sizepick{position:absolute;left:.5rem;right:.5rem;bottom:.5rem;z-index:8;display:grid;gap:.35rem;padding:.65rem;border-radius:16px;background:linear-gradient(170deg,#f3f5ff,#dfe4ff);border:1px solid #b9c1fb;box-shadow:0 18px 36px -10px rgba(20,24,100,.55);animation:dwrise var(--dw-t2) var(--dw-ease) both}
+.sizepick .sp-t{margin:0;font-size:.78rem;font-weight:700;color:#3d4590}
+.sp-o{display:flex;justify-content:space-between;align-items:center;gap:.5rem;min-height:42px;padding:.35rem .7rem;border-radius:12px;border:1px solid #b9c1fb;background:#fff;color:var(--dw-ink);font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;transition:transform var(--dw-t1),background var(--dw-t1)}
+.sp-o b{color:var(--dw-brand-700)}
+@media (hover:hover){.sp-o:hover{background:var(--dw-brand-50)}}
+.sp-o:active{transform:scale(.97)}
+:root[data-theme='dark'] .sizepick{background:linear-gradient(170deg,#1b2260,#141a4a);border-color:#3a4494}
+:root[data-theme='dark'] .sp-o{background:#10163f;border-color:#3a4494;color:#eef0ff}
+:root[data-theme='dark'] .sizepick .sp-t{color:#aab3e6}
+@media (max-width:859px){.shelf-row .pc .sizepick,.rel-list .pc .sizepick{left:-4px;right:-4px;bottom:-4px}}
+
+@media (max-width:859px){
+  .sizepick.sheet{position:fixed;left:12px;right:12px;bottom:calc(104px + env(safe-area-inset-bottom,0px));z-index:60;padding:.9rem;border-radius:22px}
+  .sizepick.sheet .sp-t{display:flex;gap:.4rem;flex-wrap:wrap;font-size:.85rem}
+  .sizepick.sheet .sp-t .bn,.sizepick.sheet .sp-t .en{color:var(--dw-brand-700)}
+  .sizepick.sheet .sp-o{min-height:50px;font-size:1rem}
+}

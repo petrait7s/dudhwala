@@ -44,8 +44,8 @@ export async function fillPrices(scope: ParentNode = document) {
 function wireQuick(card: HTMLElement, p: ApiProduct) {
   const btn = card.querySelector<HTMLButtonElement>('[data-quick]');
   if (!btn) return;
-  const single: ApiVariant | undefined = p.variants.length === 1 ? p.variants[0] : undefined;
-  const ok = !!single && single.price_poisha !== null && single.in_stock;
+  const sizes = p.variants.filter((v) => v.price_poisha !== null && v.in_stock);
+  const ok = sizes.length > 0;
   const refresh = () => {
     const z = zoneEligible(card.dataset.cat!, (card.dataset.outer || null) as OuterStatus, getZone());
     btn.hidden = !ok;
@@ -55,9 +55,31 @@ function wireQuick(card: HTMLElement, p: ApiProduct) {
   if (card.dataset.quickWired) return;
   card.dataset.quickWired = '1';
   onZone(refresh);
+  const line = (v: ApiVariant) => ({ variantId: v.id, slug: card.dataset.slug!, nameBn: card.querySelector('.nm .bn')!.textContent!, nameEn: card.querySelector('.nm .en')!.textContent!, labelBn: v.label_bn, labelEn: v.label_en ?? v.label_bn, unitPoisha: v.price_poisha!, maxQty: v.max_qty, category: card.dataset.cat!, outer: card.dataset.outer || null });
   btn.addEventListener('click', () => {
-    if (!single || btn.disabled) return;
-    addToCart({ variantId: single.id, slug: card.dataset.slug!, nameBn: card.querySelector('.nm .bn')!.textContent!, nameEn: card.querySelector('.nm .en')!.textContent!, labelBn: single.label_bn, labelEn: single.label_en ?? single.label_bn, unitPoisha: single.price_poisha!, maxQty: single.max_qty, category: card.dataset.cat!, outer: card.dataset.outer || null }, 1);
-    (window as any).dwFly?.(btn);
+    if (btn.disabled || !ok) return;
+    if (sizes.length === 1) { addToCart(line(sizes[0]!)); (window as any).dwFly?.(btn); return; }
+    openSizes(card, btn, sizes, (v) => { addToCart(line(v)); (window as any).dwFly?.(btn); });
   });
 }
+
+/** Size picker (per piece / per kg ...) shown above the card's button; tapping a size adds it to the cart. */
+function openSizes(card: HTMLElement, btn: HTMLElement, sizes: ApiVariant[], pick: (v: ApiVariant) => void) {
+  document.querySelectorAll('.sizepick').forEach((e) => e.remove());
+  const box = document.createElement('div');
+  box.className = 'sizepick'; box.setAttribute('role', 'dialog');
+  box.innerHTML = `<p class="sp-t">${both('সাইজ বাছুন', 'Choose size')} · ${card.querySelector('.nm')?.innerHTML ?? ''}</p>` + sizes.map((v, i) =>
+    `<button type="button" class="sp-o" data-i="${i}"><span>${both(esc(v.label_bn), esc(v.label_en ?? v.label_bn))}</span><b>${both(formatTaka(v.price_poisha!, 'bn'), formatTaka(v.price_poisha!, 'en'))}</b></button>`).join('');
+  const phone = matchMedia('(max-width:859px)').matches;
+  (phone ? document.body : card).appendChild(box);
+  if (phone) box.classList.add('sheet');
+  const close = () => { box.remove(); document.removeEventListener('click', away, true); document.removeEventListener('keydown', key); };
+  const away = (e: Event) => { if (!box.contains(e.target as Node) && e.target !== btn && !btn.contains(e.target as Node)) close(); };
+  const key = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
+  box.addEventListener('click', (e) => {
+    const o = (e.target as HTMLElement).closest<HTMLElement>('.sp-o'); if (!o) return;
+    pick(sizes[Number(o.dataset.i)]!); close();
+  });
+  setTimeout(() => { document.addEventListener('click', away, true); document.addEventListener('keydown', key); }, 0);
+}
+const esc = (t: string) => t.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
