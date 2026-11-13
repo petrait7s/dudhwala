@@ -33,7 +33,7 @@ export async function fillPrices(scope: ParentNode = document) {
       if (el) {
         el.classList.remove('soon');
         const more = new Set(prices).size > 1;
-        el.innerHTML = both(`${more ? 'শুরু ' : ''}${formatTaka(min, 'bn')}`, `${more ? 'from ' : ''}${formatTaka(min, 'en')}`);
+        el.innerHTML = both(`${formatTaka(min, 'bn')}${more ? ' থেকে' : ''}`, `${more ? 'from ' : ''}${formatTaka(min, 'en')}`);
       }
     }
     wireQuick(card, p);
